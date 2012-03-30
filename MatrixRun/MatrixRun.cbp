@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="MatrixRun" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Debug">
+				<Option output="bin\Debug\MatrixRun" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj\Debug\" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-g" />
+				</Compiler>
+				<Linker>
+					<Add library="..\api\boost_1_48\lib\libboost_date_time-mgw46-mt-d-1_48.a" />
+					<Add library="..\api\boost_1_48\lib\libboost_thread-mgw46-mt-d-1_48.a" />
+					<Add library="..\api\spark_1_5_5\lib\libSPARK_debug.a" />
+					<Add library="..\api\spark_1_5_5\lib\libSPARK_IRR_debug.a" />
+					<Add library="..\api\irrlicht_1_7_2\lib\libIrrlicht.dll.a" />
+				</Linker>
+			</Target>
+			<Target title="Release">
+				<Option output="bin\Release\MatrixRun" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj\Release\" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-O2" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+					<Add library="..\api\boost_1_48\lib\libboost_date_time-mgw46-mt-1_48.a" />
+					<Add library="..\api\boost_1_48\lib\libboost_thread-mgw46-mt-1_48.a" />
+					<Add library="..\api\spark_1_5_5\lib\libSPARK.a" />
+					<Add library="..\api\spark_1_5_5\lib\libSPARK_IRR.a" />
+					<Add library="..\api\irrlicht_1_7_2\lib\libIrrlicht.dll.a" />
+				</Linker>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-Wall" />
+			<Add option="-DBOOST_THREAD_USE_LIB" />
+			<Add directory="..\api\boost_1_48\include" />
+			<Add directory="..\api\irrlicht_1_7_2\include" />
+			<Add directory="..\api\wiiuse\include" />
+			<Add directory="..\api\spark_1_5_5\include" />
+		</Compiler>
+		<Linker>
+			<Add library="..\api\wiiuse\lib\wiiuse.lib" />
+			<Add directory="..\api\boost_1_48\lib" />
+			<Add directory="..\api\spark_1_5_5\lib" />
+		</Linker>
+		<Unit filename="ConfigFile.cpp" />
+		<Unit filename="ConfigFile.hpp" />
+		<Unit filename="GravityAnimator.cpp" />
+		<Unit filename="GravityAnimator.hpp" />
+		<Unit filename="WiiCur.cpp" />
+		<Unit filename="WiiCur.hpp" />
+		<Unit filename="WiiPos.cpp" />
+		<Unit filename="WiiPos.hpp" />
+		<Unit filename="WiimoteHandler.cpp" />
+		<Unit filename="WiimoteHandler.hpp" />
+		<Unit filename="_ParticleEffects.cpp">
+			<Option compile="0" />
+			<Option link="0" />
+			<Option target="&lt;{~None~}&gt;" />
+		</Unit>
+		<Unit filename="data\config.cfg">
+			<Option target="&lt;{~None~}&gt;" />
+		</Unit>
+		<Unit filename="divers.cpp" />
+		<Unit filename="divers.hpp" />
+		<Unit filename="main.cpp" />
+		<Unit filename="transition.cpp" />
+		<Unit filename="transition.hpp" />
+		<Extensions>
+			<code_completion />
+			<envvars />
+			<debugger />
+			<lib_finder disable_auto="1" />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>

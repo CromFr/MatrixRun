@@ -1,0 +1,36 @@
+################################################################################
+#                    M A T R I X                      R U N                    #
+################################################################################
+Projet en cours de réalisation par le Club'Elec de l'ISEN Brest
+par Thibaut CHARLES
+
+
+
+
+################################################################################
+Un vaisseau avance dans un tunnel généré aléatoirement en évitant les obstacles
+et en détruisant les ennemis.
+Le vaisseau est dirigé avec la tête du joueur (Wiimote fixe + lunettes émetrices
+infrarouge), et les deux canons du vaisseau par les deux wiimotes tenues par le
+joueur.
+
+
+
+
+################################################################################
+Lang. :	C (api wiimote), C++
+
+Libs :  Boost 1.48 (Threads)
+		Irrlicht 1.7.2 (Moteur 3D)
+		Spark 1.5.5 (Systèmes de particules)
+		WiiUse 1.2 (Acquisition données WM)
+		
+Dossiers :
+		/api : Librairies (include + lib)	    (non présentes sur github)
+		/api/boost_1_48
+		/api/irrlicht_1_7_2
+		/api/spark_1_5_5
+		/api/wiiuse
+		/MatrixRun : Dossier du projet code::blocks & sources
+		/MatrixRun/data : Fichiers res
+
