@@ -23,11 +23,11 @@ GravityAnimator::GravityAnimator(float fMasseKg, float fGravity, float fAirFrict
 \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ====================================================================================================================*/
-void GravityAnimator::FollowNode(scene::ISceneNode* Node, float fIntensity, float fFollowAbsorption)
+void GravityAnimator::FollowNode(scene::ISceneNode* Node, float fIntensity, core::vector3df m_vFollowOffset)
 {
     m_nodeFollowedNode = Node;
     m_fFollowIntensity = fIntensity;
-    m_fFollowAbsorption = fFollowAbsorption;
+    m_vFollowOffset = m_vFollowOffset;
 }
 
 
@@ -61,8 +61,17 @@ void GravityAnimator::animateNode(scene::ISceneNode *node, u32 timeMs)
     if(m_nodeFollowedNode!=0)
     {
         // TODO (Administrateur#1#): réduire intensité quand proche du point
-        core::vector3df vDirection((m_nodeFollowedNode->getAbsolutePosition()- node->getAbsolutePosition()));
-        vAccel+=core::vector3df(  vDirection * (m_fFollowIntensity/m_fMass)-m_fFollowAbsorption/m_fMass  );
+        //
+        //frottements : -v * (2*sqrt(mF))
+        //F = m_fFollowIntensity
+
+
+
+
+        core::vector3df vDirection((m_nodeFollowedNode->getAbsolutePosition() + m_vFollowOffset - node->getAbsolutePosition()).normalize());
+        core::vector3df vForce(vDirection * m_fFollowIntensity);
+
+        vAccel+=core::vector3df(  (vForce - m_Speed*(2*sqrt(m_fMass*vForce.getLength())))/m_fMass );
     }
 
 

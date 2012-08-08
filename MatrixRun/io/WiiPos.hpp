@@ -4,12 +4,13 @@
 
 
 #include <iostream>
-#include <cstdlib>
-#include <fstream>
 #include <sstream>
 #include <cmath>
+using namespace std;
+
 #include <wiiuse.h>
-#include "ConfigFile.hpp"
+
+#include "../lib/ConfigFile.hpp"
 
 
 

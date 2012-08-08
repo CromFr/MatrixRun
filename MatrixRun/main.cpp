@@ -1,25 +1,33 @@
+
+
 #include <iostream>
 #include <vector>
+using namespace std;
+
 #include <irrlicht.h>
+using namespace irr;
 
 #include <SPK.h>
 #include <SPK_IRR.h>
+using namespace SPK;
 
-//L'aléatoire via boost
+//L'alÃ©atoire via boost
 #include <boost/random/mersenne_twister.hpp>
 #include <boost/random/uniform_int_distribution.hpp>
 
-#include "WiimoteHandler.hpp"
-#include "transition.hpp"
-#include "ConfigFile.hpp"
+#include "io/WiimoteHandler.hpp"
+#include "io/transition.hpp"
+#include "lib/ConfigFile.hpp"
 
-#include "GravityAnimator.hpp"
+#include "game/GravityAnimator.hpp"
+
+#include "game/Collisionnable.hpp"
 
 
 
-using namespace irr;
-using namespace SPK;
-using namespace std;
+
+
+
 
 
 #define ID_TYPE_CIBLE 1
@@ -27,9 +35,17 @@ using namespace std;
 
 
 
+
+
 int main()
 {
-    ConfigFile Config("data/config.cfg");
+    ConfigFile Config;
+    ConfigFile::Error e = Config.Load("data/config.cfg");
+    if(e != ConfigFile::NO_ERROR)
+	{
+		cout<<"Error loading config file: '"<<ConfigFile::GetErrorString(e)<<endl;
+		return 0;
+	}
 
     WiimoteHandler WMHdl(&Config);
 
@@ -52,7 +68,7 @@ int main()
             else
                 cout<<"Erreur inconnue"<<endl;
         }
-        Sleep(70);
+        //Sleep(70);
     }
     }//--------------------
 
@@ -66,7 +82,7 @@ int main()
         <<"O==========================O"<<endl;
 
 
-    //==================== Création de la fenêtre
+    //==================== CrÃ©ation de la fenÃªtre
     #define FULLSCREEN false
     int nScreenWidth, nScreenHeight;
     if(FULLSCREEN)  { nScreenWidth=1920;  nScreenHeight=1080; }
@@ -93,7 +109,7 @@ int main()
     //--------------------
 
 
-    //==================== Setup de la caméra
+    //==================== Setup de la camÃ©ra
     scene::ISceneNode* nodeCamContainer = oSM->addEmptySceneNode();
 
     scene::ICameraSceneNode* nodeCamera = oSM->addCameraSceneNode(nodeCamContainer, core::vector3df(0, 0, 0), core::vector3df(0, 0, 10));
@@ -113,16 +129,20 @@ int main()
     //--------------------
 
 
-    //==================== Création du cube-background
+    //==================== CrÃ©ation du cube-background
     scene::IAnimatedMeshSceneNode *nodeBackground = oSM->addAnimatedMeshSceneNode(oSM->getMesh("data/emptycube.3ds"));
     nodeBackground->setMaterialFlag(irr::video::EMF_LIGHTING, true);
     nodeBackground->setMaterialFlag(irr::video::EMF_FOG_ENABLE, true);
     //--------------------
 
-    //==================== Génération des cibles
+    //==================== GÃ©nÃ©ration des cibles
     vector<scene::IAnimatedMeshSceneNode*> nodeCibles;
     vector<scene::IAnimatedMeshSceneNode*> nodeTiges;
+    #ifdef FIXED_TARGETS
     boost::random::mt19937 RdmSeed;//((int)oDev->getTimer()->getRealTime());
+    #else
+    boost::random::mt19937 RdmSeed((int)oDev->getTimer()->getRealTime());
+    #endif
     boost::random::uniform_int_distribution<> RdmXY(-135, 135);
     boost::random::uniform_int_distribution<> RdmZ(-300, 400);
     for(int i=0 ; i<20 ; i++)
@@ -143,12 +163,13 @@ int main()
 
 
     //==================== Joueur
-    scene::IAnimatedMeshSceneNode *nodePlayer = oSM->addAnimatedMeshSceneNode(oSM->getMesh("data/joueur.3ds"), 0, -1, core::vector3df(0, 0, 100), core::vector3df(0, 0, 0), core::vector3df(0.5, 0.5, 0.5));
+    scene::IAnimatedMeshSceneNode *nodePlayer = oSM->addAnimatedMeshSceneNode(oSM->getMesh("data/neb/nebuchadnezzar.3ds"), 0, -1, core::vector3df(0, 0, 100), core::vector3df(0, 0, 0), core::vector3df(0.5, 0.5, 0.5));
     nodePlayer->setMaterialFlag(irr::video::EMF_LIGHTING, true);
 
     //              float fMasseKg, float fGravity=98, float fAirFriction=0, core::vector3df OptForce=core::vector3df(0,0,0)
-    GravityAnimator GravEngine(1000, 0, 0, core::vector3df(0, 0, 0));
-    nodePlayer->addAnimator(&GravEngine);
+    //GravityAnimator GravEngine(1000, 0, 0, core::vector3df(0, 0, 0));
+    //GravEngine.FollowNode(nodeCamera, 1000, core::vector3df(0, -50, 300));
+    //nodePlayer->addAnimator(&GravEngine);
 
     //--------------------
 
@@ -207,8 +228,8 @@ int main()
     //Boucle principale
     while(oDev->run())
     {
-        //Prépare le rendu
-        oDriver->beginScene(true, true, 0);//la scène a un fond noir
+        //PrÃ©pare le rendu
+        oDriver->beginScene(true, true, 0);//la scÃ¨ne a un fond noir
 
         /*====================================================================================================================
         \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
@@ -219,13 +240,13 @@ int main()
 
         /*==========================================================================================
         \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-        // Gestion de la caméra /////////////////////////////////////////////////////////////////////
+        // Gestion de la camÃ©ra /////////////////////////////////////////////////////////////////////
         ==========================================================================================*/
         bool bNoIRSrc = false;
         try
         {
         //==
-            //On récupère les coordonnées du joueur
+            //On rÃ©cupÃ¨re les coordonnÃ©es du joueur
             //Cette methode peut throw
             Wiimote3d posPlayer = WMHdl.GetPlayerPos();
 
@@ -235,7 +256,7 @@ int main()
             core::vector3df posCamera = Wiimote3dToWorld3d(posPlayer);
 
 
-            //On positionne la caméra à l'endroit du joueur
+            //On positionne la camÃ©ra Ã  l'endroit du joueur
             nodeCamContainer->setPosition(posCamera);
 
 
@@ -284,9 +305,9 @@ int main()
             //Traitement des evenements
             Wiimote2dPercent EventCurPos;
             struct WiimoteCursorEvent Event = WMHdl.GetLastButtonEvent(WMHDL_RIGHT);
-            if(Event.event!=EVENT_NONE)//Un evenement à traiter !
+            if(Event.event!=EVENT_NONE)//Un evenement Ã  traiter !
             {
-                if(Event.button & (WIIMOTE_BUTTON_A | WIIMOTE_BUTTON_B))//Si le bouton A ou B est pressé
+                if(Event.button & (WIIMOTE_BUTTON_A | WIIMOTE_BUTTON_B))//Si le bouton A ou B est pressÃ©
                 {
                     //Recherche des collisions
                     core::line3d<f32> RightRay = oCollM->getRayFromScreenCoordinates(posRightCur, nodeCamera);
@@ -301,7 +322,7 @@ int main()
                         if(Event.button & WIIMOTE_BUTTON_A)
                         {
 
-    GravEngine.FollowNode(nodeSelected, 1000, 10000);
+                        //GravEngine.FollowNode(nodeSelected, 1000, 10000);
 
 
 
@@ -353,7 +374,7 @@ int main()
                         }
                     }
                 }
-                else if(Event.button & WIIMOTE_BUTTON_HOME)//Si le bouton home est pressé
+                else if(Event.button & WIIMOTE_BUTTON_HOME)//Si le bouton home est pressÃ©
                 {
                     for(unsigned int i=0 ; i<nodeCibles.size() ; i++)
                         nodeCibles[i]->setVisible(true);
@@ -377,7 +398,7 @@ int main()
          >> ELEMENTS GUI ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         ====================================================================================================================*/
-        //Rendre la scène
+        //Rendre la scÃ¨ne
         oSM->drawAll();
 
 
@@ -396,7 +417,7 @@ int main()
 
 
 
-        //Affichage de la scène
+        //Affichage de la scÃ¨ne
         oDriver->endScene();
 
 

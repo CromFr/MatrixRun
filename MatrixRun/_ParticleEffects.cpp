@@ -23,7 +23,7 @@ partFire->addAffector(Affector);       // ajout du modificateur au particle syst
   Affector->drop();
 partFire->setMaterialFlag(video::EMF_LIGHTING, false);          // insensible a la lumiere
 partFire->setMaterialFlag(video::EMF_ZWRITE_ENABLE, false);     // desactive zbuffer pour surfaces derriere
-partFire->setMaterialTexture(0, oDriver->getTexture("data/fx_fire1.tga"));     // on colle une texture
+partFire->setMaterialTexture(0, oDriver->getTexture("data/vfx/fx_fire1.tga"));     // on colle une texture
 partFire->setMaterialType(video::EMT_TRANSPARENT_VERTEX_ALPHA); // application transparence
 partFire->setVisible(false);
 //=========================================================================================================================================================================
@@ -45,7 +45,7 @@ partExplosion->addAffector(Affector);       // ajout du modificateur au particle
   Affector->drop();
 partExplosion->setMaterialFlag(video::EMF_LIGHTING, false);          // insensible a la lumiere
 partExplosion->setMaterialFlag(video::EMF_ZWRITE_ENABLE, false);     // desactive zbuffer pour surfaces derriere
-partExplosion->setMaterialTexture(0, oDriver->getTexture("data/fx_smoke.png"));     // on colle une texture
+partExplosion->setMaterialTexture(0, oDriver->getTexture("data/vfx/dustgrad1.png"));     // on colle une texture
 partExplosion->setMaterialType(video::EMT_TRANSPARENT_ALPHA_CHANNEL); // application transparence
 partExplosion->setVisible(false);
 //=========================================================================================================================================================================
@@ -54,52 +54,52 @@ partExplosion->setVisible(false);
 
 
 
+
 /*
-
 // Inits Particle Engine
-	randomSeed = oDev->getTimer()->getRealTime();
-	// Sets the update step
-	System::setClampStep(true,0.1f);			// clamp the step to 100 ms
-	System::useAdaptiveStep(0.001f,0.01f);		// use an adaptive step from 1ms to 10ms (1000fps to 100fps)
+randomSeed = oDev->getTimer()->getRealTime();
+// Sets the update step
+System::setClampStep(true,0.1f);			// clamp the step to 100 ms
+System::useAdaptiveStep(0.001f,0.01f);		// use an adaptive step from 1ms to 10ms (1000fps to 100fps)
 
-	Vector3D gravity(0.0f,-0.8f,0.0f);
+Vector3D gravity(0.0f,-0.8f,0.0f);
 
-	IRR::IRRQuadRenderer* particleRenderer = IRR::IRRQuadRenderer::create(oDev);
-	particleRenderer->setTexture(oDriver->getTexture("point.bmp"));
-	particleRenderer->setTexturingMode(TEXTURE_2D);
-	particleRenderer->setScale(0.05f,0.05f);
-	particleRenderer->setBlending(BLENDING_ADD);
-	particleRenderer->enableRenderingHint(DEPTH_WRITE,false);
+IRR::IRRQuadRenderer* particleRenderer = IRR::IRRQuadRenderer::create(oDev);
+particleRenderer->setTexture(oDriver->getTexture("point.bmp"));
+particleRenderer->setTexturingMode(TEXTURE_2D);
+particleRenderer->setScale(0.05f,0.05f);
+particleRenderer->setBlending(BLENDING_ADD);
+particleRenderer->enableRenderingHint(DEPTH_WRITE,false);
 
-	// Model
-	Model* particleModel = Model::create(FLAG_RED | FLAG_GREEN | FLAG_BLUE | FLAG_ALPHA);
-	particleModel->setParam(PARAM_ALPHA,0.8f); // constant alpha
-	particleModel->setLifeTime(8.0f,8.0f);
+// Model
+Model* particleModel = Model::create(FLAG_RED | FLAG_GREEN | FLAG_BLUE | FLAG_ALPHA);
+particleModel->setParam(PARAM_ALPHA,0.8f); // constant alpha
+particleModel->setLifeTime(8.0f,8.0f);
 
-	// Emitter
-	SphericEmitter* particleEmitter = SphericEmitter::create(Vector3D(0.0f,1.0f,0.0f),0.1f * 3.14159365,0.1f * 3.14159365);
-	particleEmitter->setZone(Point::create(Vector3D(0.0f,0.02f,0.0f)));
-	particleEmitter->setFlow(250);
-	particleEmitter->setForce(1.5f,1.5f);
+// Emitter
+SphericEmitter* particleEmitter = SphericEmitter::create(Vector3D(0.0f,1.0f,0.0f),0.1f * 3.14159365,0.1f * 3.14159365);
+particleEmitter->setZone(Point::create(Vector3D(0.0f,0.02f,0.0f)));
+particleEmitter->setFlow(250);
+particleEmitter->setForce(1.5f,1.5f);
 
-	// Obstacle
-	Plane* groundPlane = Plane::create();
-	Obstacle* obstacle = Obstacle::create(groundPlane,INTERSECT_ZONE,0.6f,1.0f);
+// Obstacle
+Plane* groundPlane = Plane::create();
+Obstacle* obstacle = Obstacle::create(groundPlane,INTERSECT_ZONE,0.6f,1.0f);
 
-	// Group
-	Group* particleGroup = Group::create(particleModel,2100);
-	particleGroup->addEmitter(particleEmitter);
-	particleGroup->setRenderer(particleRenderer);
-	particleGroup->addModifier(obstacle);
-	particleGroup->setGravity(gravity);
-	particleGroup->enableAABBComputing(true);
+// Group
+Group* particleGroup = Group::create(particleModel,2100);
+particleGroup->addEmitter(particleEmitter);
+particleGroup->setRenderer(particleRenderer);
+particleGroup->addModifier(obstacle);
+particleGroup->setGravity(gravity);
+particleGroup->enableAABBComputing(true);
 
-	System* particleSystem = IRR::IRRSystem::create(oSM->getRootSceneNode(),oSM);
-	particleSystem->addGroup(particleGroup);
-	particleSystem->enableAABBComputing(true);
-
-
+System* particleSystem = IRR::IRRSystem::create(oSM->getRootSceneNode(),oSM);
+particleSystem->addGroup(particleGroup);
+particleSystem->enableAABBComputing(true);
 */
+
+
 
 
 

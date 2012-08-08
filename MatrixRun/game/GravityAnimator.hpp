@@ -3,11 +3,14 @@
 
 #include <iostream>
 #include <vector>
+using namespace std;
+
+
 #include <irrlicht.h>
-
-
-
 using namespace irr;
+
+
+
 
 
 class GravityAnimator : public scene::ISceneNodeAnimator
@@ -17,7 +20,7 @@ class GravityAnimator : public scene::ISceneNodeAnimator
     GravityAnimator(float fMasseKg, float fGravity=98, float fAirFriction=0, core::vector3df OptForce=core::vector3df(0,0,0));
 
     ///Va suivre un node en appliquant une force dirigée vers celui ci, dont la norme est égale à fIntensity
-    void FollowNode(scene::ISceneNode* Node, float fIntensity, float fFollowAbsorption);
+    void FollowNode(scene::ISceneNode* Node, float fIntensity, core::vector3df m_vFollowOffset=core::vector3df(0));
 
     ///Nettoye tous les follow précédament lancés
     void StopFollow(){m_nodeFollowedNode=0;}
@@ -45,8 +48,9 @@ class GravityAnimator : public scene::ISceneNodeAnimator
     float m_fGravity;
 
     scene::ISceneNode* m_nodeFollowedNode;
-    float m_fFollowAbsorption;
     float m_fFollowIntensity;
+    core::vector3df m_vFollowOffset;
+
 
     core::vector3df m_DesiredSpeed;
     core::vector3df m_Speed;

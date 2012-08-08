@@ -1,6 +1,6 @@
 #include "WiimoteHandler.hpp"
 
-using namespace std;
+
 
 /*====================================================================================================================
 \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
@@ -13,9 +13,11 @@ WiimoteHandler::WiimoteHandler(ConfigFile* Config, bool bConfigure)
     m_bPauseThread = false;
 
 
+    #ifndef NO_WIIMOTES
 
     cout<<"==> Initialisation du tableau des wiimotes"<<endl;
     m_WMTable = wiiuse_init(NB_WIIMOTES);
+
 
     cout<<"==> Recherche des wiimotes..."<<endl;
     int nFound = wiiuse_find(m_WMTable, NB_WIIMOTES, 5);
@@ -201,6 +203,21 @@ WiimoteHandler::WiimoteHandler(ConfigFile* Config, bool bConfigure)
     //Lancement du thread d'update
     UpdatingThread = new boost::thread(boost::bind(&WiimoteHandler::Update, this));
 
+    #endif
+    #ifdef NO_WIIMOTES
+
+    cout<<endl<<endl<<endl<<endl
+        <<" /////////////////////////////////"<<endl
+        <<"O===============================O/"<<endl
+        <<"|    WIIMOTES DESACTIVEES !!!   |/"<<endl
+        <<"O===============================O"<<endl;
+
+
+    Sleep(2000);
+
+
+    #endif
+
 
 }
 
@@ -212,6 +229,8 @@ WiimoteHandler::WiimoteHandler(ConfigFile* Config, bool bConfigure)
 ====================================================================================================================*/
 WiimoteHandler::~WiimoteHandler()
 {
+    #ifndef NO_WIIMOTES
+
     delete m_WiimotePos;
     delete m_WiimoteRight;
     //delete m_WiimoteLeft;
@@ -219,6 +238,8 @@ WiimoteHandler::~WiimoteHandler()
     delete UpdatingThread;
 
     wiiuse_cleanup(m_WMTable, NB_WIIMOTES);
+
+    #endif
 };
 
 
@@ -229,6 +250,7 @@ WiimoteHandler::~WiimoteHandler()
 ====================================================================================================================*/
 Wiimote3d WiimoteHandler::GetPlayerPos()const
 {
+    #ifndef NO_WIIMOTES
     try
     {
         return m_WiimotePos->GetPosition();
@@ -238,6 +260,12 @@ Wiimote3d WiimoteHandler::GetPlayerPos()const
         throw e;
     }
     throw -1;
+    #endif
+
+
+    #ifdef NO_WIIMOTES
+    return Wiimote3d(0, -400, 0);
+    #endif
 }
 
 
@@ -248,6 +276,7 @@ Wiimote3d WiimoteHandler::GetPlayerPos()const
 ====================================================================================================================*/
 Wiimote2dPercent WiimoteHandler::GetCursorPos(int nWM)const
 {
+    #ifndef NO_WIIMOTES
     try
     {
         if(nWM==WMHDL_RIGHT)
@@ -260,6 +289,12 @@ Wiimote2dPercent WiimoteHandler::GetCursorPos(int nWM)const
         throw e;
     }
     throw -1;
+    #endif
+
+
+    #ifdef NO_WIIMOTES
+    return Wiimote2dPercent(0.0, 0.0);
+    #endif
 }
 
 
@@ -270,11 +305,22 @@ Wiimote2dPercent WiimoteHandler::GetCursorPos(int nWM)const
 ====================================================================================================================*/
 struct WiimoteCursorEvent WiimoteHandler::GetLastButtonEvent(int nWM)
 {
-
+    #ifndef NO_WIIMOTES
     if(nWM==WMHDL_RIGHT)
         return m_WiimoteRight->GetLastButtonEvent();
     //si c'est pas la right c'est la left
     return m_WiimoteLeft->GetLastButtonEvent();
+    #endif
+
+
+    #ifdef NO_WIIMOTES
+    WiimoteCursorEvent toReturn;
+    toReturn.button=0;
+    toReturn.event=EVENT_NONE;
+    toReturn.outofscr=0;
+    toReturn.pos = Wiimote2dPercent(0.0, 0.0);
+    return toReturn;
+    #endif
 }
 
 
@@ -285,6 +331,7 @@ struct WiimoteCursorEvent WiimoteHandler::GetLastButtonEvent(int nWM)
 ====================================================================================================================*/
 void WiimoteHandler::Update()
 {
+    #ifndef NO_WIIMOTES
     while(!m_bStopThread)
     {
         if(wiiuse_poll(m_WMTable, NB_WIIMOTES))
@@ -295,6 +342,7 @@ void WiimoteHandler::Update()
         }
         while(m_bPauseThread);
     }
+    #endif
 }
 
 
@@ -305,7 +353,9 @@ void WiimoteHandler::Update()
 ====================================================================================================================*/
 void WiimoteHandler::ClearWiimoteEvents()
 {
+    #ifndef NO_WIIMOTES
     while(wiiuse_poll(m_WMTable, NB_WIIMOTES));
+    #endif
 }
 
 

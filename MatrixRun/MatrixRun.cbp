@@ -6,81 +6,159 @@
 		<Option pch_mode="2" />
 		<Option compiler="gcc" />
 		<Build>
-			<Target title="Debug">
-				<Option output="bin\Debug\MatrixRun" prefix_auto="1" extension_auto="1" />
-				<Option object_output="obj\Debug\" />
+			<Target title="WinDebug">
+				<Option platforms="Windows;" />
+				<Option output="bin/win/Debug/MatrixRun" prefix_auto="1" extension_auto="1" />
+				<Option object_output="bin/tmp/win/Debug/" />
 				<Option type="1" />
 				<Option compiler="gcc" />
 				<Compiler>
 					<Add option="-g" />
+					<Add directory="../api/win/boost_1_48/include" />
+					<Add directory="../api/win/irrlicht_1_7_2/include" />
+					<Add directory="../api/win/wiiuse/include" />
+					<Add directory="../api/win/spark_1_5_5/include" />
 				</Compiler>
 				<Linker>
-					<Add library="..\api\boost_1_48\lib\libboost_date_time-mgw46-mt-d-1_48.a" />
-					<Add library="..\api\boost_1_48\lib\libboost_thread-mgw46-mt-d-1_48.a" />
-					<Add library="..\api\spark_1_5_5\lib\libSPARK_debug.a" />
-					<Add library="..\api\spark_1_5_5\lib\libSPARK_IRR_debug.a" />
-					<Add library="..\api\irrlicht_1_7_2\lib\libIrrlicht.dll.a" />
+					<Add library="../api/win/wiiuse/lib/wiiuse.lib" />
+					<Add library="../api/win/boost_1_48/lib/libboost_date_time-mgw46-mt-d-1_48.a" />
+					<Add library="../api/win/boost_1_48/lib/libboost_thread-mgw46-mt-d-1_48.a" />
+					<Add library="../api/win/spark_1_5_5/lib/libSPARK_debug.a" />
+					<Add library="../api/win/spark_1_5_5/lib/libSPARK_IRR_debug.a" />
+					<Add library="../api/win/irrlicht_1_7_2/lib/libIrrlicht.dll.a" />
+					<Add directory="../api/win/boost_1_48/lib" />
+					<Add directory="../api/win/spark_1_5_5/lib" />
 				</Linker>
 			</Target>
-			<Target title="Release">
-				<Option output="bin\Release\MatrixRun" prefix_auto="1" extension_auto="1" />
-				<Option object_output="obj\Release\" />
+			<Target title="WinRelease">
+				<Option platforms="Windows;" />
+				<Option output="bin/win/Release/MatrixRun" prefix_auto="1" extension_auto="1" />
+				<Option object_output="bin/tmp/win/Release/" />
 				<Option type="1" />
 				<Option compiler="gcc" />
 				<Compiler>
 					<Add option="-O2" />
+					<Add directory="../api/win/boost_1_48/include" />
+					<Add directory="../api/win/irrlicht_1_7_2/include" />
+					<Add directory="../api/win/wiiuse/include" />
+					<Add directory="../api/win/spark_1_5_5/include" />
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
-					<Add library="..\api\boost_1_48\lib\libboost_date_time-mgw46-mt-1_48.a" />
-					<Add library="..\api\boost_1_48\lib\libboost_thread-mgw46-mt-1_48.a" />
-					<Add library="..\api\spark_1_5_5\lib\libSPARK.a" />
-					<Add library="..\api\spark_1_5_5\lib\libSPARK_IRR.a" />
-					<Add library="..\api\irrlicht_1_7_2\lib\libIrrlicht.dll.a" />
+					<Add library="../api/win/wiiuse/lib/wiiuse.lib" />
+					<Add library="../api/win/boost_1_48/lib/libboost_date_time-mgw46-mt-1_48.a" />
+					<Add library="../api/win/boost_1_48/lib/libboost_thread-mgw46-mt-1_48.a" />
+					<Add library="../api/win/spark_1_5_5/lib/libSPARK.a" />
+					<Add library="../api/win/spark_1_5_5/lib/libSPARK_IRR.a" />
+					<Add library="../api/win/irrlicht_1_7_2/lib/libIrrlicht.dll.a" />
+					<Add directory="../api/win/boost_1_48/lib" />
+					<Add directory="../api/win/spark_1_5_5/lib" />
+				</Linker>
+			</Target>
+			<Target title="LinuxDebug">
+				<Option platforms="Unix;" />
+				<Option output="bin/linux/Debug/MatrixRun" prefix_auto="1" extension_auto="1" />
+				<Option object_output="bin/tmp/linux/Debug/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-g" />
+					<Add option="-static" />
+					<Add directory="../api/linux/boost_1_50_0/include" />
+					<Add directory="../api/linux/irrlicht_1_7_3/include" />
+					<Add directory="../api/linux/spark_1_5_5/include" />
+					<Add directory="../api/linux/wiiuse/include" />
+				</Compiler>
+				<Linker>
+					<Add option="-lboost_thread" />
+					<Add option="-lIrrlicht" />
+					<Add option="-lSPARK" />
+					<Add option="-lSPARK_IRR" />
+					<Add option="-lwiiuse" />
+					<Add directory="../api/linux/boost_1_50_0/lib" />
+					<Add directory="../api/linux/irrlicht_1_7_3/lib" />
+					<Add directory="../api/linux/spark_1_5_5/lib" />
+					<Add directory="../api/linux/wiiuse/lib" />
+				</Linker>
+			</Target>
+			<Target title="LinuxRelease">
+				<Option platforms="Unix;" />
+				<Option output="bin/linux/Release/MatrixRun" prefix_auto="1" extension_auto="1" />
+				<Option object_output="bin/tmp/linux/Release/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-O2" />
+					<Add option="-static" />
+					<Add directory="../api/linux/boost_1_50_0/include" />
+					<Add directory="../api/linux/irrlicht_1_7_3/include" />
+					<Add directory="../api/linux/spark_1_5_5/include" />
+					<Add directory="../api/linux/wiiuse/include" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+					<Add option="-lboost_thread" />
+					<Add option="-lIrrlicht" />
+					<Add option="-lSPARK" />
+					<Add option="-lSPARK_IRR" />
+					<Add option="-lwiiuse" />
+					<Add directory="../api/linux/boost_1_50_0/lib" />
+					<Add directory="../api/linux/irrlicht_1_7_3/lib" />
+					<Add directory="../api/linux/spark_1_5_5/lib" />
+					<Add directory="../api/linux/wiiuse/lib" />
 				</Linker>
 			</Target>
 		</Build>
 		<Compiler>
 			<Add option="-Wall" />
-			<Add option="-DBOOST_THREAD_USE_LIB" />
-			<Add directory="..\api\boost_1_48\include" />
-			<Add directory="..\api\irrlicht_1_7_2\include" />
-			<Add directory="..\api\wiiuse\include" />
-			<Add directory="..\api\spark_1_5_5\include" />
+			<Add option="-DBOOST_THREAD_USE_LIB_" />
+			<Add option="-DNO_WIIMOTES_" />
+			<Add option="-DFIXED_TARGETS" />
 		</Compiler>
-		<Linker>
-			<Add library="..\api\wiiuse\lib\wiiuse.lib" />
-			<Add directory="..\api\boost_1_48\lib" />
-			<Add directory="..\api\spark_1_5_5\lib" />
-		</Linker>
-		<Unit filename="ConfigFile.cpp" />
-		<Unit filename="ConfigFile.hpp" />
-		<Unit filename="GravityAnimator.cpp" />
-		<Unit filename="GravityAnimator.hpp" />
-		<Unit filename="WiiCur.cpp" />
-		<Unit filename="WiiCur.hpp" />
-		<Unit filename="WiiPos.cpp" />
-		<Unit filename="WiiPos.hpp" />
-		<Unit filename="WiimoteHandler.cpp" />
-		<Unit filename="WiimoteHandler.hpp" />
 		<Unit filename="_ParticleEffects.cpp">
-			<Option compile="0" />
-			<Option link="0" />
 			<Option target="&lt;{~None~}&gt;" />
 		</Unit>
-		<Unit filename="data\config.cfg">
+		<Unit filename="data/config.cfg">
 			<Option target="&lt;{~None~}&gt;" />
 		</Unit>
 		<Unit filename="divers.cpp" />
 		<Unit filename="divers.hpp" />
+		<Unit filename="game/GravityAnimator.cpp">
+			<Option compile="0" />
+			<Option link="0" />
+		</Unit>
+		<Unit filename="game/GravityAnimator.hpp" />
+		<Unit filename="game/MRCollisionnable.hpp">
+			<Option target="&lt;{~None~}&gt;" />
+		</Unit>
+		<Unit filename="game/MREntity.hpp">
+			<Option target="&lt;{~None~}&gt;" />
+		</Unit>
+		<Unit filename="io/WiiCur.cpp" />
+		<Unit filename="io/WiiCur.hpp" />
+		<Unit filename="io/WiiPos.cpp" />
+		<Unit filename="io/WiiPos.hpp" />
+		<Unit filename="io/WiimoteHandler.cpp" />
+		<Unit filename="io/WiimoteHandler.hpp" />
+		<Unit filename="io/transition.cpp" />
+		<Unit filename="io/transition.hpp" />
+		<Unit filename="lib/ConfigFile.cpp" />
+		<Unit filename="lib/ConfigFile.hpp" />
 		<Unit filename="main.cpp" />
-		<Unit filename="transition.cpp" />
-		<Unit filename="transition.hpp" />
 		<Extensions>
 			<code_completion />
 			<envvars />
 			<debugger />
 			<lib_finder disable_auto="1" />
+			<DoxyBlocks>
+				<comment_style block="0" line="0" />
+				<doxyfile_project />
+				<doxyfile_build />
+				<doxyfile_warnings />
+				<doxyfile_output />
+				<doxyfile_dot />
+				<general />
+			</DoxyBlocks>
 		</Extensions>
 	</Project>
 </CodeBlocks_project_file>

@@ -2,8 +2,9 @@
 #define DIVERS_HPP_INCLUDED
 
 #include <iostream>
+using namespace std;
 
 
-std::string IntToBinary(int n, int nLengh=0);
+string IntToBinary(int n, int nLengh=0);
 
 #endif // DIVERS_HPP_INCLUDED

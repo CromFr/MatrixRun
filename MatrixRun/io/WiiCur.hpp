@@ -3,10 +3,10 @@
 
 #include <cmath>
 #include <queue>
+using namespace std;
 
 #include <wiiuse.h>
-#include "ConfigFile.hpp"
-#include "divers.hpp"
+#include "../lib/ConfigFile.hpp"
 
 
 

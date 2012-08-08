@@ -4,16 +4,16 @@
 
 
 #include <iostream>
-#include <cstdlib>
+using namespace std;
 
-#include <boost/date_time.hpp>
+//#include <boost/date_time.hpp>
 #include <boost/thread.hpp>
 
 #include <wiiuse.h>
 
 
 
-#include "ConfigFile.hpp"
+#include "../lib/ConfigFile.hpp"
 #include "WiiPos.hpp"
 #include "WiiCur.hpp"
 

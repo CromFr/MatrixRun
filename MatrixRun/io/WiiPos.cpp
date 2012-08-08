@@ -1,8 +1,5 @@
 #include "WiiPos.hpp"
 
-
-using namespace std;
-
 /*====================================================================================================================
 \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -54,6 +51,7 @@ WiiPos::WiiPos(wiimote** WMTable, wiimote* Wiimote, int nConnectedWM, ConfigFile
     {
         m_Config->Print();
 
+		/*
         istringstream* iss;
         iss=new istringstream(Config->GetValue("DistDotToDotmm"));         *iss>>m_fCALDistDotToDotmm;          delete iss;
         iss=new istringstream(Config->GetValue("DistDotToDotpx"));         *iss>>m_fCALDistDotToDotpx;          delete iss;
@@ -62,6 +60,15 @@ WiiPos::WiiPos(wiimote** WMTable, wiimote* Wiimote, int nConnectedWM, ConfigFile
         iss=new istringstream(Config->GetValue("Ratio"));                  *iss>>m_fCALRatio;                   delete iss;
         iss=new istringstream(Config->GetValue("Scale"));                  *iss>>m_fCALScale;                   delete iss;
         iss=new istringstream(Config->GetValue("Pitch"));                  *iss>>m_fPitch;                   delete iss;
+        */
+
+        m_fCALDistDotToDotmm = Config->GetValue<float>("DistDotToDotmm");
+        m_fCALDistDotToDotpx = Config->GetValue<float>("DistDotToDotpx");
+        m_fCALDistWmToDotsmm = Config->GetValue<float>("DistWmToDotsmm");
+        m_fCALDistWmToScreenCenter = Config->GetValue<float>("DistWmToScreenCenter");
+        m_fCALRatio = Config->GetValue<float>("Ratio");
+        m_fCALScale = Config->GetValue<float>("Scale");
+        m_fPitch = Config->GetValue<float>("Pitch");
 
         m_fCosPitch = cos(3.14159265*fPitch/180);
         m_fSinPitch = sin(3.14159265*fPitch/180);
@@ -155,6 +162,7 @@ void WiiPos::Calibrer()
 
                             cout<<"==> Wiimote calibree !"<<endl;
 
+							/*
                             string tmp;
                             tmp=m_fCALDistDotToDotmm;        m_Config->SetValue("DistDotToDotmm", tmp);
                             tmp=m_fCALDistDotToDotpx;        m_Config->SetValue("DistDotToDotpx", tmp);
@@ -163,6 +171,15 @@ void WiiPos::Calibrer()
                             tmp=m_fCALRatio;                 m_Config->SetValue("Ratio", tmp);
                             tmp=m_fCALScale;                 m_Config->SetValue("Scale", tmp);
                             tmp=m_fPitch;                 m_Config->SetValue("Pitch", tmp);
+                            */
+
+        					m_Config->SetValue<float>("DistDotToDotmm", m_fCALDistDotToDotmm);
+							m_Config->SetValue<float>("DistDotToDotpx", m_fCALDistDotToDotpx);
+							m_Config->SetValue<float>("DistWmToDotsmm", m_fCALDistWmToDotsmm);
+							m_Config->SetValue<float>("DistWmToScreenCenter", m_fCALDistWmToScreenCenter);
+							m_Config->SetValue<float>("Ratio", m_fCALRatio);
+							m_Config->SetValue<float>("Scale", m_fCALScale);
+							m_Config->SetValue<float>("Pitch", m_fPitch);
 
                             bLoop=false;
                         }
