@@ -27,7 +27,7 @@ enum ConfigFile::Error ConfigFile::Load(const char* cPath, bool bCreateIfNotExis
 		}
 		else
 		{
-			return FILE_NOT_FOUND;
+			return file_not_found;
 		}
 	}
 
@@ -78,7 +78,7 @@ enum ConfigFile::Error ConfigFile::Load(const char* cPath, bool bCreateIfNotExis
     }while(!File.eof());
 
     m_sPath=cPath;
-	return NO_ERROR;
+	return no_error;
 }
 
 
@@ -130,7 +130,7 @@ enum ConfigFile::Error ConfigFile::WriteToFile(const char* cPath)
 	ifstream File(m_sPath.c_str());
 
     if(!File)
-    	return FILE_NOT_FOUND;
+    	return file_not_found;
 
 
     string sNewFile("");
@@ -216,7 +216,7 @@ enum ConfigFile::Error ConfigFile::WriteToFile(const char* cPath)
 	FileW<<sNewFile;
 	FileW.close();
 
-	return NO_ERROR;
+	return no_error;
 }
 
 /*\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\

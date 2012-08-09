@@ -1,40 +1,43 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <CodeBlocks_layout_file>
-	<ActiveTarget name="WinRelease" />
+	<ActiveTarget name="WinDebug" />
 	<File name="data\config.cfg" open="0" top="0" tabpos="17">
 		<Cursor position="0" topLine="0" />
 	</File>
-	<File name="divers.hpp" open="1" top="0" tabpos="1">
+	<File name="divers.hpp" open="0" top="0" tabpos="1">
 		<Cursor position="0" topLine="0" />
 	</File>
-	<File name="game\GravityAnimator.hpp" open="1" top="0" tabpos="7">
+	<File name="game\GravityAnimator.hpp" open="0" top="0" tabpos="7">
 		<Cursor position="784" topLine="13" />
 	</File>
-	<File name="game\MRCollisionnable.hpp" open="1" top="0" tabpos="8">
-		<Cursor position="243" topLine="0" />
+	<File name="game\MRCollisionnable.hpp" open="1" top="0" tabpos="4">
+		<Cursor position="260" topLine="0" />
 	</File>
-	<File name="game\MREntity.hpp" open="1" top="1" tabpos="9">
-		<Cursor position="160" topLine="0" />
+	<File name="game\MREntity.hpp" open="1" top="0" tabpos="5">
+		<Cursor position="261" topLine="0" />
 	</File>
-	<File name="io\WiiCur.hpp" open="1" top="0" tabpos="3">
+	<File name="io\WiiCur.hpp" open="0" top="0" tabpos="3">
 		<Cursor position="138" topLine="0" />
 	</File>
-	<File name="io\WiiPos.hpp" open="1" top="0" tabpos="4">
+	<File name="io\WiiPos.hpp" open="0" top="0" tabpos="4">
 		<Cursor position="0" topLine="0" />
 	</File>
-	<File name="io\WiimoteHandler.cpp" open="0" top="0" tabpos="0">
-		<Cursor position="613" topLine="0" />
+	<File name="io\WiimoteHandler.cpp" open="1" top="0" tabpos="6">
+		<Cursor position="8309" topLine="222" />
 	</File>
-	<File name="io\WiimoteHandler.hpp" open="1" top="0" tabpos="5">
-		<Cursor position="0" topLine="0" />
+	<File name="io\WiimoteHandler.hpp" open="1" top="0" tabpos="7">
+		<Cursor position="214" topLine="0" />
 	</File>
-	<File name="io\transition.hpp" open="1" top="0" tabpos="6">
+	<File name="io\transition.hpp" open="0" top="0" tabpos="6">
 		<Cursor position="608" topLine="0" />
 	</File>
-	<File name="lib\ConfigFile.hpp" open="1" top="0" tabpos="2">
-		<Cursor position="1621" topLine="51" />
+	<File name="lib\ConfigFile.cpp" open="1" top="0" tabpos="2">
+		<Cursor position="4483" topLine="203" />
 	</File>
-	<File name="main.cpp" open="0" top="0" tabpos="7">
-		<Cursor position="358" topLine="0" />
+	<File name="lib\ConfigFile.hpp" open="1" top="0" tabpos="1">
+		<Cursor position="2163" topLine="79" />
+	</File>
+	<File name="main.cpp" open="1" top="1" tabpos="3">
+		<Cursor position="2122" topLine="73" />
 	</File>
 </CodeBlocks_layout_file>

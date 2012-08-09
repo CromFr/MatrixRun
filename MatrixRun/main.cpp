@@ -21,7 +21,7 @@ using namespace SPK;
 
 #include "game/GravityAnimator.hpp"
 
-#include "game/Collisionnable.hpp"
+#include "game/MRCollisionnable.hpp"
 
 
 
@@ -41,7 +41,7 @@ int main()
 {
     ConfigFile Config;
     ConfigFile::Error e = Config.Load("data/config.cfg");
-    if(e != ConfigFile::NO_ERROR)
+    if(e != ConfigFile::no_error)
 	{
 		cout<<"Error loading config file: '"<<ConfigFile::GetErrorString(e)<<endl;
 		return 0;
@@ -86,7 +86,7 @@ int main()
     #define FULLSCREEN false
     int nScreenWidth, nScreenHeight;
     if(FULLSCREEN)  { nScreenWidth=1920;  nScreenHeight=1080; }
-    else            { nScreenWidth=1920;  nScreenHeight=1080-30;  }
+    else            { nScreenWidth=1900;  nScreenHeight=1080-30-80;  }
     IrrlichtDevice *oDev = createDevice(video::EDT_OPENGL, core::dimension2d<u32>(nScreenWidth,nScreenHeight), 32, FULLSCREEN);
 
 

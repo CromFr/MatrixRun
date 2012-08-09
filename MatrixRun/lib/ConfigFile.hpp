@@ -74,17 +74,16 @@ using namespace std;
 class ConfigFile
 {
     public:
-
 	/**
 	@brief Errors casted by the ConfigFile
 	@see string GetErrorString(enum Error e)
 	**/
-    enum Error
-    {
-    	NO_ERROR,
-    	FILE_NOT_FOUND,
-    	FILE_NOT_OPENED
-    };
+	enum Error
+	{
+		no_error,
+		file_not_found,
+		file_not_opened
+	};
 
     /**
     @brief Get a human readable string for a given error
@@ -92,9 +91,9 @@ class ConfigFile
     **/
     static string GetErrorString(enum Error e)
     {
-    	if(e==NO_ERROR)return "Success";
-    	else if(e==FILE_NOT_FOUND)return "File not found";
-    	else if(e==FILE_NOT_OPENED)return "The file needs to be opened";
+    	if(e==no_error)return "Success";
+    	else if(e==file_not_found)return "File not found";
+    	else if(e==file_not_opened)return "The file needs to be opened";
     	return "Unknown error :(";
 	}
 
