@@ -6957,7 +6957,7 @@
 	<cstddef>
 	<boost/smart_ptr/detail/operator_bool.hpp>
 
-1344518199 source:c:\users\administrateur\git projects\matrixrun-project\matrixrun\main.cpp
+1344545501 source:c:\users\administrateur\git projects\matrixrun-project\matrixrun\main.cpp
 	<iostream>
 	<vector>
 	<irrlicht.h>
@@ -27469,8 +27469,9 @@
 	<vector>
 	<irrlicht.h>
 
-1344525416 c:\users\administrateur\git projects\matrixrun-project\matrixrun\game\mrcollisionnable.hpp
-	"MREntity.hpp"
+1344546668 c:\users\administrateur\git projects\matrixrun-project\matrixrun\game\mrcollisionnable.hpp
+	<irrlicht.h>
+	"CollGeometry.hpp"
 
 1344525417 c:\users\administrateur\git projects\matrixrun-project\matrixrun\game\mrentity.hpp
 	<irrlicht.h>
@@ -34124,4 +34125,7 @@
 	"aabbox3d.h"
 	"matrix4.h"
 	"IVideoDriver.h"
+
+1344544859 c:\users\administrateur\git projects\matrixrun-project\matrixrun\game\collgeometry.hpp
+	<irrlicht.h>
 
