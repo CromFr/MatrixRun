@@ -45,7 +45,7 @@ namespace game
 			 modelBulletTrail_smoke->setShared(true);
 
 			IRRQuadRenderer* renderBulletTrail = IRRQuadRenderer::create(oDev);
-			 renderBulletTrail->setTexture(oDriver->getTexture("../MatrixRun/data/vfx/plasmaanimx1_blue.png"));
+			 renderBulletTrail->setTexture(res::material::Get("bullet_trail_blue.png"));
 			 renderBulletTrail->setTexturingMode(TEXTURE_2D);
 			 renderBulletTrail->setAtlasDimensions(8,4);
 			 renderBulletTrail->setScale(10.0,10.0);
@@ -53,7 +53,7 @@ namespace game
 			 renderBulletTrail->enableRenderingHint(DEPTH_WRITE,false);
 			 renderBulletTrail->setShared(true);
 			IRRQuadRenderer* renderBulletTrail_smoke = IRRQuadRenderer::create(oDev);
-			 renderBulletTrail_smoke->setTexture(oDriver->getTexture("../MatrixRun/data/vfx/shockwave1.png"));
+			 renderBulletTrail_smoke->setTexture(res::material::Get("shockwave1.png"));
 			 renderBulletTrail_smoke->setTexturingMode(TEXTURE_2D);
 			 renderBulletTrail_smoke->setScale(10.0,10.0);
 			 renderBulletTrail_smoke->setBlending(BLENDING_ALPHA);
@@ -118,14 +118,14 @@ namespace game
 			 modelBulletImpact_pt->setShared(true);
 
 			IRRQuadRenderer* renderBulletImpact_sw0 = IRRQuadRenderer::create(oDev);
-			 renderBulletImpact_sw0->setTexture(oDriver->getTexture("../MatrixRun/data/vfx/shockwave0.png"));
+			 renderBulletImpact_sw0->setTexture(res::material::Get("shockwave0.png"));
 			 renderBulletImpact_sw0->setTexturingMode(TEXTURE_2D);
 			 renderBulletImpact_sw0->setScale(10.0,10.0);
 			 renderBulletImpact_sw0->setBlending(BLENDING_ADD);
 			 renderBulletImpact_sw0->enableRenderingHint(DEPTH_WRITE,false);
 			 //renderBulletImpact_sw0->setShared(true);
 			IRRQuadRenderer* renderBulletImpact_sw1 = IRRQuadRenderer::create(oDev);
-			 renderBulletImpact_sw1->setTexture(oDriver->getTexture("../MatrixRun/data/vfx/shockwave1.png"));
+			 renderBulletImpact_sw1->setTexture(res::material::Get("shockwave1.png"));
 			 renderBulletImpact_sw1->setTexturingMode(TEXTURE_2D);
 			 renderBulletImpact_sw1->setScale(10.0,10.0);
 			 renderBulletImpact_sw1->setBlending(BLENDING_ADD);

@@ -12,6 +12,8 @@ using namespace irr;
 #include <SPK_IRR.h>
 using namespace SPK;
 
+#include "../res.hpp"
+
 namespace game
 {
 
