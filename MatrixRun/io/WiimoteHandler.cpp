@@ -213,7 +213,7 @@ WiimoteHandler::WiimoteHandler(ConfigFile* Config, bool bConfigure)
         <<"O===============================O"<<endl;
 
 
-    Sleep(2000);
+    //Sleep(2000);
 
 
     #endif

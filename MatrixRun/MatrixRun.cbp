@@ -136,15 +136,24 @@
 		<Unit filename="game\CollGeometry.hpp">
 			<Option target="&lt;{~None~}&gt;" />
 		</Unit>
+		<Unit filename="game\Collisionnable.hpp">
+			<Option target="&lt;{~None~}&gt;" />
+		</Unit>
 		<Unit filename="game\GravityAnimator.cpp">
 			<Option compile="0" />
 			<Option link="0" />
 		</Unit>
 		<Unit filename="game\GravityAnimator.hpp" />
-		<Unit filename="game\MRCollisionnable.hpp">
+		<Unit filename="game\MREntity.hpp">
 			<Option target="&lt;{~None~}&gt;" />
 		</Unit>
-		<Unit filename="game\MREntity.hpp">
+		<Unit filename="game\Object.hpp">
+			<Option target="&lt;{~None~}&gt;" />
+		</Unit>
+		<Unit filename="game\VfxManager.cpp" />
+		<Unit filename="game\VfxManager.hpp" />
+		<Unit filename="game\general.h" />
+		<Unit filename="global.hpp">
 			<Option target="&lt;{~None~}&gt;" />
 		</Unit>
 		<Unit filename="io\WiiCur.cpp" />
@@ -155,6 +164,17 @@
 		<Unit filename="io\WiimoteHandler.hpp" />
 		<Unit filename="io\transition.cpp" />
 		<Unit filename="io\transition.hpp" />
+		<Unit filename="irr\IConstantSpeedAnimator.h">
+			<Option target="&lt;{~None~}&gt;" />
+		</Unit>
+		<Unit filename="irr\IDynamicLightSceneNode.h">
+			<Option target="&lt;{~None~}&gt;" />
+		</Unit>
+		<Unit filename="irr\IEmptySceneNode.h">
+			<Option target="&lt;{~None~}&gt;" />
+		</Unit>
+		<Unit filename="lib\Async.cpp" />
+		<Unit filename="lib\Async.hpp" />
 		<Unit filename="lib\ConfigFile.cpp" />
 		<Unit filename="lib\ConfigFile.hpp" />
 		<Unit filename="main.cpp" />

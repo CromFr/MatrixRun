@@ -22,7 +22,7 @@ namespace coll
 
 		bool GetIsValid()
 		{
-			if(node!=0)return true;
+			if(node>0)return true;
 			return false;
 		}
 
@@ -51,7 +51,7 @@ namespace coll
 		/**
 		@param bDrawLines true pour que le calcul se fasse sur toute la ligne formée par l'ancienne position de calcul et la nouvelle
 		**/
-		CollPoint(scene::ISceneNode* nodeAttachedNode, core::vector3df vPos, bool bDrawLines=true)
+		CollPoint(scene::ISceneNode* nodeAttachedNode, const core::vector3df& vPos, bool bDrawLines=true)
 		{
 			m_vPosRelNode.set(vPos);
 			m_bDrawLines = bDrawLines;
@@ -97,7 +97,7 @@ namespace coll
 	class CollLine : public CollGeometry
 	{
 	public:
-		CollLine(scene::ISceneNode* nodeAttachedNode, core::line3df& Line, bool bDrawSquares=false, float fPrecision=0.0)
+		CollLine(scene::ISceneNode* nodeAttachedNode, const core::line3df& Line, bool bDrawSquares=false, float fPrecision=0.0)
 		{
 			m_vLineRelNode = Line;
 			m_bDrawSquares = bDrawSquares;

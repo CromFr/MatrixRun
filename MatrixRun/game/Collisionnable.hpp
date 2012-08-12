@@ -1,25 +1,29 @@
 #ifndef COLLISIONNABLE_HPP_INCLUDED
 #define COLLISIONNABLE_HPP_INCLUDED
 
-#include <irrlicht.h>
+#include "../irr/IEmptySceneNode.h"
 using namespace irr;
 
 #include "CollGeometry.hpp"
 
+#include <boost/bind.hpp>
+#include <boost/function.hpp>
+using namespace boost;
 
 namespace game
 {
-	class MRCollisionnable : public scene::ISceneNode
+	class Collisionnable : public scene::IEmptySceneNode
 	{
 	public:
-		MRCollisionnable(scene::ISceneNode* parent, scene::ISceneManager* mgr, s32 id,
-				const core::vector3df& position = core::vector3df(0,0,0))
-			: ISceneNode(parent, mgr, id, position)
+		Collisionnable(scene::ISceneNode* parent, scene::ISceneManager* mgr, s32 id,
+				function<void(scene::ISceneNode*, core::triangle3df&, core::vector3df&)> funcCallback)
+			: IEmptySceneNode(parent, mgr, id, core::vector3df(0,0,0))
 		{
 			m_CollM = mgr->getSceneCollisionManager();
 			m_nCollisionFlags = 0;
+			m_funcCallback = funcCallback;
 		}
-		~MRCollisionnable()
+		~Collisionnable()
 		{
 			ClearCollisions();
 		}
@@ -28,11 +32,11 @@ namespace game
 		inline int GetCollisionFlags()const{return m_nCollisionFlags;}
 
 
-		void AddCollisionLine(core::line3df& line)
+		void AddCollisionLine(const core::line3df& line)
 		{
 			m_CollPoints.push_back(new coll::CollLine(this, line));
 		}
-		void AddCollisionPoint(core::vector3df& point)
+		void AddCollisionPoint(const core::vector3df& point)
 		{
 			m_CollPoints.push_back(new coll::CollPoint(this, point));
 		}
@@ -46,7 +50,6 @@ namespace game
 			m_CollPoints.clear();
 		}
 
-		virtual void OnCollision(scene::ISceneNode* node, core::triangle3df& triangle, core::vector3df& position)=0;
 
 
 	protected:
@@ -61,11 +64,13 @@ namespace game
 					coll::Collision* collision = m_CollPoints[i]->GetCollision(m_CollM, this, m_nCollisionFlags);
 					if(collision>0)
 					{
-						OnCollision(collision->node, collision->triangle, collision->position);
+						m_funcCallback(collision->node, collision->triangle, collision->position);
+						break;
 					}
 				}
 			}
 		}
+
 
 		scene::ISceneCollisionManager* m_CollM;
 
@@ -73,6 +78,7 @@ namespace game
 
 	private:
 		vector<coll::CollGeometry*> m_CollPoints;
+		function<void(scene::ISceneNode*, core::triangle3df&, core::vector3df&)> m_funcCallback;
 
 
 	};

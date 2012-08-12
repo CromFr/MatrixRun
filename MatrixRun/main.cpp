@@ -21,7 +21,11 @@ using namespace SPK;
 
 #include "game/GravityAnimator.hpp"
 
-#include "game/MRCollisionnable.hpp"
+#include "game/Bullet.hpp"
+#include "game/VfxManager.hpp"
+
+
+#include "lib/Async.hpp"
 
 
 
@@ -31,10 +35,6 @@ using namespace SPK;
 
 
 #define ID_TYPE_CIBLE 1
-
-
-
-
 
 
 int main()
@@ -50,9 +50,10 @@ int main()
     WiimoteHandler WMHdl(&Config);
 
 
-    #define TEST_POSITIONNING false
+	#define TEST_POSITIONNING_
     {//==================== Test du syst de positionnement
-    while(TEST_POSITIONNING)
+	#ifdef TEST_POSITIONNING
+    while(true)
     {
 
         try
@@ -70,9 +71,12 @@ int main()
         }
         //Sleep(70);
     }
+    #endif
     }//--------------------
 
 
+	//Configuration de Async
+	Async::GetInstance()->LaunchThread(0.02);
 
 
     cout<<endl<<endl<<endl<<endl
@@ -97,8 +101,7 @@ int main()
 
     scene::ISceneManager *oSM = oDev->getSceneManager ();
 
-    //Le curseur est visible
-    oDev->getCursorControl()->setVisible(true);
+    oDev->getCursorControl()->setVisible(true);//Le curseur est visible
     //--------------------
 
 
@@ -106,28 +109,27 @@ int main()
     video::ITexture *texNoIRSrc = oDriver->getTexture("data/no_ir_src.png");
     video::ITexture *texRightCrosshair = oDriver->getTexture("data/rightcrosshair.png");
     //video::ITexture *texLeftCrosshair = oDriver->getTexture("data/leftcrosshair.png");
-    //--------------------
 
 
     //==================== Setup de la caméra
     scene::ISceneNode* nodeCamContainer = oSM->addEmptySceneNode();
 
-    scene::ICameraSceneNode* nodeCamera = oSM->addCameraSceneNode(nodeCamContainer, core::vector3df(0, 0, 0), core::vector3df(0, 0, 10));
+    //scene::ICameraSceneNode* nodeCamera = oSM->addCameraSceneNode(nodeCamContainer, core::vector3df(0, 0, 0), core::vector3df(0, 0, 10));
+    scene::ICameraSceneNode* nodeCamera = oSM->addCameraSceneNode(nodeCamContainer, core::vector3df(0, 0, -100), core::vector3df(0, 0, 10));
     nodeCamera->bindTargetAndRotation(false);
 
     nodeCamera->setFarValue(3500);
-    //--------------------
 
     //==================== Brouillard
     oDriver->setFog(video::SColor(0, 0, 0, 0), video::EFT_FOG_LINEAR, 2000.0f, 3000.0f, 0.01f, true, true);
-    //--------------------
 
     //==================== Eclairage
     oSM->setAmbientLight(video::SColor(0,64,64,64));
 
-    oSM->addLightSceneNode(nodeCamera, core::vector3df(0,0,0), video::SColor(128,255,255,255), 1000.0f);
-    //--------------------
+    //oSM->addLightSceneNode(nodeCamera, core::vector3df(0,0,0), video::SColor(128,255,255,255), 1000.0f);
 
+    //==================== Effets visuels
+    game::VfxManager::Init(oDev);
 
     //==================== Création du cube-background
     scene::IAnimatedMeshSceneNode *nodeBackground = oSM->addAnimatedMeshSceneNode(oSM->getMesh("data/emptycube.3ds"));
@@ -163,8 +165,8 @@ int main()
 
 
     //==================== Joueur
-    scene::IAnimatedMeshSceneNode *nodePlayer = oSM->addAnimatedMeshSceneNode(oSM->getMesh("data/neb/nebuchadnezzar.3ds"), 0, -1, core::vector3df(0, 0, 100), core::vector3df(0, 0, 0), core::vector3df(0.5, 0.5, 0.5));
-    nodePlayer->setMaterialFlag(irr::video::EMF_LIGHTING, true);
+    //scene::IAnimatedMeshSceneNode *nodePlayer = oSM->addAnimatedMeshSceneNode(oSM->getMesh("data/neb/nebuchadnezzar.3ds"), 0, -1, core::vector3df(0, 0, 100), core::vector3df(0, 0, 0), core::vector3df(0.5, 0.5, 0.5));
+    //nodePlayer->setMaterialFlag(irr::video::EMF_LIGHTING, true);
 
     //              float fMasseKg, float fGravity=98, float fAirFriction=0, core::vector3df OptForce=core::vector3df(0,0,0)
     //GravityAnimator GravEngine(1000, 0, 0, core::vector3df(0, 0, 0));
@@ -180,47 +182,9 @@ int main()
     //--------------------
 
 
-    //==================== Effets de particules
-    #include "_ParticleEffects.cpp"
-/*
-    Point* ExplosionEmitZone = Point::create();
-
-    RandomEmitter* ExplosionEmitter = RandomEmitter::create();
-     ExplosionEmitter->setZone(ExplosionEmitZone);
-     ExplosionEmitter->setTank(100);
-     ExplosionEmitter->setFlow(400);
-     ExplosionEmitter->setForce(75.0, 200.0);
-
-    Model* ExplosionModel = Model::create(FLAG_RED|FLAG_GREEN|FLAG_BLUE|FLAG_ALPHA, FLAG_ALPHA|FLAG_ANGLE, FLAG_ANGLE);
-     ExplosionModel->setParam(PARAM_ALPHA, 1.0f, 0.0f);
-     ExplosionModel->setParam(PARAM_ANGLE, 0.f, 2.0*3.14f, 0.f, 4.0*3.14f);
-     ExplosionModel->setLifeTime(5.0f, 5.0f);
-     //ExplosionModel->setShared(true);
-
-    IRR::IRRQuadRenderer* ExplosionRenderer = IRR::IRRQuadRenderer::create(oDev);
-     ExplosionRenderer->setTexture(oDriver->getTexture("data/fx_smoke.png"));
-	 ExplosionRenderer->setTexturingMode(TEXTURE_2D);
-	 ExplosionRenderer->setScale(50.0f,50.0f);
-     ExplosionRenderer->setBlending(BLENDING_ADD);
-	 ExplosionRenderer->enableRenderingHint(DEPTH_WRITE,false);
-	 //ExplosionRenderer->setShared(true);
-
-    Group* ExplosionGroup = Group::create(ExplosionModel, 1000);
-     ExplosionGroup->setRenderer(ExplosionRenderer);
-     ExplosionGroup->addEmitter(ExplosionEmitter);
-     ExplosionGroup->setFriction(3.0f);
-     ExplosionGroup->setGravity(Vector3D(0.0f,-9.0f,0.0f));
-
-    IRR::IRRSystem* Explosion = IRR::IRRSystem::create(oSM->getRootSceneNode(),oSM);
-     Explosion->addGroup(ExplosionGroup);
-
-    int explosionID = Explosion->getSPKID();//Explosion->SPK::Registerable::getID();//
-*/
-
-    cout<<"Objets : "<<SPKFactory::getInstance().getNbObjects()<<endl;
-
 	//--------------------
 
+	game::Bullet blahblah(nodeBackground, oSM, 0, core::vector3df(50,130,-200), core::vector3df(0,0,1), 20);
 
 
     oTimer->start();
@@ -334,43 +298,43 @@ int main()
                             //partFire->setPosition(posHitPosition);
                             //partFire->setVisible(true);
 
-    Point* ExplosionEmitZone = Point::create();
-
-    RandomEmitter* ExplosionEmitter = RandomEmitter::create();
-     ExplosionEmitter->setZone(ExplosionEmitZone);
-     ExplosionEmitter->setTank(20);
-     ExplosionEmitter->setFlow(100);
-     ExplosionEmitter->setForce(150.0, 300.0);
-
-    Model* ExplosionModel = Model::create(FLAG_RED|FLAG_GREEN|FLAG_BLUE|FLAG_ALPHA, FLAG_ALPHA|FLAG_ANGLE, FLAG_ANGLE);
-     ExplosionModel->setParam(PARAM_ALPHA, 1.0f, 0.0f);
-     ExplosionModel->setParam(PARAM_ANGLE, 0.f, 2.0*3.14f, 0.f, 4.0*3.14f);
-     ExplosionModel->setLifeTime(0.5f, 2.0f);
-     //ExplosionModel->setShared(true);
-
-    IRR::IRRQuadRenderer* ExplosionRenderer = IRR::IRRQuadRenderer::create(oDev);
-     ExplosionRenderer->setTexture(oDriver->getTexture("data/fx_smoke.png"));
-	 ExplosionRenderer->setTexturingMode(TEXTURE_2D);
-	 ExplosionRenderer->setScale(50.0f,100.0f);
-     ExplosionRenderer->setBlending(BLENDING_ADD);
-	 ExplosionRenderer->enableRenderingHint(DEPTH_WRITE,false);
-	 //ExplosionRenderer->setShared(true);
-
-    Group* ExplosionGroup = Group::create(ExplosionModel, 1000);
-     ExplosionGroup->setRenderer(ExplosionRenderer);
-     ExplosionGroup->addEmitter(ExplosionEmitter);
-     ExplosionGroup->setFriction(2.5f);
-     ExplosionGroup->setGravity(Vector3D(0.0f,-9.0f,0.0f));
-
-    IRR::IRRSystem* Explosion = IRR::IRRSystem::create(oSM->getRootSceneNode(),oSM);
-     Explosion->addGroup(ExplosionGroup);
-     Explosion->setPosition(posHitPosition);
+//    Point* ExplosionEmitZone = Point::create();
+//
+//    RandomEmitter* ExplosionEmitter = RandomEmitter::create();
+//     ExplosionEmitter->setZone(ExplosionEmitZone);
+//     ExplosionEmitter->setTank(20);
+//     ExplosionEmitter->setFlow(100);
+//     ExplosionEmitter->setForce(150.0, 300.0);
+//
+//    Model* ExplosionModel = Model::create(FLAG_RED|FLAG_GREEN|FLAG_BLUE|FLAG_ALPHA, FLAG_ALPHA|FLAG_ANGLE, FLAG_ANGLE);
+//     ExplosionModel->setParam(PARAM_ALPHA, 1.0f, 0.0f);
+//     ExplosionModel->setParam(PARAM_ANGLE, 0.f, 2.0*3.14f, 0.f, 4.0*3.14f);
+//     ExplosionModel->setLifeTime(0.5f, 2.0f);
+//     //ExplosionModel->setShared(true);
+//
+//    IRR::IRRQuadRenderer* ExplosionRenderer = IRR::IRRQuadRenderer::create(oDev);
+//     ExplosionRenderer->setTexture(oDriver->getTexture("data/fx_smoke.png"));
+//	 ExplosionRenderer->setTexturingMode(TEXTURE_2D);
+//	 ExplosionRenderer->setScale(50.0f,100.0f);
+//     ExplosionRenderer->setBlending(BLENDING_ADD);
+//	 ExplosionRenderer->enableRenderingHint(DEPTH_WRITE,false);
+//	 //ExplosionRenderer->setShared(true);
+//
+//    Group* ExplosionGroup = Group::create(ExplosionModel, 1000);
+//     ExplosionGroup->setRenderer(ExplosionRenderer);
+//     ExplosionGroup->addEmitter(ExplosionEmitter);
+//     ExplosionGroup->setFriction(2.5f);
+//     ExplosionGroup->setGravity(Vector3D(0.0f,-9.0f,0.0f));
+//
+//    IRR::IRRSystem* Explosion = IRR::IRRSystem::create(oSM->getRootSceneNode(),oSM);
+//     Explosion->addGroup(ExplosionGroup);
+//     Explosion->setPosition(posHitPosition);
 
                         }
                         else if(Event.button & WIIMOTE_BUTTON_B)
                         {
-                            partExplosion->setPosition(posHitPosition);
-                            partExplosion->setVisible(true);
+//                            partExplosion->setPosition(posHitPosition);
+//                            partExplosion->setVisible(true);
                         }
                     }
                 }
@@ -381,8 +345,8 @@ int main()
                 }
                 else
                 {
-                    partExplosion->setVisible(false);
-                    partFire->setVisible(false);
+//                    partExplosion->setVisible(false);
+//                    partFire->setVisible(false);
                 }
 
             }
@@ -427,5 +391,6 @@ int main()
         sCaption += oDriver->getFPS();//oTimer->getTime()
         oDev->setWindowCaption(sCaption.c_str());
     }
+
 }
 
