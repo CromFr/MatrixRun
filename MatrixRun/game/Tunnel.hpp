@@ -120,12 +120,6 @@ namespace game
 					aStartBottomPoints[iBot++] = &(*itStart);
 				}
 			}
-			cout<<iTop<<" top points and "<<iBot<<" bot points"<<endl;
-			if(iTop!=iBot)
-			{
-				m_vLines.push_back(video::S3DVertex(-150,fStartCoeff*(-150+fStartXDiff)+fStartYDiff,0,  0,0,0,  clr, 0,0));
-				m_vLines.push_back(video::S3DVertex(150,fStartCoeff*(150+fStartXDiff)+fStartYDiff,0,  0,0,0,  clr, 0,0));
-			}
 
 			//idem for the bottom
 			float fEndCoeff = (m_EndingElipse.GetCenter().Y-itEnd->Y)/(m_EndingElipse.GetCenter().X-itEnd->X);
@@ -148,16 +142,10 @@ namespace game
 					aEndBottomPoints[iBot++] = &(*itEnd);
 				}
 			}
-			cout<<iTop<<" top points and "<<iBot<<" bot points"<<endl;
-			if(iTop!=iBot)
-			{
-				m_vLines.push_back(video::S3DVertex(-150,fEndCoeff*(-150+fEndXDiff)+fEndYDiff,300,  0,0,0,  video::SColor(255,255,0,0), 0,0));
-				m_vLines.push_back(video::S3DVertex(150,fEndCoeff*(150+fEndXDiff)+fEndYDiff,300,  0,0,0,  video::SColor(255,255,0,0), 0,0));
-			}
 
 
 			//==> Link all points, making quads
-			for(int i=0 ; i<nStartPoints-1 ; i++)// @fixme clean
+			for(int i=0 ; i<nStartPoints-1 ; i++)
 			{
 				AddTunnelQuad(
 								aStartTopPoints[i]->X,		aStartTopPoints[i]->Y,		0,
@@ -193,12 +181,6 @@ namespace game
 			driver->setTransform(video::ETS_WORLD, AbsoluteTransformation);
 
 			driver->drawVertexPrimitiveList(&m_vVertices[0], m_vVertices.size(), &m_vPoligons[0], m_vPoligons.size()/4, video::EVT_STANDARD, scene::EPT_QUADS, video::EIT_16BIT);
-
-			u16 indexes[m_vLines.size()];
-			for(int i=0 ; i<m_vLines.size() ; i++)
-				indexes[i] = i;
-			driver->drawVertexPrimitiveList(&m_vLines[0], m_vLines.size(), &indexes[0], m_vLines.size()/2, video::EVT_STANDARD, scene::EPT_LINES, video::EIT_16BIT);
-
 		}
 
 		virtual const core::aabbox3d<f32>& getBoundingBox() const{return m_AABBox;}
@@ -276,8 +258,6 @@ namespace game
 		vector<video::S3DVertex> m_vVertices;
 		vector<u16> m_vPoligons;
 		video::SMaterial m_Material;
-
-		vector<video::S3DVertex> m_vLines;
 
 
 		video::SColor clr;

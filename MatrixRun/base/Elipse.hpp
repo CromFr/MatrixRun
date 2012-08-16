@@ -61,7 +61,7 @@ namespace base
 			if(!m_bCalculated)
 			{
 				//Calculate points
-
+				//cout<<"CREATING ELIPSE : c("<<m_vCenter.X<<","<<m_vCenter.Y<<")\tA="<<m_fA<<"\tB="<<m_fB<<"\ta="<<m_fAngle<<endl;
 
 				//Add special points
 				m_listElipsePoints.push_back(core::vector2df(0,m_fB));
@@ -84,6 +84,7 @@ namespace base
 						m_listElipsePoints.push_back(core::vector2df(x,-y));
 						m_listElipsePoints.push_back(core::vector2df(-x,-y));
 						m_listElipsePoints.push_back(core::vector2df(-x,y));
+						//cout<<" o\t"<<x<<"\t"<<y<<endl;
 					}
 				}
 				else
@@ -99,6 +100,7 @@ namespace base
 						m_listElipsePoints.push_back(core::vector2df(x,-y));
 						m_listElipsePoints.push_back(core::vector2df(-x,-y));
 						m_listElipsePoints.push_back(core::vector2df(-x,y));
+						//cout<<" o\t"<<x<<"\t"<<y<<endl;
 					}
 				}
 
@@ -113,11 +115,9 @@ namespace base
 					it->X = fNewX;
 					it->Y = fNewY;
 				}
-				cout<<"Elipse created : "<<nCount<<" points :"<<endl;
+				//cout<<"Elipse created : "<<nCount<<" points :"<<endl;
 
 				m_listElipsePoints.sort();
-				for(it=m_listElipsePoints.begin() ; it!=m_listElipsePoints.end() ; it++)
-					cout<<"Point at "<<it->X<<"\t"<<it->Y<<endl;
 				m_bCalculated=true;
 			}
 			return &m_listElipsePoints;

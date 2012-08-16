@@ -70,10 +70,17 @@ namespace game
 			float fAngle = base.GetAngle() + (rand()%40)-20;
 
 			core::vector2df vCenter(base.GetCenter().X+(rand()%50)-25, base.GetCenter().Y+(rand()%50)-25);
+			if(vCenter.X>100)vCenter.X = 100;
+			if(vCenter.X<-100)vCenter.X = -100;
+			if(vCenter.Y>100)vCenter.Y = 100;
+			if(vCenter.Y<-100)vCenter.Y = -100;
 
-			float fMax = 150;
 			float fA = base.GetA() + rand()%50 -25;
+			if(fA<50)fA=50;
+			if(fA>150)fA=150;
 			float fB = base.GetB() + rand()%50 -25;
+			if(fB<50)fB=50;
+			if(fB>150)fB=150;
 
 			return base::Elipse(vCenter, fA, fB, fAngle);
 		}
