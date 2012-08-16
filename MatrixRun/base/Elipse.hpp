@@ -61,14 +61,25 @@ namespace base
 			if(!m_bCalculated)
 			{
 				//Calculate points
+
+
+				//Add special points
+				m_listElipsePoints.push_back(core::vector2df(0,m_fB));
+				m_listElipsePoints.push_back(core::vector2df(0,-m_fB));
+				m_listElipsePoints.push_back(core::vector2df(m_fA,0));
+				m_listElipsePoints.push_back(core::vector2df(-m_fA,0));
+
+				//
 				list<core::vector2df>::iterator it;
 				if(m_fA>=m_fB)
 				{
 					//Calculate y with x fixed
 					float a2 = m_fA*m_fA;
-					for(float x=0 ; x<=m_fA ; x+=m_fA/(float)m_nPrecision)
+					for(int i=1 ; i<(m_nPrecision-1) ; i++)
 					{
+						float x = m_fA*i/(m_nPrecision-1);
 						float y = m_fB*sqrt((1-x*x/a2));
+
 						m_listElipsePoints.push_back(core::vector2df(x,y));
 						m_listElipsePoints.push_back(core::vector2df(x,-y));
 						m_listElipsePoints.push_back(core::vector2df(-x,-y));
@@ -79,9 +90,11 @@ namespace base
 				{
 					//Calculate x with y fixed
 					float b2 = m_fB*m_fB;
-					for(float y=0 ; y<=m_fB ; y+=m_fB/(float)m_nPrecision)
+					for(int i=1 ; i<(m_nPrecision-1) ; i++)
 					{
+						float y = m_fB*i/(m_nPrecision-1);
 						float x = m_fA*sqrt((1-y*y/b2));
+
 						m_listElipsePoints.push_back(core::vector2df(x,y));
 						m_listElipsePoints.push_back(core::vector2df(x,-y));
 						m_listElipsePoints.push_back(core::vector2df(-x,-y));
@@ -92,33 +105,41 @@ namespace base
 				//Rotate then translate the vectors
 				float fCos = cosf(m_fAngle*3.14/180);
 				float fSin = sinf(m_fAngle*3.14/180);
-				for(it=m_listElipsePoints.begin() ; it!=m_listElipsePoints.end() ; it++)
+				int nCount=0;
+				for(it=m_listElipsePoints.begin() ; it!=m_listElipsePoints.end() ; it++, nCount++)
 				{
 					float fNewX = fCos*it->X - fSin*it->Y		+m_vCenter.X;
 					float fNewY = fSin*it->X + fCos*it->Y		+m_vCenter.Y;
 					it->X = fNewX;
 					it->Y = fNewY;
 				}
-
+				cout<<"Elipse created : "<<nCount<<" points :"<<endl;
 
 				m_listElipsePoints.sort();
+				for(it=m_listElipsePoints.begin() ; it!=m_listElipsePoints.end() ; it++)
+					cout<<"Point at "<<it->X<<"\t"<<it->Y<<endl;
 				m_bCalculated=true;
 			}
 			return &m_listElipsePoints;
 		}
 
 
-		bool GetIsInto(core::vector2df pos)
+		bool GetIsInto(const core::vector2df& pos)const
 		{
-			pos.X -= m_vCenter.X;
-			pos.Y -= m_vCenter.Y;
+			return GetIsInto(pos.X, pos.Y);
+		}
 
+		bool GetIsInto(const float& fposX, const float& fposY)const
+		{
+			//Unrotate
 			float fCos = cosf(-m_fAngle*3.14/180);
 			float fSin = sinf(-m_fAngle*3.14/180);
 
-			float fX = fCos*pos.X - fSin*pos.Y;
-			float fY = fSin*pos.X + fCos*pos.Y;
+			//Calculate point in elipse origin
+			float fX = fCos*(fposX-m_vCenter.X) - fSin*(fposY-m_vCenter.Y);
+			float fY = fSin*(fposX-m_vCenter.X) + fCos*(fposY-m_vCenter.Y);
 
+			//use elipse formula
 			return ( ((fX*fX)/(m_fA*m_fA) + (fY*fY)/(m_fB*m_fB)) <= 1 );
 		}
 	private:
@@ -134,7 +155,7 @@ namespace base
 		list<core::vector2df> m_listElipsePoints;
 
 	};
-	
+
 }
 
 #endif // ELIPSE_HPP_INCLUDED

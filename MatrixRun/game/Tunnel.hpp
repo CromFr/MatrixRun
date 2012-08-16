@@ -18,9 +18,7 @@ namespace game
 	{
 	public:
 		Tunnel(scene::ISceneNode* parent, scene::ISceneManager* mgr, const core::vector3df& pos, const base::Elipse& start, const base::Elipse& end)
-			: scene::ISceneNode(parent, mgr, -1, pos),
-			//m_StartingElipse(core::vector2df(0,0), 140, 80, 0),
-			//m_EndingElipse(core::vector2df(-50,-90), 100, 70, 30),
+			: scene::ISceneNode(parent, mgr, tunnel_border, pos),
 			m_AABBox(-150,-150,0,300,300,300),
 			clr(128,128,128,128)
 		{
@@ -28,68 +26,69 @@ namespace game
 			m_EndingElipse = end;
 
 
-			m_Material.setTexture(0, SceneManager->getVideoDriver()->getTexture("../MatrixRun/data/model/wood.jpg"));
+			m_Material.setTexture(0, res::material::Get("cave.jpg"));
 			m_Material.Lighting = true;
 			m_Material.FogEnable = true;
 			//m_Material.Wireframe = true;
 
 
-			//============================> Set the front polygons
-			list<core::vector2df>* listPoint = m_StartingElipse.GetCalculatedPoints();
-			list<core::vector2df>::iterator it = listPoint->begin();
-
-
-			//middle line params : f(x) = fCoeff*(x+fXDiff)+fYDiff
-			//	Used to determine if the point must be linked to the top or bottom
-			float fCoeff = (m_StartingElipse.GetCenter().Y-it->Y)/(m_StartingElipse.GetCenter().X-it->X);
-			float fXDiff = -m_StartingElipse.GetCenter().X;
-			float fYDiff = m_StartingElipse.GetCenter().Y;
-
-
-			//Left border quads :
-			AddFrontPolygon(core::vector3df(-150,-150,0),
-							core::vector3df(-150,150,0),
-							core::vector3df(it->X,150,0),
-							core::vector3df(it->X,-150,0));
-
-
-			core::vector2df* vLastPointTop = &(*it);
-			core::vector2df* vLastPointBottom = &(*it);
-			it++;
-			for( ; it!=listPoint->end() ; it++)
-			{
-				//if fDelta>0, the point will be linked with upper side
-				float fDelta = it->Y - (fCoeff*(it->X+fXDiff)+fYDiff);
-
-				if(fDelta >= -0.05)// +/- 0.05 error due to float approx
-				{
-					AddFrontPolygon(core::vector3df(vLastPointTop->X,vLastPointTop->Y,0),
-									core::vector3df(vLastPointTop->X,150,0),
-									core::vector3df(it->X,150,0),
-									core::vector3df(it->X,it->Y,0));
-
-					vLastPointTop = &(*it);
-				}
-				if(fDelta <= 0.05)// +/- 0.05 error due to float approx
-				{
-					AddFrontPolygon(core::vector3df(it->X,it->Y,0),
-									core::vector3df(it->X,-150,0),
-									core::vector3df(vLastPointBottom->X,-150,0),
-									core::vector3df(vLastPointBottom->X,vLastPointBottom->Y,0));
-
-					vLastPointBottom = &(*it);
-				}
-
-			}
-			//Right border
-			AddFrontPolygon(core::vector3df(vLastPointBottom->X,-150,0),
-							core::vector3df(vLastPointBottom->X,150,0),
-							core::vector3df(150,150,0),
-							core::vector3df(150,-150,0));
+//			//============================> Set the front polygons
+//			list<core::vector2df>* listPoint = m_StartingElipse.GetCalculatedPoints();
+//			list<core::vector2df>::iterator it = listPoint->begin();
+//
+//
+//			//middle line params : f(x) = fCoeff*(x+fXDiff)+fYDiff
+//			//	Used to determine if the point must be linked to the top or bottom
+//			float fCoeff = (m_StartingElipse.GetCenter().Y-it->Y)/(m_StartingElipse.GetCenter().X-it->X);
+//			float fXDiff = -m_StartingElipse.GetCenter().X;
+//			float fYDiff = m_StartingElipse.GetCenter().Y;
+//
+//
+//			//Left border quads :
+//			AddFrontPolygon(core::vector3df(-150,-150,0),
+//							core::vector3df(-150,150,0),
+//							core::vector3df(it->X,150,0),
+//							core::vector3df(it->X,-150,0));
+//
+//
+//			core::vector2df* vLastPointTop = &(*it);
+//			core::vector2df* vLastPointBottom = &(*it);
+//			it++;
+//			for( ; it!=listPoint->end() ; it++)
+//			{
+//				//if fDelta>0, the point will be linked with upper side
+//				float fDelta = it->Y - (fCoeff*(it->X+fXDiff)+fYDiff);
+//
+//				if(fDelta >= -0.05)// +/- 0.05 error due to float approx
+//				{
+//					AddFrontPolygon(core::vector3df(vLastPointTop->X,vLastPointTop->Y,0),
+//									core::vector3df(vLastPointTop->X,150,0),
+//									core::vector3df(it->X,150,0),
+//									core::vector3df(it->X,it->Y,0));
+//
+//					vLastPointTop = &(*it);
+//				}
+//				if(fDelta <= 0.05)// +/- 0.05 error due to float approx
+//				{
+//					AddFrontPolygon(core::vector3df(it->X,it->Y,0),
+//									core::vector3df(it->X,-150,0),
+//									core::vector3df(vLastPointBottom->X,-150,0),
+//									core::vector3df(vLastPointBottom->X,vLastPointBottom->Y,0));
+//
+//					vLastPointBottom = &(*it);
+//				}
+//
+//			}
+//			//Right border
+//			AddFrontPolygon(core::vector3df(vLastPointBottom->X,-150,0),
+//							core::vector3df(vLastPointBottom->X,150,0),
+//							core::vector3df(150,150,0),
+//							core::vector3df(150,-150,0));
 
 
 
 			//============================> Set the tunnel polygons
+			int iTop=0, iBot=0;
 			list<core::vector2df>* listStartPoint = m_StartingElipse.GetCalculatedPoints();
 			list<core::vector2df>::iterator itStart = listStartPoint->begin();
 			list<core::vector2df>* listEndPoint = m_EndingElipse.GetCalculatedPoints();
@@ -105,20 +104,27 @@ namespace game
 			float fStartYDiff = m_StartingElipse.GetCenter().Y;
 
 			//The arrays that contain the points
-			core::vector2df* aStartTopPoints[m_StartingElipse.GetCalcPrecision()*2];
-			core::vector2df* aStartBottomPoints[m_StartingElipse.GetCalcPrecision()*2];
-			for(int iTop=0, iBot=0 ; itStart!=listStartPoint->end() ; itStart++)
+			int nStartPoints = 2*m_StartingElipse.GetCalcPrecision()-1;
+			core::vector2df* aStartTopPoints[nStartPoints];
+			core::vector2df* aStartBottomPoints[nStartPoints];
+			for(iTop=0, iBot=0 ; itStart!=listStartPoint->end() ; itStart++)
 			{
 				//fDelta represents if the point is at the top/bottom of the elipse
 				float fDelta = itStart->Y - (fStartCoeff*(itStart->X+fStartXDiff)+fStartYDiff);
-				if(fDelta >= -0.5)// +/- 0.05 error due to float approx
+				if(fDelta >= -0.05)// +/- 0.05 error due to float approx
 				{
 					aStartTopPoints[iTop++] = &(*itStart);
 				}
-				if(fDelta <= 0.5)// +/- 0.05 error due to float approx
+				if(fDelta <= 0.05)// +/- 0.05 error due to float approx
 				{
 					aStartBottomPoints[iBot++] = &(*itStart);
 				}
+			}
+			cout<<iTop<<" top points and "<<iBot<<" bot points"<<endl;
+			if(iTop!=iBot)
+			{
+				m_vLines.push_back(video::S3DVertex(-150,fStartCoeff*(-150+fStartXDiff)+fStartYDiff,0,  0,0,0,  clr, 0,0));
+				m_vLines.push_back(video::S3DVertex(150,fStartCoeff*(150+fStartXDiff)+fStartYDiff,0,  0,0,0,  clr, 0,0));
 			}
 
 			//idem for the bottom
@@ -126,24 +132,32 @@ namespace game
 			float fEndXDiff = -m_EndingElipse.GetCenter().X;
 			float fEndYDiff = m_EndingElipse.GetCenter().Y;
 
-			core::vector2df* aEndTopPoints[m_EndingElipse.GetCalcPrecision()*2];
-			core::vector2df* aEndBottomPoints[m_EndingElipse.GetCalcPrecision()*2];
-			for(int iTop=0, iBot=0 ; itEnd!=listEndPoint->end() ; itEnd++)
+			int nEndPoints = 2*m_EndingElipse.GetCalcPrecision()-1;
+			core::vector2df* aEndTopPoints[nEndPoints];
+			core::vector2df* aEndBottomPoints[nEndPoints];
+			for(iTop=0, iBot=0 ; itEnd!=listEndPoint->end() ; itEnd++)
 			{
 				float fDelta = itEnd->Y - (fEndCoeff*(itEnd->X+fEndXDiff)+fEndYDiff);
-				if(fDelta >= -0.5)
+				//cout<<"fDelta = "<<fDelta<<"\t Coord="<<itEnd->X<<"\t"<<itEnd->Y<<endl;
+				if(fDelta >= -0.05)
 				{
 					aEndTopPoints[iTop++] = &(*itEnd);
 				}
-				if(fDelta <= 0.5)
+				if(fDelta <= 0.05)
 				{
 					aEndBottomPoints[iBot++] = &(*itEnd);
 				}
 			}
+			cout<<iTop<<" top points and "<<iBot<<" bot points"<<endl;
+			if(iTop!=iBot)
+			{
+				m_vLines.push_back(video::S3DVertex(-150,fEndCoeff*(-150+fEndXDiff)+fEndYDiff,300,  0,0,0,  video::SColor(255,255,0,0), 0,0));
+				m_vLines.push_back(video::S3DVertex(150,fEndCoeff*(150+fEndXDiff)+fEndYDiff,300,  0,0,0,  video::SColor(255,255,0,0), 0,0));
+			}
 
 
 			//==> Link all points, making quads
-			for(int i=0 ; i<m_StartingElipse.GetCalcPrecision()*2+2 ; i++)// @fixme (crom#1#): why +2? =D
+			for(int i=0 ; i<nStartPoints-1 ; i++)// @fixme clean
 			{
 				AddTunnelQuad(
 								aStartTopPoints[i]->X,		aStartTopPoints[i]->Y,		0,
@@ -158,12 +172,11 @@ namespace game
 								aStartBottomPoints[i+1]->X,	aStartBottomPoints[i+1]->Y,	0,
 								aStartBottomPoints[i]->X,	aStartBottomPoints[i]->Y,	0,
 								-1);
-
 			}
 		}
 
 
-
+		//============================================
 		virtual void OnRegisterSceneNode()
 		{
 			if(IsVisible)
@@ -171,6 +184,7 @@ namespace game
 			ISceneNode::OnRegisterSceneNode();
 		}
 
+		//============================================
 		virtual void render()
 		{
 			video::IVideoDriver* driver = SceneManager->getVideoDriver();
@@ -180,18 +194,45 @@ namespace game
 
 			driver->drawVertexPrimitiveList(&m_vVertices[0], m_vVertices.size(), &m_vPoligons[0], m_vPoligons.size()/4, video::EVT_STANDARD, scene::EPT_QUADS, video::EIT_16BIT);
 
+			u16 indexes[m_vLines.size()];
+			for(int i=0 ; i<m_vLines.size() ; i++)
+				indexes[i] = i;
+			driver->drawVertexPrimitiveList(&m_vLines[0], m_vLines.size(), &indexes[0], m_vLines.size()/2, video::EVT_STANDARD, scene::EPT_LINES, video::EIT_16BIT);
+
 		}
 
 		virtual const core::aabbox3d<f32>& getBoundingBox() const{return m_AABBox;}
 		virtual u32 getMaterialCount() const{return 1;}
 		virtual video::SMaterial& getMaterial(u32 i){return m_Material;}
 
+		//============================================
+		bool GetIsInTunnel(const core::vector3df& vCheckPosAbs)
+		{
+			core::vector3df vCheckPosRelNode(vCheckPosAbs-getAbsolutePosition());
+			if(!m_AABBox.isPointInside(vCheckPosRelNode))
+				return false;
+
+			//fCoeff = 0:start, 1:end
+			float fCoeff = vCheckPosRelNode.Z/300.0;
+			float fAntiCoeff = 1-fCoeff;
+			base::Elipse elipseMidle(	m_StartingElipse.GetCenter()*fCoeff + m_EndingElipse.GetCenter()*fAntiCoeff,
+										m_StartingElipse.GetA()*fCoeff + m_EndingElipse.GetA()*fAntiCoeff,
+										m_StartingElipse.GetB()*fCoeff + m_EndingElipse.GetB()*fAntiCoeff,
+										m_StartingElipse.GetAngle()*fCoeff + m_EndingElipse.GetAngle()*fAntiCoeff);
+
+			return elipseMidle.GetIsInto(vCheckPosRelNode.X, vCheckPosRelNode.Y);
+		}
+
+		const base::Elipse* GetStartingElipse(){return &m_StartingElipse;}
+		const base::Elipse* GetEndingElipse(){return &m_EndingElipse;}
+
+
+//============================================
 	private:
+		//============================================
 		void AddFrontPolygon(const core::vector3df& a, const core::vector3df& b, const core::vector3df& c, const core::vector3df& d)
 		{
 			int nBaseIndex = m_vVertices.size();
-
-			//core::vector3df normal(0,0,-1);
 			core::vector3df normal(0,0,0);
 
 			m_vVertices.push_back(video::S3DVertex(	a,	normal,		clr,	core::vector2df(a.X/100.0,a.Y/100.0)));
@@ -205,6 +246,7 @@ namespace game
 			m_vPoligons.push_back(nBaseIndex+3);
 		}
 
+		//============================================
 		//the two first vectors are used for the normal
 		void AddTunnelQuad( const float& fX1, const float& fY1, const float& fZ1,
 							const float& fX2, const float& fY2, const float& fZ2,
@@ -212,21 +254,12 @@ namespace game
 							const float& fX4, const float& fY4, const float& fZ4,
 							signed short nNormal)
 		{
-	//		float fNormX=nNormal, fNormY=nNormal;
-	//
-	//		fNormX *= (fY1-fY2);
-	//		fNormY *= (fX1-fX2);
 
 			int nBaseIndex = m_vVertices.size();
-	//
-	//		m_vVertices.push_back(video::S3DVertex(fX1,fY1,fZ1,  fNormX,fNormY,0,  clr, fX1/100, fZ1/100));
-	//		m_vVertices.push_back(video::S3DVertex(fX2,fY2,fZ2,  fNormX,fNormY,0,  clr, fX2/100, fZ2/100));
-	//		m_vVertices.push_back(video::S3DVertex(fX3,fY3,fZ3,  fNormX,fNormY,0,  clr, fX3/100, fZ3/100));
-	//		m_vVertices.push_back(video::S3DVertex(fX4,fY4,fZ4,  fNormX,fNormY,0,  clr, fX4/100, fZ4/100));
-			m_vVertices.push_back(video::S3DVertex(fX1,fY1,fZ1,  0,0,0,  clr, fX1/100, fZ1/100));
-			m_vVertices.push_back(video::S3DVertex(fX2,fY2,fZ2,  0,0,0,  clr, fX2/100, fZ2/100));
-			m_vVertices.push_back(video::S3DVertex(fX3,fY3,fZ3,  0,0,0,  clr, fX3/100, fZ3/100));
-			m_vVertices.push_back(video::S3DVertex(fX4,fY4,fZ4,  0,0,0,  clr, fX4/100, fZ4/100));
+			m_vVertices.push_back(video::S3DVertex(fX1,fY1,fZ1,  0,0,0,  clr, fX1/200.0, fZ1/500.0));
+			m_vVertices.push_back(video::S3DVertex(fX2,fY2,fZ2,  0,0,0,  clr, fX2/200.0, fZ2/500.0));
+			m_vVertices.push_back(video::S3DVertex(fX3,fY3,fZ3,  0,0,0,  clr, fX3/200.0, fZ3/500.0));
+			m_vVertices.push_back(video::S3DVertex(fX4,fY4,fZ4,  0,0,0,  clr, fX4/200.0, fZ4/500.0));
 
 			for(int i=0 ; i<4 ; i++)
 				m_vPoligons.push_back(nBaseIndex+i);
@@ -243,6 +276,9 @@ namespace game
 		vector<video::S3DVertex> m_vVertices;
 		vector<u16> m_vPoligons;
 		video::SMaterial m_Material;
+
+		vector<video::S3DVertex> m_vLines;
+
 
 		video::SColor clr;
 	};

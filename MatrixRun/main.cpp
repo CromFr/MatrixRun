@@ -28,6 +28,12 @@ using namespace SPK;
 #include "lib/Async.hpp"
 
 
+#include "res.hpp"
+
+#include "game/World.hpp"
+#include "game/Sentinel.hpp"
+
+
 
 
 
@@ -106,8 +112,11 @@ int main()
 
 
     //==================== Chargement des images 2d
-    video::ITexture *texNoIRSrc = oDriver->getTexture("data/no_ir_src.png");
-    video::ITexture *texRightCrosshair = oDriver->getTexture("data/rightcrosshair.png");
+	res::material::LoadDir(oDriver, "data/material");
+	res::model::LoadDir(oSM, "data/model");
+
+    video::ITexture *texNoIRSrc = res::material::Get("no_ir_src.png");//oDriver->getTexture("data/no_ir_src.png");
+    video::ITexture *texRightCrosshair = res::material::Get("rightcrosshair.png");//oDriver->getTexture("data/rightcrosshair.png");
     //video::ITexture *texLeftCrosshair = oDriver->getTexture("data/leftcrosshair.png");
 
 
@@ -121,7 +130,7 @@ int main()
     nodeCamera->setFarValue(3500);
 
     //==================== Brouillard
-    oDriver->setFog(video::SColor(0, 0, 0, 0), video::EFT_FOG_LINEAR, 2000.0f, 3000.0f, 0.01f, true, true);
+    oDriver->setFog(video::SColor(0, 0, 0, 0), video::EFT_FOG_LINEAR, 2000.0f, 3000.0f, 0.00001f, true, true);
 
     //==================== Eclairage
     oSM->setAmbientLight(video::SColor(0,64,64,64));
@@ -132,35 +141,37 @@ int main()
     game::VfxManager::Init(oDev);
 
     //==================== Création du cube-background
-    scene::IAnimatedMeshSceneNode *nodeBackground = oSM->addAnimatedMeshSceneNode(oSM->getMesh("data/emptycube.3ds"));
-    nodeBackground->setMaterialFlag(irr::video::EMF_LIGHTING, true);
-    nodeBackground->setMaterialFlag(irr::video::EMF_FOG_ENABLE, true);
+    //scene::IAnimatedMeshSceneNode *nodeBackground = oSM->addAnimatedMeshSceneNode(res::model::Get("emptycube.3ds"));
+    //nodeBackground->setMaterialFlag(irr::video::EMF_LIGHTING, true);
+    //nodeBackground->setMaterialFlag(irr::video::EMF_FOG_ENABLE, true);
+    //game::Tunnel a(oSM->getRootSceneNode(), oSM, core::vector3df(0,0,0));
+    game::World oWorld(oSM);
     //--------------------
 
     //==================== Génération des cibles
-    vector<scene::IAnimatedMeshSceneNode*> nodeCibles;
-    vector<scene::IAnimatedMeshSceneNode*> nodeTiges;
-    #ifdef FIXED_TARGETS
-    boost::random::mt19937 RdmSeed;//((int)oDev->getTimer()->getRealTime());
-    #else
-    boost::random::mt19937 RdmSeed((int)oDev->getTimer()->getRealTime());
-    #endif
-    boost::random::uniform_int_distribution<> RdmXY(-135, 135);
-    boost::random::uniform_int_distribution<> RdmZ(-300, 400);
-    for(int i=0 ; i<20 ; i++)
-    {
-        int x = RdmXY(RdmSeed);
-        int y = RdmXY(RdmSeed);
-        int z = RdmZ(RdmSeed);
-
-        scene::IAnimatedMeshSceneNode* nodeCible = oSM->addAnimatedMeshSceneNode(oSM->getMesh("data/cible.3ds"), 0, ID_TYPE_CIBLE, core::vector3df(x,y,z), core::vector3df(0,0,0), core::vector3df(1.5,1.5,1.5));
-        nodeCible->setMaterialFlag(irr::video::EMF_LIGHTING, true);
-        nodeCible->setMaterialFlag(irr::video::EMF_FOG_ENABLE, true);
-        nodeCible->setTriangleSelector(oSM->createTriangleSelector(nodeCible));
-        nodeCibles.push_back(nodeCible);
-
-        nodeTiges.push_back(oSM->addAnimatedMeshSceneNode(oSM->getMesh("data/baton.3ds"), 0, -1, core::vector3df(x,y,z)));
-    }
+//    vector<scene::IAnimatedMeshSceneNode*> nodeCibles;
+//    vector<scene::IAnimatedMeshSceneNode*> nodeTiges;
+//    #ifdef FIXED_TARGETS
+//    boost::random::mt19937 RdmSeed;//((int)oDev->getTimer()->getRealTime());
+//    #else
+//    boost::random::mt19937 RdmSeed((int)oDev->getTimer()->getRealTime());
+//    #endif
+//    boost::random::uniform_int_distribution<> RdmXY(-135, 135);
+//    boost::random::uniform_int_distribution<> RdmZ(-300, 400);
+//    for(int i=0 ; i<20 ; i++)
+//    {
+//        int x = RdmXY(RdmSeed);
+//        int y = RdmXY(RdmSeed);
+//        int z = RdmZ(RdmSeed);
+//
+//        scene::IAnimatedMeshSceneNode* nodeCible = oSM->addAnimatedMeshSceneNode(res::model::Get("cible.3ds"), 0, ID_TYPE_CIBLE, core::vector3df(x,y,z), core::vector3df(0,0,0), core::vector3df(1.5,1.5,1.5));
+//        nodeCible->setMaterialFlag(irr::video::EMF_LIGHTING, true);
+//        nodeCible->setMaterialFlag(irr::video::EMF_FOG_ENABLE, true);
+//        nodeCible->setTriangleSelector(oSM->createTriangleSelector(nodeCible));
+//        nodeCibles.push_back(nodeCible);
+//
+//        nodeTiges.push_back(oSM->addAnimatedMeshSceneNode(res::model::Get("baton.3ds"), 0, -1, core::vector3df(x,y,z)));
+//    }
     //--------------------
 
 
@@ -184,7 +195,13 @@ int main()
 
 	//--------------------
 
-	game::Bullet blahblah(nodeBackground, oSM, 0, core::vector3df(50,130,-200), core::vector3df(0,0,1), 20);
+//	game::Bullet a(&oWorld, oSM, core::vector3df(50,130,-200), core::vector3df(-0.8,-0.2,1), 800);
+//	game::Bullet b(&oWorld, oSM, core::vector3df(20,-30,-200), core::vector3df(0,-0,1), 500);
+//	game::Bullet c(&oWorld, oSM, core::vector3df(-100,60,-200), core::vector3df(0,-0.2,1), 600);
+
+	//game::Sentinel s(&oWorld, oSM, core::vector3df(20,-30,500));
+
+
 
 
     oTimer->start();
@@ -340,8 +357,8 @@ int main()
                 }
                 else if(Event.button & WIIMOTE_BUTTON_HOME)//Si le bouton home est pressé
                 {
-                    for(unsigned int i=0 ; i<nodeCibles.size() ; i++)
-                        nodeCibles[i]->setVisible(true);
+//                    for(unsigned int i=0 ; i<nodeCibles.size() ; i++)
+//                        nodeCibles[i]->setVisible(true);
                 }
                 else
                 {
@@ -391,6 +408,8 @@ int main()
         sCaption += oDriver->getFPS();//oTimer->getTime()
         oDev->setWindowCaption(sCaption.c_str());
     }
+
+    oDev->drop();
 
 }
 

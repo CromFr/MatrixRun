@@ -56,7 +56,7 @@ enum ConfigFile::Error ConfigFile::Load(const char* cPath, bool bCreateIfNotExis
 				struct ConfigLine CurrConfigLine;
 
 				//Parsing var name
-				while(c!=' ' && c!='\t')
+				while(c!=' ' && c!='\t' && !File.eof())
 				{
 					CurrConfigLine.name+=c;
 					File.get(c);
@@ -64,7 +64,7 @@ enum ConfigFile::Error ConfigFile::Load(const char* cPath, bool bCreateIfNotExis
 
 				//Parsing var value
 				File.get(c);
-				while(c!=';')
+				while(c!=';' && !File.eof())
 				{
 					CurrConfigLine.value+=c;
 					File.get(c);
