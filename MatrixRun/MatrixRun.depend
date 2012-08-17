@@ -43844,10 +43844,10 @@
 	<irrlicht.h>
 	<list>
 
-1344369330 source:/media/windows/Users/Administrateur/Git Projects/MatrixRun-Project/MatrixRun/io/WiiPos.cpp
+1345139993 source:/media/windows/Users/Administrateur/Git Projects/MatrixRun-Project/MatrixRun/io/WiiPos.cpp
 	"WiiPos.hpp"
 
-1344372653 /media/windows/Users/Administrateur/Git Projects/MatrixRun-Project/MatrixRun/io/WiiPos.hpp
+1345139994 /media/windows/Users/Administrateur/Git Projects/MatrixRun-Project/MatrixRun/io/WiiPos.hpp
 	<iostream>
 	<sstream>
 	<cmath>
@@ -49813,19 +49813,19 @@
 	<boost/container/detail/preprocessor.hpp>
 	<boost/container/detail/config_end.hpp>
 
-1344368774 source:/media/windows/Users/Administrateur/Git Projects/MatrixRun-Project/MatrixRun/io/WiiCur.cpp
+1345139993 source:/media/windows/Users/Administrateur/Git Projects/MatrixRun-Project/MatrixRun/io/WiiCur.cpp
 	"WiiCur.hpp"
 
-1344372373 /media/windows/Users/Administrateur/Git Projects/MatrixRun-Project/MatrixRun/io/WiiCur.hpp
+1345139993 /media/windows/Users/Administrateur/Git Projects/MatrixRun-Project/MatrixRun/io/WiiCur.hpp
 	<cmath>
 	<queue>
 	<wiiuse.h>
 	"../lib/ConfigFile.hpp"
 
-1344632768 source:/media/windows/Users/Administrateur/Git Projects/MatrixRun-Project/MatrixRun/io/WiimoteHandler.cpp
+1345139993 source:/media/windows/Users/Administrateur/Git Projects/MatrixRun-Project/MatrixRun/io/WiimoteHandler.cpp
 	"WiimoteHandler.hpp"
 
-1344372565 /media/windows/Users/Administrateur/Git Projects/MatrixRun-Project/MatrixRun/io/WiimoteHandler.hpp
+1345139993 /media/windows/Users/Administrateur/Git Projects/MatrixRun-Project/MatrixRun/io/WiimoteHandler.hpp
 	<iostream>
 	<boost/thread.hpp>
 	<wiiuse.h>
@@ -49833,16 +49833,16 @@
 	"WiiPos.hpp"
 	"WiiCur.hpp"
 
-1332338199 source:/media/windows/Users/Administrateur/Git Projects/MatrixRun-Project/MatrixRun/divers.cpp
+1345139747 source:/media/windows/Users/Administrateur/Git Projects/MatrixRun-Project/MatrixRun/divers.cpp
 	"divers.hpp"
 
-1344368973 /media/windows/Users/Administrateur/Git Projects/MatrixRun-Project/MatrixRun/divers.hpp
+1345139742 /media/windows/Users/Administrateur/Git Projects/MatrixRun-Project/MatrixRun/divers.hpp
 	<iostream>
 
-1327512501 source:/media/windows/Users/Administrateur/Git Projects/MatrixRun-Project/MatrixRun/io/transition.cpp
+1345139993 source:/media/windows/Users/Administrateur/Git Projects/MatrixRun-Project/MatrixRun/io/transition.cpp
 	"transition.hpp"
 
-1327512501 /media/windows/Users/Administrateur/Git Projects/MatrixRun-Project/MatrixRun/io/transition.hpp
+1345139993 /media/windows/Users/Administrateur/Git Projects/MatrixRun-Project/MatrixRun/io/transition.hpp
 	<irrlicht.h>
 	"WiimoteHandler.hpp"
 
@@ -50807,7 +50807,7 @@
 	"matrix4.h"
 	"IVideoDriver.h"
 
-1345034014 source:/media/windows/Users/Administrateur/Git Projects/MatrixRun-Project/MatrixRun/main.cpp
+1345225080 source:/media/windows/Users/Administrateur/Git Projects/MatrixRun-Project/MatrixRun/main.cpp
 	<iostream>
 	<vector>
 	<irrlicht.h>
@@ -51214,13 +51214,14 @@
 	<boost/random/detail/disable_warnings.hpp>
 	<boost/random/detail/enable_warnings.hpp>
 
-1344809120 /media/windows/Users/Administrateur/Git Projects/MatrixRun-Project/MatrixRun/game/GravityAnimator.hpp
+1345139931 /media/windows/Users/Administrateur/Git Projects/MatrixRun-Project/MatrixRun/game/GravityAnimator.hpp
 	<iostream>
 	<vector>
 	<irrlicht.h>
 
-1344866607 /media/windows/Users/Administrateur/Git Projects/MatrixRun-Project/MatrixRun/game/Bullet.hpp
+1345203992 /media/windows/Users/Administrateur/Git Projects/MatrixRun-Project/MatrixRun/game/Bullet.hpp
 	"Object.hpp"
+	"../irr/IEmptySceneNode.h"
 	"Collisionnable.hpp"
 	"VfxManager.hpp"
 	"../lib/Async.hpp"
@@ -51228,10 +51229,11 @@
 	"../irr/IDynamicLightSceneNode.h"
 	"Sentinel.hpp"
 
-1344861097 /media/windows/Users/Administrateur/Git Projects/MatrixRun-Project/MatrixRun/game/Object.hpp
+1345211803 /media/windows/Users/Administrateur/Git Projects/MatrixRun-Project/MatrixRun/game/Object.hpp
+	<iostream>
 	"../irr/IEmptySceneNode.h"
 
-1344558245 /media/windows/Users/Administrateur/Git Projects/MatrixRun-Project/MatrixRun/irr/IEmptySceneNode.h
+1345207911 /media/windows/Users/Administrateur/Git Projects/MatrixRun-Project/MatrixRun/irr/IEmptySceneNode.h
 	<irrlicht.h>
 
 1344712446 /media/windows/Users/Administrateur/Git Projects/MatrixRun-Project/MatrixRun/game/Collisionnable.hpp
@@ -51240,8 +51242,9 @@
 	<boost/bind.hpp>
 	<boost/function.hpp>
 
-1344712446 /media/windows/Users/Administrateur/Git Projects/MatrixRun-Project/MatrixRun/game/CollGeometry.hpp
+1345209659 /media/windows/Users/Administrateur/Git Projects/MatrixRun-Project/MatrixRun/game/CollGeometry.hpp
 	<irrlicht.h>
+	"World.hpp"
 
 1344782477 /media/windows/Users/Administrateur/Git Projects/MatrixRun-Project/MatrixRun/game/VfxManager.hpp
 	<iostream>
@@ -51251,50 +51254,51 @@
 	<SPK_IRR.h>
 	"../res.hpp"
 
-1344785977 /media/windows/Users/Administrateur/Git Projects/MatrixRun-Project/MatrixRun/res.hpp
+1345140111 /media/windows/Users/Administrateur/Git Projects/MatrixRun-Project/MatrixRun/res.hpp
 	<irrlicht.h>
 	<iostream>
 	<map>
 	<dirent.h>
 
-1344809120 /media/windows/Users/Administrateur/Git Projects/MatrixRun-Project/MatrixRun/irr/IConstantSpeedAnimator.h
+1345225502 /media/windows/Users/Administrateur/Git Projects/MatrixRun-Project/MatrixRun/irr/IConstantSpeedAnimator.h
 	<irrlicht.h>
 
-1344776742 /media/windows/Users/Administrateur/Git Projects/MatrixRun-Project/MatrixRun/irr/IDynamicLightSceneNode.h
+1345140020 /media/windows/Users/Administrateur/Git Projects/MatrixRun-Project/MatrixRun/irr/IDynamicLightSceneNode.h
 	<irrlicht.h>
 	"IEmptySceneNode.h"
 
-1344865522 /media/windows/Users/Administrateur/Git Projects/MatrixRun-Project/MatrixRun/game/Sentinel.hpp
+1345204257 /media/windows/Users/Administrateur/Git Projects/MatrixRun-Project/MatrixRun/game/Sentinel.hpp
 	"Destroyable.hpp"
+	"../irr/IEmptySceneNode.h"
 
-1344865522 /media/windows/Users/Administrateur/Git Projects/MatrixRun-Project/MatrixRun/game/Destroyable.hpp
+1345204191 /media/windows/Users/Administrateur/Git Projects/MatrixRun-Project/MatrixRun/game/Destroyable.hpp
 	"Object.hpp"
+	"../irr/IEmptySceneNode.h"
 
-1345035546 /media/windows/Users/Administrateur/Git Projects/MatrixRun-Project/MatrixRun/game/World.hpp
+1345207835 /media/windows/Users/Administrateur/Git Projects/MatrixRun-Project/MatrixRun/game/World.hpp
 	<irrlicht.h>
 	"../irr/IConstantSpeedAnimator.h"
 	"../irr/IEmptySceneNode.h"
-	<deque>
 	"Tunnel.hpp"
 
-1345139444 /media/windows/Users/Administrateur/Git Projects/MatrixRun-Project/MatrixRun/game/Tunnel.hpp
-	<cmath>
-	<vector>
-	<list>
-	<irrlicht.h>
+1345208079 /media/windows/Users/Administrateur/Git Projects/MatrixRun-Project/MatrixRun/game/Tunnel.hpp
+	<deque>
+	"Object.hpp"
+	"../irr/IEmptySceneNode.h"
 	"../base/Elipse.hpp"
+	"TunnelModule.hpp"
 
-1345139410 /media/windows/Users/Administrateur/Git Projects/MatrixRun-Project/MatrixRun/base/Elipse.hpp
+1345145423 /media/windows/Users/Administrateur/Git Projects/MatrixRun-Project/MatrixRun/base/Elipse.hpp
 	<irrlicht.h>
 	<list>
 
 1345068222 source:/media/windows/Users/Administrateur/Git Projects/MatrixRun-Project/MatrixRun/lib/ConfigFile.cpp
 	"ConfigFile.hpp"
 
-1344786084 source:/media/windows/Users/Administrateur/Git Projects/MatrixRun-Project/MatrixRun/res.cpp
+1345225230 source:/media/windows/Users/Administrateur/Git Projects/MatrixRun-Project/MatrixRun/res.cpp
 	"res.hpp"
 
-1344372179 source:/media/windows/Users/Administrateur/Git Projects/MatrixRun-Project/MatrixRun/game/GravityAnimator.cpp
+1345139931 source:/media/windows/Users/Administrateur/Git Projects/MatrixRun-Project/MatrixRun/game/GravityAnimator.cpp
 	"GravityAnimator.hpp"
 
 1207160394 /media/windows/Users/Administrateur/Git Projects/MatrixRun-Project/api/linux/wiiuse/include/wiiuse.h
@@ -58586,6 +58590,17 @@
 	<boost/random/detail/disable_warnings.hpp>
 	<boost/random/detail/enable_warnings.hpp>
 
-1345060160 source:/media/windows/Users/Administrateur/Git Projects/MatrixRun-Project/MatrixRun/game/VfxManager.cpp
+1345140639 source:/media/windows/Users/Administrateur/Git Projects/MatrixRun-Project/MatrixRun/game/VfxManager.cpp
 	"VfxManager.hpp"
+
+1345207309 source:/media/windows/Users/Administrateur/Git Projects/MatrixRun-Project/MatrixRun/game/World.cpp
+	"World.hpp"
+
+1345232208 /media/windows/Users/Administrateur/Git Projects/MatrixRun-Project/MatrixRun/game/TunnelModule.hpp
+	<cmath>
+	<vector>
+	<list>
+	<irrlicht.h>
+	"../base/Elipse.hpp"
+	"../res.hpp"
 

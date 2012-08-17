@@ -12,7 +12,7 @@ namespace irr
 		class IConstantSpeedAnimator : public scene::ISceneNodeAnimator
 		{
 			public:
-			IConstantSpeedAnimator(core::vector3df direction, float fSpeedS)
+			IConstantSpeedAnimator(core::vector3df direction, f32 fSpeedS)
 			{
 				m_vectDirection.set(direction.normalize());
 				m_fSpeedS = fSpeedS;
@@ -42,7 +42,7 @@ namespace irr
 
 			private:
 			core::vector3df m_vectDirection;
-			float m_fSpeedS;
+			f32 m_fSpeedS;
 
 			u32 m_LastCalculDateMS;
 

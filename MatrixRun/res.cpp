@@ -7,13 +7,14 @@ namespace res
 
 	//=========================================================================
 	//=========================================================================
+
+	//====================================
+//	void material::LoadFile(video::IVideoDriver* oDriver, const char* cName, const char* cPath)
+//	{
+//		m_materials.insert(pair<string, video::ITexture*>(string(cName), oDriver->getTexture(cPath)));
+//	}
+	//====================================
 	map<string, video::ITexture*> material::m_materials;
-	//====================================
-	void material::LoadFile(video::IVideoDriver* oDriver, const char* cName, const char* cPath)
-	{
-		m_materials.insert(pair<string, video::ITexture*>(string(cName), oDriver->getTexture(cPath)));
-	}
-	//====================================
 	void material::LoadDir(video::IVideoDriver* oDriver, const char* cPath)
 	{
 		DIR* dir = opendir(cPath);
@@ -37,7 +38,19 @@ namespace res
 					{
 						if(string(entity->d_name).find(cAllowedFiles[i])!=string::npos)
 						{
-							LoadFile(oDriver, entity->d_name, sEntityPath.c_str());
+							//Load file
+							if(string(entity->d_name).find(string("_n")+cAllowedFiles[i])!=string::npos)
+							{
+								//Normal map
+								video::ITexture* text= oDriver->getTexture(sEntityPath.c_str());
+								oDriver->makeNormalMapTexture(text, 9.0f);
+								m_materials.insert(	pair<string, video::ITexture*>(string(entity->d_name),		text)	);
+							}
+							else
+							{
+								//common texture
+								m_materials.insert(	pair<string, video::ITexture*>(string(entity->d_name),		oDriver->getTexture(sEntityPath.c_str()))	);
+							}
 							break;
 						}
 					}

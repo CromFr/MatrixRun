@@ -133,9 +133,10 @@ int main()
     oDriver->setFog(video::SColor(0, 0, 0, 0), video::EFT_FOG_LINEAR, 2000.0f, 3000.0f, 0.00001f, true, true);
 
     //==================== Eclairage
-    oSM->setAmbientLight(video::SColor(0,64,64,64));
+    oSM->setAmbientLight(video::SColor(128,255,255,255));
 
-    //oSM->addLightSceneNode(nodeCamera, core::vector3df(0,0,0), video::SColor(128,255,255,255), 1000.0f);
+    scene::ILightSceneNode* light = oSM->addLightSceneNode(nodeCamera, core::vector3df(0,0,0), video::SColor(200,0,127,255), 600.0f);
+    light->enableCastShadow();
 
     //==================== Effets visuels
     game::VfxManager::Init(oDev);
@@ -195,9 +196,9 @@ int main()
 
 	//--------------------
 
-//	game::Bullet a(&oWorld, oSM, core::vector3df(50,130,-200), core::vector3df(-0.8,-0.2,1), 800);
-//	game::Bullet b(&oWorld, oSM, core::vector3df(20,-30,-200), core::vector3df(0,-0,1), 500);
-//	game::Bullet c(&oWorld, oSM, core::vector3df(-100,60,-200), core::vector3df(0,-0.2,1), 600);
+	//game::Bullet a(&oWorld, oSM, core::vector3df(50,130,-200), core::vector3df(-0.8,-0.2,1), 800);
+//	game::Bullet b(&oWorld, oSM, core::vector3df(20,-30,1), core::vector3df(0,-0,1), 500);
+	//game::Bullet c(&oWorld, oSM, core::vector3df(-100,60,-200), core::vector3df(0,-0.2,1), 600);
 
 	//game::Sentinel s(&oWorld, oSM, core::vector3df(20,-30,500));
 

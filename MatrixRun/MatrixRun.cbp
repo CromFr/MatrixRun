@@ -162,8 +162,12 @@
 		<Unit filename="game/Tunnel.hpp">
 			<Option target="&lt;{~None~}&gt;" />
 		</Unit>
+		<Unit filename="game/TunnelModule.hpp">
+			<Option target="&lt;{~None~}&gt;" />
+		</Unit>
 		<Unit filename="game/VfxManager.cpp" />
 		<Unit filename="game/VfxManager.hpp" />
+		<Unit filename="game/World.cpp" />
 		<Unit filename="game/World.hpp">
 			<Option target="&lt;{~None~}&gt;" />
 		</Unit>
