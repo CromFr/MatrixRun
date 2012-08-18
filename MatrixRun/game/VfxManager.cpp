@@ -7,7 +7,7 @@ namespace game
 	void VfxManager::Init(IrrlichtDevice* oDev)
 	{
 		using namespace IRR;
-		video::IVideoDriver* oDriver = oDev->getVideoDriver();
+		//video::IVideoDriver* oDriver = oDev->getVideoDriver();
 		scene::ISceneManager *oSM = oDev->getSceneManager();
 	//================================================================
 	//vfx_bullet_shot
@@ -63,14 +63,14 @@ namespace game
 			Group* groupBulletTrail = Group::create(modelBulletTrail, 1000);
 			 groupBulletTrail->setRenderer(renderBulletTrail);
 			 groupBulletTrail->addEmitter(emitBulletTrail);
-			 groupBulletTrail->setShared(true);
+			 //groupBulletTrail->setShared(true);
 			Group* groupBulletTrail_smoke = Group::create(modelBulletTrail_smoke, 1000);
 			 groupBulletTrail_smoke->setRenderer(renderBulletTrail_smoke);
 			 groupBulletTrail_smoke->addEmitter(emitBulletTrail_smoke);
 			 groupBulletTrail_smoke->setGravity(Vector3D(0.0f,5.0f,0.0f));
-			 groupBulletTrail_smoke->setShared(true);
+			 //groupBulletTrail_smoke->setShared(true);
 
-			IRRSystem* sysBulletTrail = IRRSystem::create(0,oSM);
+			IRRSystem* sysBulletTrail = IRRSystem::create(0,oSM, false);
 			 sysBulletTrail->addGroup(groupBulletTrail);
 			 sysBulletTrail->addGroup(groupBulletTrail_smoke);
 			 sysBulletTrail->setVisible(false);
@@ -149,7 +149,7 @@ namespace game
 			 //groupBulletImpact_sw1->setShared(true);
 
 
-			IRRSystem* sysBulletImpact = IRRSystem::create(0,oSM);
+			IRRSystem* sysBulletImpact = IRRSystem::create(0,oSM, false);
 			 sysBulletImpact->addGroup(groupBulletImpact_sw0);
 			 sysBulletImpact->addGroup(groupBulletImpact_sw1);
 			 sysBulletImpact->addGroup(groupBulletImpact_pt);
@@ -174,11 +174,11 @@ namespace game
 	{
 		const vector<Group*> vGroupList(sys->getGroups());
 		unsigned int nGroupCount = vGroupList.size();
-		for(int i=0 ; i<nGroupCount ; i++)
+		for(unsigned int i=0 ; i<nGroupCount ; i++)
 		{
 			const vector<Emitter*> vEmitList(vGroupList[i]->getEmitters());
 			unsigned int nEmitCount = vEmitList.size();
-			for(int j=0 ; j<nEmitCount ; j++)
+			for(unsigned int j=0 ; j<nEmitCount ; j++)
 			{
 				vEmitList[j]->setActive(false);
 			}

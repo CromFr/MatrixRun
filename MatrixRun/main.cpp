@@ -120,6 +120,10 @@ int main()
     //video::ITexture *texLeftCrosshair = oDriver->getTexture("data/leftcrosshair.png");
 
 
+    //==================== Lancement d'Irrlicht
+    SPK::randomSeed = oDev->getTimer()->getRealTime();
+
+
     //==================== Setup de la caméra
     scene::ISceneNode* nodeCamContainer = oSM->addEmptySceneNode();
 
@@ -135,7 +139,7 @@ int main()
     //==================== Eclairage
     oSM->setAmbientLight(video::SColor(128,255,255,255));
 
-    scene::ILightSceneNode* light = oSM->addLightSceneNode(nodeCamera, core::vector3df(0,0,0), video::SColor(200,0,127,255), 600.0f);
+    scene::ILightSceneNode* light = oSM->addLightSceneNode(nodeCamera, core::vector3df(0,0,0), video::SColor(255,0,127,255), 600.0f);
     light->enableCastShadow();
 
     //==================== Effets visuels
@@ -147,6 +151,7 @@ int main()
     //nodeBackground->setMaterialFlag(irr::video::EMF_FOG_ENABLE, true);
     //game::Tunnel a(oSM->getRootSceneNode(), oSM, core::vector3df(0,0,0));
     game::World oWorld(oSM);
+    //return 0;
     //--------------------
 
     //==================== Génération des cibles
@@ -197,8 +202,8 @@ int main()
 	//--------------------
 
 	//game::Bullet a(&oWorld, oSM, core::vector3df(50,130,-200), core::vector3df(-0.8,-0.2,1), 800);
-//	game::Bullet b(&oWorld, oSM, core::vector3df(20,-30,1), core::vector3df(0,-0,1), 500);
-	//game::Bullet c(&oWorld, oSM, core::vector3df(-100,60,-200), core::vector3df(0,-0.2,1), 600);
+	game::Bullet b(&oWorld, oSM, core::vector3df(20,-30,-200), core::vector3df(0,-0,1), 500);
+	game::Bullet c(&oWorld, oSM, core::vector3df(-100,60,-200), core::vector3df(0,-0.2,1), 600);
 
 	//game::Sentinel s(&oWorld, oSM, core::vector3df(20,-30,500));
 

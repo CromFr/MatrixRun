@@ -4,6 +4,8 @@
 #include <irrlicht.h>
 using namespace irr;
 
+#include "World.hpp"
+
 namespace coll
 {
 
@@ -11,7 +13,10 @@ namespace coll
 	class Collision
 	{
 	public:
-		Collision() {}
+		Collision()
+		{
+			node = 0;
+		}
 
 		Collision(scene::ISceneNode* node_, core::triangle3df& triangle_, core::vector3df& position_)
 		{
@@ -81,6 +86,16 @@ namespace coll
 				Ray.setLine(m_vCurrPosAbs, m_vCurrPosAbs);
 			}
 
+			//Specific collision with tunnel
+			if(nFlags & game::tunnel_border)
+			{
+				if(!game::World::GetInstance()->GetTunnel()->GetIsInTunnel(m_vCurrPosAbs, &m_Collision.node))
+				{
+					m_Collision.position = m_vCurrPosAbs;
+					return &m_Collision;
+				}
+
+			}
 
 			m_Collision.node = oCollM->getSceneNodeAndCollisionPointFromRay(Ray, m_Collision.position, m_Collision.triangle, nFlags);
 			if(m_Collision.GetIsValid())

@@ -22,8 +22,8 @@ namespace game
 		Tunnel(scene::ISceneNode* parent, scene::ISceneManager* mgr)
 			: IEmptySceneNode(parent, mgr, tunnel_border)
 		{
-			// @todo (crom#1#): Optimize
-			m_dqTunnelModules.push_back(new TunnelModule(this, mgr, core::vector3df(0,0,-TUNNEL_MODULE_DIM_Z), base::Elipse(core::vector2df(0,0), 140, 120, 0), base::Elipse(core::vector2df(0,0), 140, 120, 0)));
+			base::Elipse elipseFirst(core::vector2df(0,0), 140, 120, 0);
+			m_dqTunnelModules.push_back(new TunnelModule(this, mgr, core::vector3df(0,0,-TUNNEL_MODULE_DIM_Z), elipseFirst, elipseFirst));
 			for(int i=0 ; i<=9*TUNNEL_MODULE_DIM_Z ; i+=TUNNEL_MODULE_DIM_Z)
 			{
 				const base::Elipse* elipseLast = m_dqTunnelModules.back()->GetEndingElipse();
@@ -69,22 +69,19 @@ namespace game
 		}
 
 		//===========================================================================
-		bool GetIsInTunnel(const core::vector3df& posAbs, scene::ISceneNode* outCheckedTunnel)
+		bool GetIsInTunnel(const core::vector3df& posAbs, scene::ISceneNode** outCheckedTunnel=0)
 		{
 			core::vector3df posCheckRelWorld = posAbs - getAbsolutePosition();
 
 			int nPos = posCheckRelWorld.Z / TUNNEL_MODULE_DIM_Z;
+			if(nPos<0)return true;
 
-			TunnelModule* tunnel = m_dqTunnelModules[nPos+1];
-			core::vector3df postunnelRelWorld = tunnel->getPosition();
-			if(posAbs.Z<postunnelRelWorld.Z+TUNNEL_MODULE_DIM_Z)
-			{
-				tunnel = m_dqTunnelModules[nPos+2];
-				postunnelRelWorld.set(tunnel->getPosition());
-			}
 
-			outCheckedTunnel = tunnel;
-			return tunnel->GetIsInTunnel(postunnelRelWorld-posCheckRelWorld);
+			TunnelModule* tunnelmod = m_dqTunnelModules[nPos+1];//+1 because there is alway a supp node
+			if(outCheckedTunnel!=0)
+				*outCheckedTunnel = tunnelmod;
+
+			return tunnelmod->GetIsInTunnel(posCheckRelWorld-tunnelmod->getPosition());
 		}
 
 

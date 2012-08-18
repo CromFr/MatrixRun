@@ -12,7 +12,7 @@ namespace irr
 		{
 		public:
 
-			IEmptySceneNode(scene::ISceneNode* parent, scene::ISceneManager* mgr, s32 id, const core::vector3df& position)
+			IEmptySceneNode(scene::ISceneNode* parent, scene::ISceneManager* mgr, s32 id, const core::vector3df& position=core::vector3df(0,0,0))
 						: ISceneNode(parent, mgr, id, position), box(0,0,0,0,0,0)
 			{
 
