@@ -6,7 +6,6 @@
 #include <iostream>
 using namespace std;
 
-//#include <boost/date_time.hpp>
 #include <boost/thread.hpp>
 
 #include <wiiuse.h>
@@ -29,7 +28,7 @@ class WiimoteHandler
     public:
 
     ///Organise le tableau des wiimotes & entame la procédure d'initialisation
-    WiimoteHandler(ConfigFile* Config, bool bConfigure=false);
+    WiimoteHandler(bool bConfigure=false);
 
     ///Supprime les allocs dyna
     ~WiimoteHandler();
@@ -47,8 +46,23 @@ class WiimoteHandler
 
     ///Access to WiiCur::GetLastButtonEvent : Relève la dernière action effectuée sur la WM
     /// @return la struct contenant tout ce qu'il faut pour l'event
-    /// @warning Supprime immédiatement le clic de la file d'attente
+    ///// @warning Supprime immédiatement le clic de la file d'attente
     struct WiimoteCursorEvent GetLastButtonEvent(int nWM);
+
+    void DropLastButtonEvent(int nWM)
+    {
+    	if(nWM==WMHDL_RIGHT)
+        	return m_WiimoteRight->DropLastButtonEvent();
+		return m_WiimoteLeft->DropLastButtonEvent();
+    }
+
+    bool GetIsButtonEvent(int nWM)
+    {
+    	if(nWM==WMHDL_RIGHT)
+        	return m_WiimoteRight->GetIsButtonEvent();
+		return m_WiimoteLeft->GetIsButtonEvent();
+    }
+
 
 
 
@@ -56,7 +70,7 @@ class WiimoteHandler
     private:
     wiimote** m_WMTable;
     int m_nConnectedWM;
-    ConfigFile* m_Config;
+    ConfigFile m_Config;
 
     WiiPos* m_WiimotePos;
     WiiCur* m_WiimoteRight;

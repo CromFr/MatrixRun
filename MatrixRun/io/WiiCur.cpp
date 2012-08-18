@@ -74,7 +74,7 @@ struct WiimoteCursorEvent WiiCur::GetLastButtonEvent()
     {
         //Copie du dernier event & suppr
         Return = m_Events.front();
-        m_Events.pop();
+        //m_Events.pop();
 
         return Return;
     }

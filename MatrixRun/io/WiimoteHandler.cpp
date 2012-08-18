@@ -6,9 +6,14 @@
 \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ====================================================================================================================*/
-WiimoteHandler::WiimoteHandler(ConfigFile* Config, bool bConfigure)
+WiimoteHandler::WiimoteHandler(bool bConfigure)
 {
-    m_Config = Config;
+	if(m_Config.Load("data/wiimotes.cfg", false) == ConfigFile::file_not_found)
+	{
+		m_Config.Load("data/wiimotes.cfg", true);
+		bConfigure = true;
+	}
+
     m_bStopThread = false;
     m_bPauseThread = false;
 

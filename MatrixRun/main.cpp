@@ -1,50 +1,49 @@
 
 
 #include <iostream>
-#include <vector>
-using namespace std;
 
 #include <irrlicht.h>
-using namespace irr;
 
 #include <SPK.h>
-#include <SPK_IRR.h>
-using namespace SPK;
 
-//L'aléatoire via boost
-#include <boost/random/mersenne_twister.hpp>
-#include <boost/random/uniform_int_distribution.hpp>
 
-#include "io/WiimoteHandler.hpp"
-#include "io/transition.hpp"
+
 #include "lib/ConfigFile.hpp"
-
-#include "game/GravityAnimator.hpp"
-
-#include "game/Bullet.hpp"
-#include "game/VfxManager.hpp"
-
-
 #include "lib/Async.hpp"
 
-
 #include "res.hpp"
+#include "game/VfxManager.hpp"
+
+#include "io/IOManager.hpp"
 
 #include "game/World.hpp"
 #include "game/Sentinel.hpp"
+#include "game/Bullet.hpp"
 
 
 
 
-
-
-
-
-#define ID_TYPE_CIBLE 1
 
 
 int main()
 {
+	using namespace std;
+	using namespace irr;
+
+
+	cout<<endl<<endl
+        <<" /////////////////////////////////////////////////"<<endl
+        <<"O===============================================O/"<<endl
+        <<"|                  Matrix-Run!                  |/"<<endl
+        <<"|          Réalisé par Thibaut CHARLES          |/"<<endl
+        <<"|              (tcharl15@iseb.fr)               |/"<<endl
+        <<"O===============================================O"<<endl;
+
+	struct timeval timeStartLoading;
+	gettimeofday(&timeStartLoading, NULL);
+
+
+	cout<<endl<<"========================> Parsing config file"<<endl;
     ConfigFile Config;
     ConfigFile::Error e = Config.Load("data/config.cfg");
     if(e != ConfigFile::no_error)
@@ -53,164 +52,94 @@ int main()
 		return 0;
 	}
 
-    WiimoteHandler WMHdl(&Config);
 
-
-	#define TEST_POSITIONNING_
-    {//==================== Test du syst de positionnement
-	#ifdef TEST_POSITIONNING
-    while(true)
-    {
-
-        try
-        {
-            Wiimote3d PlayerPos = WMHdl.GetPlayerPos();
-            cout<<endl<<endl<<"Position :"<<endl;
-            cout<<"x="<<PlayerPos.x<<"   \ty="<<PlayerPos.y<<"   \tz="<<PlayerPos.z<<endl;
-        }
-        catch(int e)
-        {
-            if(e==EXC_WIIPOS_NOT_ENOUGH_IRSRC)
-                cout<<"Pas assez de sources"<<endl;
-            else
-                cout<<"Erreur inconnue"<<endl;
-        }
-        //Sleep(70);
-    }
-    #endif
-    }//--------------------
-
-
-	//Configuration de Async
+	cout<<endl<<"========================> Launch libAsync thread"<<endl;
 	Async::GetInstance()->LaunchThread(0.02);
 
 
-    cout<<endl<<endl<<endl<<endl
-        <<" ////////////////////////////"<<endl
-        <<"O==========================O/"<<endl
-        <<"| Lancement du moteur 3D ! |/"<<endl
-        <<"O==========================O"<<endl;
+	cout<<endl<<endl
+        <<" /////////////////////////////////"<<endl
+        <<"O===============================O/"<<endl
+        <<"|    Chargement du moteur 3D    |/"<<endl
+        <<"O===============================O"<<endl;
 
-
-    //==================== Création de la fenêtre
     #define FULLSCREEN false
     int nScreenWidth, nScreenHeight;
     if(FULLSCREEN)  { nScreenWidth=1920;  nScreenHeight=1080; }
     else            { nScreenWidth=1900;  nScreenHeight=1080-30-80;  }
-    IrrlichtDevice *oDev = createDevice(video::EDT_OPENGL, core::dimension2d<u32>(nScreenWidth,nScreenHeight), 32, FULLSCREEN);
 
 
-    oDev->setWindowCaption(L"Irrlicht : HeadTracking");
-    ITimer* oTimer = oDev->getTimer();
+    cout<<endl<<"========================> Entrées/Sorties"<<endl;
+    mrio::IOManager IOMgr(mrio::IOManager::mouse, mrio::IOManager::keyboard, core::vector2di(nScreenWidth, nScreenHeight));
 
+
+	cout<<endl<<"========================> Device, Driver, Scene mgr, Collision mgr"<<endl;
+	//Device
+    IrrlichtDevice *oDev = createDevice(video::EDT_OPENGL, core::dimension2d<u32>(nScreenWidth,nScreenHeight), 32, FULLSCREEN, false, false, IOMgr.GetEventReceiver());
+    oDev->setWindowCaption(L"Matrix-Run!   by Thibaut CHARLES");
+    oDev->getCursorControl()->setVisible(true);
+
+	//Driver
     video::IVideoDriver* oDriver = oDev->getVideoDriver();
 
-    scene::ISceneManager *oSM = oDev->getSceneManager ();
+	//SceneManager
+    scene::ISceneManager *oSM = oDev->getSceneManager();
 
-    oDev->getCursorControl()->setVisible(true);//Le curseur est visible
-    //--------------------
-
-
-    //==================== Chargement des images 2d
-	res::material::LoadDir(oDriver, "data/material");
-	res::model::LoadDir(oSM, "data/model");
-
-    video::ITexture *texNoIRSrc = res::material::Get("no_ir_src.png");//oDriver->getTexture("data/no_ir_src.png");
-    video::ITexture *texRightCrosshair = res::material::Get("rightcrosshair.png");//oDriver->getTexture("data/rightcrosshair.png");
-    //video::ITexture *texLeftCrosshair = oDriver->getTexture("data/leftcrosshair.png");
+    //Collision manager
+    scene::ISceneCollisionManager* oCollM = oSM->getSceneCollisionManager();
 
 
-    //==================== Lancement d'Irrlicht
+	cout<<endl<<"========================> Spark particle engine"<<endl;
     SPK::randomSeed = oDev->getTimer()->getRealTime();
 
 
-    //==================== Setup de la caméra
+	cout<<endl<<"========================> Ressources (material, models, ...)"<<endl;
+	res::material::LoadDir(oDriver, "data/material");
+	res::model::LoadDir(oSM, "data/model");
+
+	game::VfxManager::Init(oDev);
+
+
+    cout<<endl<<endl
+        <<" /////////////////////////////////"<<endl
+        <<"O===============================O/"<<endl
+        <<"|    Chargement de la scène     |/"<<endl
+        <<"O===============================O"<<endl;
+
+	cout<<endl<<"========================> Caméra"<<endl;
     scene::ISceneNode* nodeCamContainer = oSM->addEmptySceneNode();
 
-    //scene::ICameraSceneNode* nodeCamera = oSM->addCameraSceneNode(nodeCamContainer, core::vector3df(0, 0, 0), core::vector3df(0, 0, 10));
     scene::ICameraSceneNode* nodeCamera = oSM->addCameraSceneNode(nodeCamContainer, core::vector3df(0, 0, -100), core::vector3df(0, 0, 10));
     nodeCamera->bindTargetAndRotation(false);
 
-    nodeCamera->setFarValue(3500);
+    nodeCamera->setFarValue(3000);
 
-    //==================== Brouillard
+
+	cout<<endl<<"========================> Ambiance"<<endl;
+
+    //Fog
     oDriver->setFog(video::SColor(0, 0, 0, 0), video::EFT_FOG_LINEAR, 2000.0f, 3000.0f, 0.00001f, true, true);
 
-    //==================== Eclairage
+    //Ambiant light
     oSM->setAmbientLight(video::SColor(128,255,255,255));
 
     scene::ILightSceneNode* light = oSM->addLightSceneNode(nodeCamera, core::vector3df(0,0,0), video::SColor(255,0,127,255), 600.0f);
     light->enableCastShadow();
 
-    //==================== Effets visuels
-    game::VfxManager::Init(oDev);
 
-    //==================== Création du cube-background
-    //scene::IAnimatedMeshSceneNode *nodeBackground = oSM->addAnimatedMeshSceneNode(res::model::Get("emptycube.3ds"));
-    //nodeBackground->setMaterialFlag(irr::video::EMF_LIGHTING, true);
-    //nodeBackground->setMaterialFlag(irr::video::EMF_FOG_ENABLE, true);
-    //game::Tunnel a(oSM->getRootSceneNode(), oSM, core::vector3df(0,0,0));
+    cout<<endl<<"========================> Scene nodes"<<endl;
+
+    //World
     game::World oWorld(oSM);
-    //return 0;
-    //--------------------
 
-    //==================== Génération des cibles
-//    vector<scene::IAnimatedMeshSceneNode*> nodeCibles;
-//    vector<scene::IAnimatedMeshSceneNode*> nodeTiges;
-//    #ifdef FIXED_TARGETS
-//    boost::random::mt19937 RdmSeed;//((int)oDev->getTimer()->getRealTime());
-//    #else
-//    boost::random::mt19937 RdmSeed((int)oDev->getTimer()->getRealTime());
-//    #endif
-//    boost::random::uniform_int_distribution<> RdmXY(-135, 135);
-//    boost::random::uniform_int_distribution<> RdmZ(-300, 400);
-//    for(int i=0 ; i<20 ; i++)
-//    {
-//        int x = RdmXY(RdmSeed);
-//        int y = RdmXY(RdmSeed);
-//        int z = RdmZ(RdmSeed);
-//
-//        scene::IAnimatedMeshSceneNode* nodeCible = oSM->addAnimatedMeshSceneNode(res::model::Get("cible.3ds"), 0, ID_TYPE_CIBLE, core::vector3df(x,y,z), core::vector3df(0,0,0), core::vector3df(1.5,1.5,1.5));
-//        nodeCible->setMaterialFlag(irr::video::EMF_LIGHTING, true);
-//        nodeCible->setMaterialFlag(irr::video::EMF_FOG_ENABLE, true);
-//        nodeCible->setTriangleSelector(oSM->createTriangleSelector(nodeCible));
-//        nodeCibles.push_back(nodeCible);
-//
-//        nodeTiges.push_back(oSM->addAnimatedMeshSceneNode(res::model::Get("baton.3ds"), 0, -1, core::vector3df(x,y,z)));
-//    }
-    //--------------------
-
-
-    //==================== Joueur
-    //scene::IAnimatedMeshSceneNode *nodePlayer = oSM->addAnimatedMeshSceneNode(oSM->getMesh("data/neb/nebuchadnezzar.3ds"), 0, -1, core::vector3df(0, 0, 100), core::vector3df(0, 0, 0), core::vector3df(0.5, 0.5, 0.5));
-    //nodePlayer->setMaterialFlag(irr::video::EMF_LIGHTING, true);
-
-    //              float fMasseKg, float fGravity=98, float fAirFriction=0, core::vector3df OptForce=core::vector3df(0,0,0)
-    //GravityAnimator GravEngine(1000, 0, 0, core::vector3df(0, 0, 0));
-    //GravEngine.FollowNode(nodeCamera, 1000, core::vector3df(0, -50, 300));
-    //nodePlayer->addAnimator(&GravEngine);
-
-    //--------------------
+    //Player
 
 
 
-    //==================== Gestionnaire de collisions
-    scene::ISceneCollisionManager* oCollM = oSM->getSceneCollisionManager();
-    //--------------------
-
-
-	//--------------------
-
-	//game::Bullet a(&oWorld, oSM, core::vector3df(50,130,-200), core::vector3df(-0.8,-0.2,1), 800);
-	game::Bullet b(&oWorld, oSM, core::vector3df(20,-30,-200), core::vector3df(0,-0,1), 500);
-	game::Bullet c(&oWorld, oSM, core::vector3df(-100,60,-200), core::vector3df(0,-0.2,1), 600);
-
-	//game::Sentinel s(&oWorld, oSM, core::vector3df(20,-30,500));
-
-
-
-
-    oTimer->start();
+	struct timeval timeEndLoading;
+	gettimeofday(&timeEndLoading, NULL);
+	cout<<endl<<"O===============================O"<<endl
+				<<"Finished in "<<(timeStartLoading.tv_usec - timeEndLoading.tv_usec)/1000<<" ms"<<endl<<endl;
 
     //Boucle principale
     while(oDev->run())
@@ -229,155 +158,62 @@ int main()
         \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
         // Gestion de la caméra /////////////////////////////////////////////////////////////////////
         ==========================================================================================*/
-        bool bNoIRSrc = false;
-        try
-        {
-        //==
-            //On récupère les coordonnées du joueur
-            //Cette methode peut throw
-            Wiimote3d posPlayer = WMHdl.GetPlayerPos();
+
+		//On récupère les coordonnées du joueur
+		bool bCameraEnoughIRSrc;
+		core::vector3df posCamera = IOMgr.GetCameraPosition(&bCameraEnoughIRSrc);
+
+		//On positionne la caméra à l'endroit du joueur
+		nodeCamContainer->setPosition(posCamera);
 
 
-            //GetPlayerPos n'a pas throw : il y a assez de sources
+		//==================== On calcule le champs de vision
+		//Horizontalement
+		float fHrzFOV1=atan((WORLD_WIDTH/2+posCamera.X)/posCamera.Z);
+		float fHrzFOV2=atan((-WORLD_WIDTH/2+posCamera.X)/posCamera.Z);
+		float fHrzFOV = fabs(fHrzFOV1-fHrzFOV2);
+		// ...
 
-            core::vector3df posCamera = Wiimote3dToWorld3d(posPlayer);
+		//Verticalement
+		float fVerFOV1=atan((WORLD_HEIGHT/2+posCamera.Y)/posCamera.Z);
+		float fVerFOV2=atan((-WORLD_HEIGHT/2+posCamera.Y)/posCamera.Z);
+		float fVerFOV = fabs(fVerFOV1-fVerFOV2);
 
-
-            //On positionne la caméra à l'endroit du joueur
-            nodeCamContainer->setPosition(posCamera);
-
-
-            //==================== On calcule le champs de vision
-            //Horizontalement
-            float fHrzFOV1=atan((WORLD_WIDTH/2+posCamera.X)/posCamera.Z);
-            float fHrzFOV2=atan((-WORLD_WIDTH/2+posCamera.X)/posCamera.Z);
-            float fHrzFOV = fabs(fHrzFOV1-fHrzFOV2);
-            // ...
-
-            //Verticalement
-            float fVerFOV1=atan((WORLD_HEIGHT/2+posCamera.Y)/posCamera.Z);
-            float fVerFOV2=atan((-WORLD_HEIGHT/2+posCamera.Y)/posCamera.Z);
-            float fVerFOV = fabs(fVerFOV1-fVerFOV2);
-
-            nodeCamera->setAspectRatio(fHrzFOV/fVerFOV);
-            nodeCamera->setFOV(fHrzFOV);
-            //--------------------
+		nodeCamera->setAspectRatio(fHrzFOV/fVerFOV);
+		nodeCamera->setFOV(fHrzFOV);
+		//--------------------
 
 
-            core::vector3df facFacing((abs(fVerFOV1)-fVerFOV)/2.0, -(abs(fHrzFOV1)-fHrzFOV)/2.0, 0);
-        //==
-        }
-        catch(int e)
-        {
-            if(e==EXC_WIIPOS_NOT_ENOUGH_IRSRC)
-            {
-                bNoIRSrc=true;
-            }
-        }
+		core::vector3df facFacing((abs(fVerFOV1)-fVerFOV)/2.0, -(abs(fHrzFOV1)-fHrzFOV)/2.0, 0);
 
 
         /*==========================================================================================
         \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-        // Gestion du curseur droit /////////////////////////////////////////////////////////////////
+        // Gestion des events curseur droit /////////////////////////////////////////////////////////
         ==========================================================================================*/
-        int nRightCursorException = 0;
-        core::position2d<s32> posRightCur;
-        try
-        {
-            //Recup de la position du curseur droit
-            Wiimote2dPercent RightCurPercent = WMHdl.GetCursorPos(WMHDL_RIGHT);
-            posRightCur.set(RightCurPercent.x*nScreenWidth,RightCurPercent.y*nScreenHeight);
 
 
-            //Traitement des evenements
-            Wiimote2dPercent EventCurPos;
-            struct WiimoteCursorEvent Event = WMHdl.GetLastButtonEvent(WMHDL_RIGHT);
-            if(Event.event!=EVENT_NONE)//Un evenement à traiter !
-            {
-                if(Event.button & (WIIMOTE_BUTTON_A | WIIMOTE_BUTTON_B))//Si le bouton A ou B est pressé
-                {
-                    //Recherche des collisions
-                    core::line3d<f32> RightRay = oCollM->getRayFromScreenCoordinates(posRightCur, nodeCamera);
+        while( IOMgr.GetIsCursorEvent(mrio::IOManager::right) )
+		{
+			const struct mrio::IOManager::IOCursorEvent e = IOMgr.GetLastCursorEvent(mrio::IOManager::right);
+			if(e.button == mrio::IOManager::primary)
+			{
+				core::line3df ray(oCollM->getRayFromScreenCoordinates(e.pos, nodeCamera));
 
-                    core::vector3df posHitPosition;
-                    core::triangle3df triHitTriangle;
-                    scene::ISceneNode *nodeSelected = oCollM->getSceneNodeAndCollisionPointFromRay(RightRay, posHitPosition, triHitTriangle, ID_TYPE_CIBLE,	0);
-                    if(nodeSelected!=0)
-                    {
-                        nodeSelected->setVisible(false);
+				new game::Bullet(&oWorld, oSM, nodeCamContainer->getAbsolutePosition()-oWorld.getAbsolutePosition(), ray.getVector(), 1500.0);
+			}
+			else if(e.button == mrio::IOManager::secondary)
+			{
 
-                        if(Event.button & WIIMOTE_BUTTON_A)
-                        {
+			}
+			else if(e.button == mrio::IOManager::menu)
+			{
 
-                        //GravEngine.FollowNode(nodeSelected, 1000, 10000);
+			}
+		}
 
-
-
-                            //IRR::IRRSystem* newSystem = dynamic_cast<IRR::IRRSystem*>(SPKFactory::getInstance().copy(explosionID));
-                            //IRR::IRRSystem* newSystem = SPK_Copy(IRR::IRRSystem,explosionID);
-                            //newSystem->setPosition(posHitPosition);
-                            //newSystem->setTransformPosition(Vector3D(posHitPosition.X, posHitPosition.Y, posHitPosition.Z));
-                            //newSystem->updateTransform();
-                            //partFire->setPosition(posHitPosition);
-                            //partFire->setVisible(true);
-
-//    Point* ExplosionEmitZone = Point::create();
-//
-//    RandomEmitter* ExplosionEmitter = RandomEmitter::create();
-//     ExplosionEmitter->setZone(ExplosionEmitZone);
-//     ExplosionEmitter->setTank(20);
-//     ExplosionEmitter->setFlow(100);
-//     ExplosionEmitter->setForce(150.0, 300.0);
-//
-//    Model* ExplosionModel = Model::create(FLAG_RED|FLAG_GREEN|FLAG_BLUE|FLAG_ALPHA, FLAG_ALPHA|FLAG_ANGLE, FLAG_ANGLE);
-//     ExplosionModel->setParam(PARAM_ALPHA, 1.0f, 0.0f);
-//     ExplosionModel->setParam(PARAM_ANGLE, 0.f, 2.0*3.14f, 0.f, 4.0*3.14f);
-//     ExplosionModel->setLifeTime(0.5f, 2.0f);
-//     //ExplosionModel->setShared(true);
-//
-//    IRR::IRRQuadRenderer* ExplosionRenderer = IRR::IRRQuadRenderer::create(oDev);
-//     ExplosionRenderer->setTexture(oDriver->getTexture("data/fx_smoke.png"));
-//	 ExplosionRenderer->setTexturingMode(TEXTURE_2D);
-//	 ExplosionRenderer->setScale(50.0f,100.0f);
-//     ExplosionRenderer->setBlending(BLENDING_ADD);
-//	 ExplosionRenderer->enableRenderingHint(DEPTH_WRITE,false);
-//	 //ExplosionRenderer->setShared(true);
-//
-//    Group* ExplosionGroup = Group::create(ExplosionModel, 1000);
-//     ExplosionGroup->setRenderer(ExplosionRenderer);
-//     ExplosionGroup->addEmitter(ExplosionEmitter);
-//     ExplosionGroup->setFriction(2.5f);
-//     ExplosionGroup->setGravity(Vector3D(0.0f,-9.0f,0.0f));
-//
-//    IRR::IRRSystem* Explosion = IRR::IRRSystem::create(oSM->getRootSceneNode(),oSM);
-//     Explosion->addGroup(ExplosionGroup);
-//     Explosion->setPosition(posHitPosition);
-
-                        }
-                        else if(Event.button & WIIMOTE_BUTTON_B)
-                        {
-//                            partExplosion->setPosition(posHitPosition);
-//                            partExplosion->setVisible(true);
-                        }
-                    }
-                }
-                else if(Event.button & WIIMOTE_BUTTON_HOME)//Si le bouton home est pressé
-                {
-//                    for(unsigned int i=0 ; i<nodeCibles.size() ; i++)
-//                        nodeCibles[i]->setVisible(true);
-                }
-                else
-                {
-//                    partExplosion->setVisible(false);
-//                    partFire->setVisible(false);
-                }
-
-            }
-        }
-        catch(int e)
-        {
-            nRightCursorException=e;
-        }
+		//Rendu des scene nodes
+        oSM->drawAll();
 
 
         /*====================================================================================================================
@@ -385,20 +221,20 @@ int main()
          >> ELEMENTS GUI ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         ====================================================================================================================*/
-        //Rendre la scène
-        oSM->drawAll();
 
-
-        //Notification GUI src lunettes
-        if(bNoIRSrc)
-            oDriver->draw2DImage(texNoIRSrc, core::position2d<s32>(50,50),
+        //Notification GUI IRSrc lunettes
+        if(bCameraEnoughIRSrc)
+            oDriver->draw2DImage(res::material::Get("no_ir_src.png"), core::vector2di(50,50),
                         core::rect<s32>(0,0,200,200), 0,
                         video::SColor(255, 255, 255, 255), true);
 
 
+
         //Dessin du curseur droit
-        if(nRightCursorException==0)
-            oDriver->draw2DImage(texRightCrosshair, core::position2d<s32>(posRightCur.X-32, posRightCur.Y-32),
+        bool bRightCursorEnoughIRSrc;
+        core::vector2di vRightCursorPos(IOMgr.GetCursorPosition(mrio::IOManager::right, &bRightCursorEnoughIRSrc));
+        if(bRightCursorEnoughIRSrc)
+            oDriver->draw2DImage(res::material::Get("rightcrosshair.png"), vRightCursorPos - core::vector2di(32, 32),
                         core::rect<s32>(0,0,64,64), 0,
                         video::SColor(255, 255, 255, 255), true);
 
@@ -413,9 +249,11 @@ int main()
         core::stringw sCaption = L"FPS=";
         sCaption += oDriver->getFPS();//oTimer->getTime()
         oDev->setWindowCaption(sCaption.c_str());
+
+        sleep(0.1);
     }
 
     oDev->drop();
-
 }
+
 

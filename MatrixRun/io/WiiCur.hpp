@@ -61,8 +61,20 @@ class WiiCur
 
     ///Relève la dernière action effectuée
     /// @return la struct contenant l'ID du bouton, l'action effectuee et la position visée
-    /// @warning Supprime immédiatement le clic de la file d'attente
+    //// @warning Supprime immédiatement le clic de la file d'attente
     struct WiimoteCursorEvent GetLastButtonEvent();
+
+    ///Supprime le dernier event
+    void DropLastButtonEvent()
+    {
+    	m_Events.pop();
+    }
+
+	///Retourne 1 si il y a un evenement a traiter
+    bool GetIsButtonEvent()
+    {
+    	return m_Events.empty();
+    }
 
 
     ///Vérifie si tel bouton est enfoncé
