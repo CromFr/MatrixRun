@@ -338,10 +338,6 @@ namespace game
 			AddQuad(nLastStartTopIndex, nBaseIndex, nBaseIndex+1, nLastEndTopIndex);
 			AddQuad(nBaseIndex, nLastStartBotIndex, nLastEndBotIndex, nBaseIndex+1);
 
-
-
-			//m_FinalMesh = mgr->getMeshManipulator()->createMeshWithTangents(&m_Mesh);
-
 		}
 
 
@@ -371,12 +367,10 @@ namespace game
 		//============================================
 		bool GetIsInTunnel(const core::vector3df& vCheckPosRelNode)
 		{
-			if(!m_MeshBuffer.BoundingBox.isPointInside(vCheckPosRelNode))
-				return false;
-
 			//fCoeff = 0:start, 1:end
 			float fCoeff = vCheckPosRelNode.Z/TUNNEL_MODULE_DIM_Z;
 			float fAntiCoeff = 1-fCoeff;
+
 			base::Elipse elipseMidle(	m_StartingElipse.GetCenter()*fCoeff + m_EndingElipse.GetCenter()*fAntiCoeff,
 										m_StartingElipse.GetA()*fCoeff + m_EndingElipse.GetA()*fAntiCoeff,
 										m_StartingElipse.GetB()*fCoeff + m_EndingElipse.GetB()*fAntiCoeff,

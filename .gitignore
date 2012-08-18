@@ -3,3 +3,7 @@
 *.exe
 *.o
 api
+MatrixRun_light
+MatrixRun/bin
+doc
+trash
