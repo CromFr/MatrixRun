@@ -21,7 +21,8 @@ namespace game
 	{
 		vfx_bullet_shot=0,
 		vfx_bullet_trail=1,
-		vfx_bullet_impact=2
+		vfx_bullet_impact=2,
+		vfx_blood_sentinel=3
 	};
 
 	class VfxManager

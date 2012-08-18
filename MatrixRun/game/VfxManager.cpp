@@ -18,145 +18,181 @@ namespace game
 	//================================================================
 	//vfx_bullet_trail
 		{
-			Point* zoneBulletTrail = Point::create();
+			Point* zone = Point::create();
 
-			StaticEmitter* emitBulletTrail = StaticEmitter::create();
-			 emitBulletTrail->setZone(zoneBulletTrail);
-			 emitBulletTrail->setTank(-1);
-			 emitBulletTrail->setFlow(200);
-			 //emitBulletTrail->setShared(true);
-			StaticEmitter* emitBulletTrail_smoke = StaticEmitter::create();
-			 emitBulletTrail_smoke->setZone(zoneBulletTrail);
-			 emitBulletTrail_smoke->setTank(-1);
-			 emitBulletTrail_smoke->setFlow(30);
-			 //emitBulletTrail_smoke->setShared(true);
+			StaticEmitter* emit_trail = StaticEmitter::create();
+			 emit_trail->setZone(zone);
+			 emit_trail->setTank(-1);
+			 emit_trail->setFlow(200);
+			 //emit_trail->setShared(true);
+			StaticEmitter* emit_smoke = StaticEmitter::create();
+			 emit_smoke->setZone(zone);
+			 emit_smoke->setTank(-1);
+			 emit_smoke->setFlow(30);
+			 //emit_smoke->setShared(true);
 
-			Model* modelBulletTrail = Model::create(FLAG_ALPHA|FLAG_ANGLE|FLAG_TEXTURE_INDEX, FLAG_ALPHA|FLAG_TEXTURE_INDEX, FLAG_ANGLE);
-			 modelBulletTrail->setParam(PARAM_ALPHA, 1.0, 0.0);
-			 modelBulletTrail->setParam(PARAM_ANGLE, 0.f, 2.0*3.14);
-			 modelBulletTrail->setParam(PARAM_TEXTURE_INDEX, 0, 32);
-			 modelBulletTrail->setLifeTime(0.5, 0.7);
-			 modelBulletTrail->setShared(true);
-			Model* modelBulletTrail_smoke = Model::create(FLAG_ALPHA|FLAG_ANGLE|FLAG_SIZE, FLAG_ALPHA|FLAG_SIZE, FLAG_ANGLE);
-			 modelBulletTrail_smoke->setParam(PARAM_ALPHA, 0.5, 0.0);
-			 modelBulletTrail_smoke->setParam(PARAM_SIZE, 0.0, 3.0);
-			 modelBulletTrail_smoke->setParam(PARAM_ANGLE, 0.f, 2.0*3.14);
-			 modelBulletTrail_smoke->setLifeTime(1, 2);
-			 modelBulletTrail_smoke->setShared(true);
+			Model* model_trail = Model::create(FLAG_ALPHA|FLAG_ANGLE|FLAG_TEXTURE_INDEX, FLAG_ALPHA|FLAG_TEXTURE_INDEX, FLAG_ANGLE);
+			 model_trail->setParam(PARAM_ALPHA, 1.0, 0.0);
+			 model_trail->setParam(PARAM_ANGLE, 0.f, 2.0*3.14);
+			 model_trail->setParam(PARAM_TEXTURE_INDEX, 0, 32);
+			 model_trail->setLifeTime(0.5, 0.7);
+			 model_trail->setShared(true);
+			Model* model_smoke = Model::create(FLAG_ALPHA|FLAG_ANGLE|FLAG_SIZE, FLAG_ALPHA|FLAG_SIZE, FLAG_ANGLE);
+			 model_smoke->setParam(PARAM_ALPHA, 0.5, 0.0);
+			 model_smoke->setParam(PARAM_SIZE, 0.0, 3.0);
+			 model_smoke->setParam(PARAM_ANGLE, 0.f, 2.0*3.14);
+			 model_smoke->setLifeTime(1, 2);
+			 model_smoke->setShared(true);
 
-			IRRQuadRenderer* renderBulletTrail = IRRQuadRenderer::create(oDev);
-			 renderBulletTrail->setTexture(res::material::Get("bullet_trail_blue.png"));
-			 renderBulletTrail->setTexturingMode(TEXTURE_2D);
-			 renderBulletTrail->setAtlasDimensions(8,4);
-			 renderBulletTrail->setScale(10.0,10.0);
-			 renderBulletTrail->setBlending(BLENDING_ADD);
-			 renderBulletTrail->enableRenderingHint(DEPTH_WRITE,false);
-			 renderBulletTrail->setShared(true);
-			IRRQuadRenderer* renderBulletTrail_smoke = IRRQuadRenderer::create(oDev);
-			 renderBulletTrail_smoke->setTexture(res::material::Get("shockwave1.png"));
-			 renderBulletTrail_smoke->setTexturingMode(TEXTURE_2D);
-			 renderBulletTrail_smoke->setScale(10.0,10.0);
-			 renderBulletTrail_smoke->setBlending(BLENDING_ALPHA);
-			 renderBulletTrail_smoke->enableRenderingHint(DEPTH_WRITE,false);
-			 renderBulletTrail_smoke->setShared(true);
+			IRRQuadRenderer* render_trail = IRRQuadRenderer::create(oDev);
+			 render_trail->setTexture(res::material::Get("bullet_trail_blue.png"));
+			 render_trail->setTexturingMode(TEXTURE_2D);
+			 render_trail->setAtlasDimensions(8,4);
+			 render_trail->setScale(10.0,10.0);
+			 render_trail->setBlending(BLENDING_ADD);
+			 render_trail->enableRenderingHint(DEPTH_WRITE,false);
+			 render_trail->setShared(true);
+			IRRQuadRenderer* render_smoke = IRRQuadRenderer::create(oDev);
+			 render_smoke->setTexture(res::material::Get("shockwave1.png"));
+			 render_smoke->setTexturingMode(TEXTURE_2D);
+			 render_smoke->setScale(10.0,10.0);
+			 render_smoke->setBlending(BLENDING_ALPHA);
+			 render_smoke->enableRenderingHint(DEPTH_WRITE,false);
+			 render_smoke->setShared(true);
 
-			Group* groupBulletTrail = Group::create(modelBulletTrail, 1000);
-			 groupBulletTrail->setRenderer(renderBulletTrail);
-			 groupBulletTrail->addEmitter(emitBulletTrail);
-			 //groupBulletTrail->setShared(true);
-			Group* groupBulletTrail_smoke = Group::create(modelBulletTrail_smoke, 1000);
-			 groupBulletTrail_smoke->setRenderer(renderBulletTrail_smoke);
-			 groupBulletTrail_smoke->addEmitter(emitBulletTrail_smoke);
-			 groupBulletTrail_smoke->setGravity(Vector3D(0.0f,5.0f,0.0f));
-			 //groupBulletTrail_smoke->setShared(true);
+			Group* group_trail = Group::create(model_trail, 1000);
+			 group_trail->setRenderer(render_trail);
+			 group_trail->addEmitter(emit_trail);
+			 //group_trail->setShared(true);
+			Group* group_smoke = Group::create(model_smoke, 1000);
+			 group_smoke->setRenderer(render_smoke);
+			 group_smoke->addEmitter(emit_smoke);
+			 group_smoke->setGravity(Vector3D(0.0f,5.0f,0.0f));
+			 //group_smoke->setShared(true);
 
-			IRRSystem* sysBulletTrail = IRRSystem::create(0,oSM, false);
-			 sysBulletTrail->addGroup(groupBulletTrail);
-			 sysBulletTrail->addGroup(groupBulletTrail_smoke);
-			 sysBulletTrail->setVisible(false);
+			IRRSystem* sys = IRRSystem::create(0,oSM, false);
+			 sys->addGroup(group_trail);
+			 sys->addGroup(group_smoke);
+			 sys->setVisible(false);
 
-			m_vfxList.push_back(sysBulletTrail);
+			m_vfxList.push_back(sys);
 		}
 	//================================================================
 	//vfx_bullet_impact
 		{
-			Point* zoneBulletImpact = Point::create();
+			Point* zone = Point::create();
 
-			StaticEmitter* emitBulletImpact_sw0 = StaticEmitter::create();
-			 emitBulletImpact_sw0->setZone(zoneBulletImpact);
-			 emitBulletImpact_sw0->setTank(1);
-			 emitBulletImpact_sw0->setFlow(-1);
-			 //emitBulletImpact_sw0->setShared(true);
-			StaticEmitter* emitBulletImpact_sw1 = StaticEmitter::create();
-			 emitBulletImpact_sw1->setZone(zoneBulletImpact);
-			 emitBulletImpact_sw1->setTank(1);
-			 emitBulletImpact_sw1->setFlow(-1);
-			 //emitBulletImpact_sw1->setShared(true);
-			RandomEmitter* emitBulletImpact_pt = RandomEmitter::create();
-			 emitBulletImpact_pt->setZone(zoneBulletImpact);
-			 emitBulletImpact_pt->setTank(40);
-			 emitBulletImpact_pt->setFlow(-1);
-			 emitBulletImpact_pt->setForce(100, 150);
-			 //emitBulletImpact_pt->setShared(true);
+			StaticEmitter* emit_sw0 = StaticEmitter::create();
+			 emit_sw0->setZone(zone);
+			 emit_sw0->setTank(1);
+			 emit_sw0->setFlow(-1);
+			 //emit_sw0->setShared(true);
+			StaticEmitter* emit_sw1 = StaticEmitter::create();
+			 emit_sw1->setZone(zone);
+			 emit_sw1->setTank(1);
+			 emit_sw1->setFlow(-1);
+			 //emit_sw1->setShared(true);
+			RandomEmitter* emit_pt = RandomEmitter::create();
+			 emit_pt->setZone(zone);
+			 emit_pt->setTank(40);
+			 emit_pt->setFlow(-1);
+			 emit_pt->setForce(100, 150);
+			 //emit_pt->setShared(true);
 
-			Model* modelBulletImpact_sw0 = Model::create(FLAG_ALPHA|FLAG_SIZE, FLAG_ALPHA|FLAG_SIZE);
-			 modelBulletImpact_sw0->setParam(PARAM_ALPHA, 1.0, 0.0);
-			 modelBulletImpact_sw0->setParam(PARAM_SIZE, 0, 10);
-			 modelBulletImpact_sw0->setLifeTime(0.6, 1);
-			 modelBulletImpact_sw0->setShared(true);
-			Model* modelBulletImpact_sw1 = Model::create(FLAG_ALPHA|FLAG_SIZE|FLAG_ANGLE, FLAG_ALPHA|FLAG_SIZE, FLAG_ANGLE);
-			 modelBulletImpact_sw1->setParam(PARAM_ALPHA, 1.0, 0.0);
-			 modelBulletImpact_sw1->setParam(PARAM_SIZE, 2,2.5);
-			 modelBulletImpact_sw1->setParam(PARAM_ANGLE, 0,2*3.14);
-			 modelBulletImpact_sw1->setLifeTime(0.4, 0.7);
-			 modelBulletImpact_sw1->setShared(true);
-			Model* modelBulletImpact_pt = Model::create(FLAG_RED|FLAG_GREEN|FLAG_ALPHA, FLAG_ALPHA);
-			 modelBulletImpact_pt->setParam(PARAM_ALPHA, 1.0, 0.0);
-			 modelBulletImpact_pt->setParam(PARAM_GREEN, 0.6);
-			 modelBulletImpact_pt->setParam(PARAM_RED, 0);
-			 modelBulletImpact_pt->setLifeTime(0.4, 0.5);
-			 modelBulletImpact_pt->setShared(true);
+			Model* model_sw0 = Model::create(FLAG_ALPHA|FLAG_SIZE, FLAG_ALPHA|FLAG_SIZE);
+			 model_sw0->setParam(PARAM_ALPHA, 1.0, 0.0);
+			 model_sw0->setParam(PARAM_SIZE, 0, 10);
+			 model_sw0->setLifeTime(0.6, 1);
+			 model_sw0->setShared(true);
+			Model* model_sw1 = Model::create(FLAG_ALPHA|FLAG_SIZE|FLAG_ANGLE, FLAG_ALPHA|FLAG_SIZE, FLAG_ANGLE);
+			 model_sw1->setParam(PARAM_ALPHA, 1.0, 0.0);
+			 model_sw1->setParam(PARAM_SIZE, 2,2.5);
+			 model_sw1->setParam(PARAM_ANGLE, 0,2*3.14);
+			 model_sw1->setLifeTime(0.4, 0.7);
+			 model_sw1->setShared(true);
+			Model* model_pt = Model::create(FLAG_RED|FLAG_GREEN|FLAG_ALPHA, FLAG_ALPHA);
+			 model_pt->setParam(PARAM_ALPHA, 1.0, 0.0);
+			 model_pt->setParam(PARAM_GREEN, 0.6);
+			 model_pt->setParam(PARAM_RED, 0);
+			 model_pt->setLifeTime(0.4, 0.5);
+			 model_pt->setShared(true);
 
-			IRRQuadRenderer* renderBulletImpact_sw0 = IRRQuadRenderer::create(oDev);
-			 renderBulletImpact_sw0->setTexture(res::material::Get("shockwave0.png"));
-			 renderBulletImpact_sw0->setTexturingMode(TEXTURE_2D);
-			 renderBulletImpact_sw0->setScale(10.0,10.0);
-			 renderBulletImpact_sw0->setBlending(BLENDING_ADD);
-			 renderBulletImpact_sw0->enableRenderingHint(DEPTH_WRITE,false);
-			 //renderBulletImpact_sw0->setShared(true);
-			IRRQuadRenderer* renderBulletImpact_sw1 = IRRQuadRenderer::create(oDev);
-			 renderBulletImpact_sw1->setTexture(res::material::Get("shockwave1.png"));
-			 renderBulletImpact_sw1->setTexturingMode(TEXTURE_2D);
-			 renderBulletImpact_sw1->setScale(10.0,10.0);
-			 renderBulletImpact_sw1->setBlending(BLENDING_ADD);
-			 renderBulletImpact_sw1->enableRenderingHint(DEPTH_WRITE,false);
-			 //renderBulletImpact_sw1->setShared(true);
-			IRRPointRenderer* renderBulletImpact_pt = IRRPointRenderer::create(oDev);
-			 renderBulletImpact_pt->setSize(5.0);
+			IRRQuadRenderer* render_sw0 = IRRQuadRenderer::create(oDev);
+			 render_sw0->setTexture(res::material::Get("shockwave0.png"));
+			 render_sw0->setTexturingMode(TEXTURE_2D);
+			 render_sw0->setScale(10.0,10.0);
+			 render_sw0->setBlending(BLENDING_ADD);
+			 render_sw0->enableRenderingHint(DEPTH_WRITE,false);
+			 //render_sw0->setShared(true);
+			IRRQuadRenderer* render_sw1 = IRRQuadRenderer::create(oDev);
+			 render_sw1->setTexture(res::material::Get("shockwave1.png"));
+			 render_sw1->setTexturingMode(TEXTURE_2D);
+			 render_sw1->setScale(10.0,10.0);
+			 render_sw1->setBlending(BLENDING_ADD);
+			 render_sw1->enableRenderingHint(DEPTH_WRITE,false);
+			 //render_sw1->setShared(true);
+			IRRPointRenderer* render_pt = IRRPointRenderer::create(oDev);
+			 render_pt->setSize(5.0);
 
-			Group* groupBulletImpact_sw0 = Group::create(modelBulletImpact_sw0, 1);
-			 groupBulletImpact_sw0->setRenderer(renderBulletImpact_sw0);
-			 groupBulletImpact_sw0->addEmitter(emitBulletImpact_sw0);
-			 //groupBulletImpact_sw0->setShared(true);
-			Group* groupBulletImpact_sw1 = Group::create(modelBulletImpact_sw1, 1);
-			 groupBulletImpact_sw1->setRenderer(renderBulletImpact_sw1);
-			 groupBulletImpact_sw1->addEmitter(emitBulletImpact_sw1);
-			 //groupBulletImpact_sw1->setShared(true);
-			Group* groupBulletImpact_pt = Group::create(modelBulletImpact_pt, 40);
-			 groupBulletImpact_pt->setRenderer(renderBulletImpact_pt);
-			 groupBulletImpact_pt->addEmitter(emitBulletImpact_pt);
-			 groupBulletImpact_pt->setFriction(3.0);
-			 //groupBulletImpact_sw1->setShared(true);
+			Group* group_sw0 = Group::create(model_sw0, 1);
+			 group_sw0->setRenderer(render_sw0);
+			 group_sw0->addEmitter(emit_sw0);
+			 //group_sw0->setShared(true);
+			Group* group_sw1 = Group::create(model_sw1, 1);
+			 group_sw1->setRenderer(render_sw1);
+			 group_sw1->addEmitter(emit_sw1);
+			 //group_sw1->setShared(true);
+			Group* group_pt = Group::create(model_pt, 40);
+			 group_pt->setRenderer(render_pt);
+			 group_pt->addEmitter(emit_pt);
+			 group_pt->setFriction(3.0);
+			 //group_sw1->setShared(true);
 
 
-			IRRSystem* sysBulletImpact = IRRSystem::create(0,oSM, false);
-			 sysBulletImpact->addGroup(groupBulletImpact_sw0);
-			 sysBulletImpact->addGroup(groupBulletImpact_sw1);
-			 sysBulletImpact->addGroup(groupBulletImpact_pt);
-			 sysBulletImpact->setVisible(false);
+			IRRSystem* sys = IRRSystem::create(0,oSM, false);
+			 sys->addGroup(group_sw0);
+			 sys->addGroup(group_sw1);
+			 sys->addGroup(group_pt);
+			 sys->setVisible(false);
 
-			m_vfxList.push_back(sysBulletImpact);
+			m_vfxList.push_back(sys);
 		}
+	//================================================================
+	//vfx_blood_sentinel
+		{
+			Point* zone = Point::create();
+
+			RandomEmitter* emit_pt = RandomEmitter::create();
+			 emit_pt->setZone(zone);
+			 emit_pt->setTank(200);
+			 emit_pt->setFlow(-1);
+			 emit_pt->setForce(20, 80);
+
+			Model* model_pt = Model::create(FLAG_RED|FLAG_GREEN|FLAG_ALPHA, FLAG_ALPHA|FLAG_GREEN);
+			 model_pt->setParam(PARAM_ALPHA, 1.0, 0);
+			 model_pt->setParam(PARAM_RED, 1);
+			 model_pt->setParam(PARAM_GREEN, 1, 0.7);
+			 //model_pt->setParam(PARAM_BLUE, 0.0, 0.0, 1.0, 1.0);
+			 model_pt->setLifeTime(0.5, 1.0);
+			 model_pt->setShared(true);
+
+			IRRPointRenderer* render_pt = IRRPointRenderer::create(oDev);
+			 render_pt->setSize(5.0);
+
+			Group* group_pt = Group::create(model_pt, 200);
+			 group_pt->setRenderer(render_pt);
+			 group_pt->addEmitter(emit_pt);
+			 group_pt->setFriction(2.0);
+			 group_pt->setGravity(Vector3D(0,-60,0));
+
+			IRRSystem* sys = IRRSystem::create(0,oSM, false);
+			 sys->addGroup(group_pt);
+			 sys->setVisible(false);
+
+			m_vfxList.push_back(sys);
+		}
+
+
 
 	}
 
