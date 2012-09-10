@@ -7,7 +7,7 @@ using namespace std;
 #include "Object.hpp"
 #include "../irr/IEmptySceneNode.h"
 
-#include "../base/Elipse.hpp"
+#include "../base/Ellipse.hpp"
 
 #include "TunnelModule.hpp"
 
@@ -22,12 +22,12 @@ namespace game
 		Tunnel(scene::ISceneNode* parent, scene::ISceneManager* mgr)
 			: IEmptySceneNode(parent, mgr, tunnel_border)
 		{
-			base::Elipse elipseFirst(core::vector2df(0,0), 140, 120, 0);
-			m_dqTunnelModules.push_back(new TunnelModule(this, mgr, core::vector3df(0,0,-TUNNEL_MODULE_DIM_Z), elipseFirst, elipseFirst));
-			for(int i=0 ; i<=9*TUNNEL_MODULE_DIM_Z ; i+=TUNNEL_MODULE_DIM_Z)
+			base::Ellipse ellipseFirst(core::vector2df(0,0), 140, 120, 0);
+			m_dqTunnelModules.push_back(new TunnelModule(this, mgr, core::vector3df(0,0,-TUNNEL_MODULE_DIM_Z), ellipseFirst, ellipseFirst));
+			for(int i=0 ; i<=9 ; i++)
 			{
-				const base::Elipse* elipseLast = m_dqTunnelModules.back()->GetEndingElipse();
-				TunnelModule* tunnel = new TunnelModule(this, mgr, core::vector3df(0,0,i), *elipseLast, RandomizeElipse(*elipseLast) );
+				const base::Ellipse* ellipseLast = m_dqTunnelModules.back()->GetEndingEllipse();
+				TunnelModule* tunnel = new TunnelModule(this, mgr, core::vector3df(0,0,i*TUNNEL_MODULE_DIM_Z), *ellipseLast, RandomizeEllipse(*ellipseLast) );
 				m_dqTunnelModules.push_back(tunnel);
 			}
 		}
@@ -60,8 +60,8 @@ namespace game
 				}
 
 				m_dqTunnelModules.pop_front();
-				const base::Elipse* elipseLast = m_dqTunnelModules.back()->GetEndingElipse();
-				m_dqTunnelModules.push_back(new TunnelModule(this, getSceneManager(), core::vector3df(0,0,fZ+TUNNEL_MODULE_DIM_Z*10)-getAbsolutePosition(), *elipseLast, RandomizeElipse(*elipseLast)));
+				const base::Ellipse* ellipseLast = m_dqTunnelModules.back()->GetEndingEllipse();
+				m_dqTunnelModules.push_back(new TunnelModule(this, getSceneManager(), core::vector3df(0,0,fZ+TUNNEL_MODULE_DIM_Z*10)-getAbsolutePosition(), *ellipseLast, RandomizeEllipse(*ellipseLast)));
 			}
 
 
@@ -71,17 +71,36 @@ namespace game
 		//===========================================================================
 		bool GetIsInTunnel(const core::vector3df& posAbs, scene::ISceneNode** outCheckedTunnel=0)
 		{
-			core::vector3df posCheckRelWorld = posAbs - getAbsolutePosition();
+			core::vector3df posCheckRelTunnel = posAbs - getAbsolutePosition();
 
-			int nPos = posCheckRelWorld.Z / TUNNEL_MODULE_DIM_Z;
+			int nPos = (posCheckRelTunnel.Z+300) / TUNNEL_MODULE_DIM_Z;
 			if(nPos<0)return true;
+			else if(nPos>10)
+			{
+				if(outCheckedTunnel!=0)
+					*outCheckedTunnel = m_dqTunnelModules.back();
+				return false;
+			}
 
+			TunnelModule* tunnelmod = m_dqTunnelModules[nPos];
+			float posTunnelEntry = tunnelmod->getAbsolutePosition().Z;
 
-			TunnelModule* tunnelmod = m_dqTunnelModules[nPos+1];//+1 because there is alway a supp node
+			// @note (crom#1#): Clean this
+			if(!(posTunnelEntry<posAbs.Z))
+			{
+				tunnelmod = m_dqTunnelModules[--nPos];
+				posTunnelEntry = tunnelmod->getAbsolutePosition().Z;
+			}
+			else if(!(posTunnelEntry+300>posAbs.Z))
+			{
+				tunnelmod = m_dqTunnelModules[++nPos];
+				posTunnelEntry = tunnelmod->getAbsolutePosition().Z;
+			}
+
 			if(outCheckedTunnel!=0)
 				*outCheckedTunnel = tunnelmod;
 
-			return tunnelmod->GetIsInTunnel(posCheckRelWorld-tunnelmod->getPosition());
+			return tunnelmod->GetIsInTunnel(posCheckRelTunnel-tunnelmod->getPosition());
 		}
 
 
@@ -90,7 +109,7 @@ namespace game
 
 	private:
 
-		base::Elipse RandomizeElipse(const base::Elipse& base)
+		base::Ellipse RandomizeEllipse(const base::Ellipse& base)
 		{
 			float fAngle = base.GetAngle() + (rand()%40)-20;
 
@@ -107,7 +126,7 @@ namespace game
 			if(fB<50)fB=50;
 			if(fB>150)fB=150;
 
-			return base::Elipse(vCenter, fA, fB, fAngle);
+			return base::Ellipse(vCenter, fA, fB, fAngle);
 		}
 
 

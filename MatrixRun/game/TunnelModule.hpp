@@ -9,7 +9,7 @@ using namespace std;
 #include <irrlicht.h>
 using namespace irr;
 
-#include "../base/Elipse.hpp"
+#include "../base/Ellipse.hpp"
 
 #include "../res.hpp"
 
@@ -25,12 +25,12 @@ namespace game
 	class TunnelModule : public scene::ISceneNode
 	{
 	public:
-		TunnelModule(scene::ISceneNode* parent, scene::ISceneManager* mgr, const core::vector3df& pos, const base::Elipse& start, const base::Elipse& end)
+		TunnelModule(scene::ISceneNode* parent, scene::ISceneManager* mgr, const core::vector3df& pos, const base::Ellipse& start, const base::Ellipse& end)
 			: ISceneNode(parent, mgr, tunnel_border, pos),
 			clr(128,128,128,128)
 		{
-			m_StartingElipse = start;
-			m_EndingElipse = end;
+			m_StartingEllipse = start;
+			m_EndingEllipse = end;
 
 
 			//============================> Preparing mesh
@@ -49,15 +49,15 @@ namespace game
 
 
 //			//============================> Set the front polygons
-//			list<core::vector2df>* listPoint = m_StartingElipse.GetCalculatedPoints();
+//			list<core::vector2df>* listPoint = m_StartingEllipse.GetCalculatedPoints();
 //			list<core::vector2df>::iterator it = listPoint->begin();
 //
 //
 //			//middle line params : f(x) = fCoeff*(x+fXDiff)+fYDiff
 //			//	Used to determine if the point must be linked to the top or bottom
-//			float fCoeff = (m_StartingElipse.GetCenter().Y-it->Y)/(m_StartingElipse.GetCenter().X-it->X);
-//			float fXDiff = -m_StartingElipse.GetCenter().X;
-//			float fYDiff = m_StartingElipse.GetCenter().Y;
+//			float fCoeff = (m_StartingEllipse.GetCenter().Y-it->Y)/(m_StartingEllipse.GetCenter().X-it->X);
+//			float fXDiff = -m_StartingEllipse.GetCenter().X;
+//			float fYDiff = m_StartingEllipse.GetCenter().Y;
 //
 //
 //			//Left border quads :
@@ -104,9 +104,9 @@ namespace game
 
 
 			//============================> Set the tunnel polygons
-			list<core::vector2df>* listStartPoint = m_StartingElipse.GetCalculatedPoints();
+			list<core::vector2df>* listStartPoint = m_StartingEllipse.GetCalculatedPoints();
 			list<core::vector2df>::iterator itStart = listStartPoint->begin();
-			list<core::vector2df>* listEndPoint = m_EndingElipse.GetCalculatedPoints();
+			list<core::vector2df>* listEndPoint = m_EndingEllipse.GetCalculatedPoints();
 			list<core::vector2df>::iterator itEnd = listEndPoint->begin();
 
 
@@ -114,19 +114,19 @@ namespace game
 
 			//middle line params : f(x) = fStartCoeff*(x+fStartXDiff)+fStartYDiff
 			//	Used to determine if the point must be linked to the top or bottom
-			float fStartCoeff = (m_StartingElipse.GetCenter().Y-itStart->Y)/(m_StartingElipse.GetCenter().X-itStart->X);
-			float fStartXDiff = -m_StartingElipse.GetCenter().X;
-			float fStartYDiff = m_StartingElipse.GetCenter().Y;
+			float fStartCoeff = (m_StartingEllipse.GetCenter().Y-itStart->Y)/(m_StartingEllipse.GetCenter().X-itStart->X);
+			float fStartXDiff = -m_StartingEllipse.GetCenter().X;
+			float fStartYDiff = m_StartingEllipse.GetCenter().Y;
 
 			//The arrays that contain the points
-			int nStartPoints = 2*m_StartingElipse.GetCalcPrecision()-1;
+			int nStartPoints = 2*m_StartingEllipse.GetCalcPrecision()-1;
 			core::vector2df* aStartTopPoints[nStartPoints];
 			//unsigned int aStartTopIndex[nStartPoints];
 			core::vector2df* aStartBottomPoints[nStartPoints];
 			//unsigned int aStartBottomIndex[nStartPoints];
 			for(int iTop=0, iBot=0, nIndex=0 ; itStart!=listStartPoint->end() ; itStart++, nIndex++)
 			{
-				//fDelta represents if the point is at the top/bottom of the elipse
+				//fDelta represents if the point is at the top/bottom of the ellipse
 				float fDelta = itStart->Y - (fStartCoeff*(itStart->X+fStartXDiff)+fStartYDiff);
 				if(fDelta >= -0.05)// +/- 0.05 error due to float approx
 				{
@@ -141,11 +141,11 @@ namespace game
 			}
 
 			//idem for the bottom
-			float fEndCoeff = (m_EndingElipse.GetCenter().Y-itEnd->Y)/(m_EndingElipse.GetCenter().X-itEnd->X);
-			float fEndXDiff = -m_EndingElipse.GetCenter().X;
-			float fEndYDiff = m_EndingElipse.GetCenter().Y;
+			float fEndCoeff = (m_EndingEllipse.GetCenter().Y-itEnd->Y)/(m_EndingEllipse.GetCenter().X-itEnd->X);
+			float fEndXDiff = -m_EndingEllipse.GetCenter().X;
+			float fEndYDiff = m_EndingEllipse.GetCenter().Y;
 
-			int nEndPoints = 2*m_EndingElipse.GetCalcPrecision()-1;
+			int nEndPoints = 2*m_EndingEllipse.GetCalcPrecision()-1;
 			core::vector2df* aEndTopPoints[nEndPoints];
 			//unsigned int aEndTopIndex[nStartPoints];
 			core::vector2df* aEndBottomPoints[nEndPoints];
@@ -219,7 +219,7 @@ namespace game
 
 				u16 nBaseIndex(m_MeshBuffer.Vertices.size());
 
-				//Starting elipse, top points
+				//Starting ellipse, top points
 				m_MeshBuffer.Vertices.push_back(video::S3DVertexTangents(	aStartTopPoints[i]->X,
 														aStartTopPoints[i]->Y,
 														0,
@@ -235,7 +235,7 @@ namespace game
 														aStartTopPoints[i]->Y - aStartTopPoints[i-1]->Y,
 														aStartTopPoints[i-1]->X - aStartTopPoints[i]->X,
 														0));
-				//Ending elipse, top points
+				//Ending ellipse, top points
 				m_MeshBuffer.Vertices.push_back(video::S3DVertexTangents(	aEndTopPoints[i]->X,
 														aEndTopPoints[i]->Y,
 														TUNNEL_MODULE_DIM_Z,
@@ -252,7 +252,7 @@ namespace game
 														aEndTopPoints[i-1]->X - aEndTopPoints[i]->X,
 														0));
 
-				//Starting elipse, bottom points
+				//Starting ellipse, bottom points
 				m_MeshBuffer.Vertices.push_back(video::S3DVertexTangents(	aStartBottomPoints[i]->X,
 														aStartBottomPoints[i]->Y,
 														0,
@@ -269,7 +269,7 @@ namespace game
 														aStartBottomPoints[i]->X - aStartBottomPoints[i-1]->X,
 														0));
 
-				//Ending elipse, bottom points
+				//Ending ellipse, bottom points
 				m_MeshBuffer.Vertices.push_back(video::S3DVertexTangents(	aEndBottomPoints[i]->X,
 														aEndBottomPoints[i]->Y,
 														TUNNEL_MODULE_DIM_Z,
@@ -301,7 +301,7 @@ namespace game
 			}
 
 			u16 nBaseIndex(m_MeshBuffer.Vertices.size());
-			//Starting elipse point
+			//Starting ellipse point
 			m_MeshBuffer.Vertices.push_back(video::S3DVertexTangents(	aStartBottomPoints[i]->X,
 													aStartBottomPoints[i]->Y,
 													0,
@@ -318,7 +318,7 @@ namespace game
 													aStartBottomPoints[i]->X - aStartBottomPoints[i-1]->X,
 													0));
 
-			//Ending elipse point
+			//Ending ellipse point
 			m_MeshBuffer.Vertices.push_back(video::S3DVertexTangents(	aEndBottomPoints[i]->X,
 													aEndBottomPoints[i]->Y,
 													TUNNEL_MODULE_DIM_Z,
@@ -371,16 +371,16 @@ namespace game
 			float fCoeff = vCheckPosRelNode.Z/TUNNEL_MODULE_DIM_Z;
 			float fAntiCoeff = 1-fCoeff;
 
-			base::Elipse elipseMidle(	m_StartingElipse.GetCenter()*fCoeff + m_EndingElipse.GetCenter()*fAntiCoeff,
-										m_StartingElipse.GetA()*fCoeff + m_EndingElipse.GetA()*fAntiCoeff,
-										m_StartingElipse.GetB()*fCoeff + m_EndingElipse.GetB()*fAntiCoeff,
-										m_StartingElipse.GetAngle()*fCoeff + m_EndingElipse.GetAngle()*fAntiCoeff);
+			base::Ellipse ellipseMidle(	m_StartingEllipse.GetCenter()*fCoeff + m_EndingEllipse.GetCenter()*fAntiCoeff,
+										m_StartingEllipse.GetA()*fCoeff + m_EndingEllipse.GetA()*fAntiCoeff,
+										m_StartingEllipse.GetB()*fCoeff + m_EndingEllipse.GetB()*fAntiCoeff,
+										m_StartingEllipse.GetAngle()*fCoeff + m_EndingEllipse.GetAngle()*fAntiCoeff);
 
-			return elipseMidle.GetIsInto(vCheckPosRelNode.X, vCheckPosRelNode.Y);
+			return ellipseMidle.GetIsInto(vCheckPosRelNode.X, vCheckPosRelNode.Y);
 		}
 
-		const base::Elipse* GetStartingElipse(){return &m_StartingElipse;}
-		const base::Elipse* GetEndingElipse(){return &m_EndingElipse;}
+		const base::Ellipse* GetStartingEllipse(){return &m_StartingEllipse;}
+		const base::Ellipse* GetEndingEllipse(){return &m_EndingEllipse;}
 
 
 //============================================
@@ -412,8 +412,8 @@ namespace game
 			m_MeshBuffer.Indices.push_back(D);
 		}
 
-		base::Elipse m_StartingElipse;
-		base::Elipse m_EndingElipse;
+		base::Ellipse m_StartingEllipse;
+		base::Ellipse m_EndingEllipse;
 
 		scene::SMesh m_Mesh;
 		scene::CMeshBuffer<video::S3DVertexTangents> m_MeshBuffer;
