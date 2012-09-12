@@ -6,13 +6,18 @@
 \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ====================================================================================================================*/
-WiimoteHandler::WiimoteHandler(bool bConfigure)
+WiimoteHandler::WiimoteHandler()
 {
+
 	if(m_Config.Load("data/wiimotes.cfg", false) == ConfigFile::file_not_found)
 	{
-		m_Config.Load("data/wiimotes.cfg", true);
-		bConfigure = true;
+		cerr<<"/!\\ WiimoteHandler : configuration file not found !!!!!!!!"<<endl;
+		return;
 	}
+
+	bool bConfigure = m_Config.GetValue<int>("RunWMConfig");
+	cout<<"bConfigure="<<bConfigure<<endl;
+
 
     m_bStopThread = false;
     m_bPauseThread = false;
@@ -34,7 +39,7 @@ WiimoteHandler::WiimoteHandler(bool bConfigure)
     }
 
     cout<<"==> Connection des wiimotes..."<<endl;
-    m_nConnectedWM = wiiuse_connect(m_WMTable, NB_WIIMOTES);
+    m_nConnectedWM = wiiuse_connect(m_WMTable, nFound);
     cout<<" => "<<m_nConnectedWM<<" wiimote(s) connectee(s)"<<endl;
     if(m_nConnectedWM==0)
     {
@@ -43,165 +48,216 @@ WiimoteHandler::WiimoteHandler(bool bConfigure)
     }
 
 
-
-    //Récup des infos de la batterie, pitch & clear des events wiimote
-    int nGotBattLvls = 0;
-    while(nGotBattLvls<m_nConnectedWM)
-    {
-        while(wiiuse_poll(m_WMTable, NB_WIIMOTES))
-        {
-            int n;
-            for(n=0 ; n < NB_WIIMOTES; ++n)
-            {
-                float fBattery;
-                switch(m_WMTable[n]->event)
-                {
-                    case WIIUSE_STATUS:
-                        fBattery = 100*m_WMTable[n]->battery_level;
-
-                        if(fBattery>=75)
-                            wiiuse_set_leds(m_WMTable[n], WIIMOTE_LED_1 | WIIMOTE_LED_2 | WIIMOTE_LED_3 | WIIMOTE_LED_4);
-                        else if(fBattery>=50)
-                            wiiuse_set_leds(m_WMTable[n], WIIMOTE_LED_1 | WIIMOTE_LED_2 | WIIMOTE_LED_3);
-                        else if(fBattery>=25)
-                            wiiuse_set_leds(m_WMTable[n], WIIMOTE_LED_1 | WIIMOTE_LED_2);
-                        else
-                            wiiuse_set_leds(m_WMTable[n], WIIMOTE_LED_1);
-
-                        nGotBattLvls++;
-                        break;
-                    default:
-                        break;
-                }
-            }
-        }
-    }
-
-    //On désactive tous les modules des WM, ils seront réactivée manuellement ensuite
-    for(int i=0 ; i<NB_WIIMOTES ; i++)
-    {
-        //wiiuse_set_flags(m_WMTable[i], WIIUSE_INIT_FLAGS);
-        wiiuse_motion_sensing(m_WMTable[i], false);
-        wiiuse_set_accel_threshold(m_WMTable[i], false);
-        //wiiuse_set_ir_sensitivity(m_WMTable[i], 1);
-    }
+	//On désactive tous les modules des WM, ils seront réactivée manuellement ensuite
+	for(int i=0 ; i<nFound ; i++)
+	{
+		//wiiuse_set_flags(m_WMTable[i], WIIUSE_INIT_FLAGS);
+		wiiuse_motion_sensing(m_WMTable[i], false);
+		wiiuse_set_accel_threshold(m_WMTable[i], false);
+		//wiiuse_set_ir_sensitivity(m_WMTable[i], 1);
+	}
 
 
-    //==================================================================================================================
-    cout<<endl<<endl<<endl<<endl
-        <<" ////////////////////////////////////////////////"<<endl
-        <<"O==============================================O/"<<endl
-        <<"| Appuyez sur le bouton (A) de la wiimote fixe |/"<<endl
-        <<"O==============================================O"<<endl;
-    bool bLoop = true;
-    while(bLoop)
-    {
-		if(wiiuse_poll(m_WMTable, NB_WIIMOTES))
+
+	if(bConfigure)
+	{
+
+
+		//Récup des infos de la batterie & clear des events wiimote
+		int nGotBattLvls = 0;
+		while(nGotBattLvls<m_nConnectedWM)
 		{
-			int n;
-			for(n=0 ; n < NB_WIIMOTES; ++n)
+			while(wiiuse_poll(m_WMTable, nFound))
 			{
-				switch(m_WMTable[n]->event)
+				int n;
+				for(n=0 ; n < nFound; ++n)
 				{
-					case WIIUSE_EVENT:
-                        if(IS_JUST_PRESSED(m_WMTable[n], WIIMOTE_BUTTON_A))
-                        {
-                            cout<<"==> WiiMote fixe trouvee"<<endl;
+					float fBattery;
+					switch(m_WMTable[n]->event)
+					{
+						case WIIUSE_STATUS:
+							fBattery = 100*m_WMTable[n]->battery_level;
 
-                            wiiuse_set_leds(m_WMTable[n], WIIMOTE_LED_2 | WIIMOTE_LED_3);
+							if(fBattery>=75)
+								wiiuse_set_leds(m_WMTable[n], WIIMOTE_LED_1 | WIIMOTE_LED_2 | WIIMOTE_LED_3 | WIIMOTE_LED_4);
+							else if(fBattery>=50)
+								wiiuse_set_leds(m_WMTable[n], WIIMOTE_LED_1 | WIIMOTE_LED_2 | WIIMOTE_LED_3);
+							else if(fBattery>=25)
+								wiiuse_set_leds(m_WMTable[n], WIIMOTE_LED_1 | WIIMOTE_LED_2);
+							else
+								wiiuse_set_leds(m_WMTable[n], WIIMOTE_LED_1);
 
-
-                            //création & configuration de la WiiPos
-                            // TODO (Administrateur#1#): Use dynamic detection of pitch
-                            m_WiimotePos = new WiiPos(m_WMTable, m_WMTable[n], m_nConnectedWM, Config, 26.0, bConfigure);
-
-                            bLoop=false;
-                        }
-                        break;
-                    default:
-                        break;
+							nGotBattLvls++;
+							break;
+						default:
+							break;
+					}
 				}
 			}
 		}
-    }
 
-    ClearWiimoteEvents();
-    //==================================================================================================================
-    cout<<endl<<endl<<endl<<endl
-        <<" /////////////////////////////////////////////////////"<<endl
-        <<"O===================================================O/"<<endl
-        <<"| Appuyez sur le bouton (+) de la wiimote de droite |/"<<endl
-        <<"O===================================================O"<<endl;
-    bLoop = true;
-    while(bLoop)
-    {
-		if(wiiuse_poll(m_WMTable, NB_WIIMOTES))
+
+		//==================================================================================================================
+		cout<<endl<<endl<<endl<<endl
+			<<" ////////////////////////////////////////////////"<<endl
+			<<"O==============================================O/"<<endl
+			<<"| Appuyez sur le bouton (A) de la wiimote fixe |/"<<endl
+			<<"O==============================================O"<<endl;
+		bool bLoop = true;
+		while(bLoop)
 		{
-			int n;
-			for(n=0 ; n < NB_WIIMOTES; ++n)
+			if(wiiuse_poll(m_WMTable, nFound))
 			{
-			    if(m_WMTable[n] == m_WiimotePos->GetWiimote())
-                    continue;
-
-				switch(m_WMTable[n]->event)
+				int n;
+				for(n=0 ; n < nFound; ++n)
 				{
-					case WIIUSE_EVENT:
-                        if(IS_JUST_PRESSED(m_WMTable[n], WIIMOTE_BUTTON_PLUS))
-                        {
-                            cout<<"==> WiiMote de droite trouvee et prete"<<endl;
-                            wiiuse_set_leds(m_WMTable[n], WIIMOTE_LED_3 | WIIMOTE_LED_4);
+					switch(m_WMTable[n]->event)
+					{
+						case WIIUSE_EVENT:
+							if(IS_JUST_PRESSED(m_WMTable[n], WIIMOTE_BUTTON_A))
+							{
+								cout<<"==> WiiMote fixe trouvee"<<endl;
 
-                            m_WiimoteRight = new WiiCur(m_WMTable, m_WMTable[n], m_nConnectedWM, Config);
+								wiiuse_set_leds(m_WMTable[n], WIIMOTE_LED_2 | WIIMOTE_LED_3);
 
-                            bLoop=false;
-                        }
-                        break;
+								//Enregistrement dans la config
+								m_Config.SetStringValue("MACAddrFixedWM", m_WMTable[n]->bdaddr_str);
+								cout<<"    Addr MAC="<<m_WMTable[n]->bdaddr_str<<endl;
 
-                    default:
-                        break;
+								//création & configuration de la WiiPos
+								// TODO (Administrateur#1#): Use dynamic detection of pitch
+								m_WiimotePos = new WiiPos(m_WMTable, m_WMTable[n], m_nConnectedWM, &m_Config, 26.0, bConfigure);
+
+								bLoop=false;
+							}
+							break;
+						default:
+							break;
+					}
 				}
 			}
 		}
-    }
-    ClearWiimoteEvents();
-    /*
-    //==================================================================================================================
-    cout<<endl<<endl<<endl<<endl
-        <<" /////////////////////////////////////////////////////"<<endl
-        <<"O===================================================O/"<<endl
-        <<"| Appuyez sur le bouton (-) de la wiimote de gauche |/"<<endl
-        <<"O===================================================O"<<endl;
-    bLoop = true;
-    while(bLoop)
-    {
-		if(wiiuse_poll(m_WMTable, NB_WIIMOTES))
+
+		ClearWiimoteEvents();
+		//==================================================================================================================
+		cout<<endl<<endl<<endl<<endl
+			<<" /////////////////////////////////////////////////////"<<endl
+			<<"O===================================================O/"<<endl
+			<<"| Appuyez sur le bouton (+) de la wiimote de droite |/"<<endl
+			<<"O===================================================O"<<endl;
+		bLoop = true;
+		while(bLoop)
 		{
-			int n;
-			for(n=0 ; n < NB_WIIMOTES; ++n)
+			if(wiiuse_poll(m_WMTable, nFound))
 			{
-			    if(m_WMTable[n] == m_WiimotePos->GetWiimote() || m_WMTable[n] == m_WiimoteRight->GetWiimote())
-                    continue;
-
-				switch(m_WMTable[n]->event)
+				int n;
+				for(n=0 ; n < nFound; ++n)
 				{
-					case WIIUSE_EVENT:
-                        if(IS_JUST_PRESSED(m_WMTable[n], WIIMOTE_BUTTON_MINUS))
-                        {
-                            cout<<"==> WiiMote de droite trouvee et prete"<<endl;
-                            wiiuse_set_leds(m_WMTable[n], WIIMOTE_LED_3 | WIIMOTE_LED_4);
+					if(m_WMTable[n] == m_WiimotePos->GetWiimote())
+						continue;
 
-                            m_WiimoteLeft = new WiiCur(m_WMTable, m_WMTable[n], m_nConnectedWM, Config, bConfigure);
+					switch(m_WMTable[n]->event)
+					{
+						case WIIUSE_EVENT:
+							if(IS_JUST_PRESSED(m_WMTable[n], WIIMOTE_BUTTON_PLUS))
+							{
+								cout<<"==> WiiMote de droite trouvee et prete"<<endl;
+								wiiuse_set_leds(m_WMTable[n], WIIMOTE_LED_3 | WIIMOTE_LED_4);
 
-                            bLoop=false;
-                        }
-                        break;
+								//Enregistrement dans la config
+								m_Config.SetStringValue("MACAddrLeftWM", m_WMTable[n]->bdaddr_str);
+								cout<<"    Addr MAC="<<m_WMTable[n]->bdaddr_str<<endl;
 
-                    default:
-                        break;
+								m_WiimoteRight = new WiiCur(m_WMTable, m_WMTable[n], m_nConnectedWM, &m_Config);
+
+								bLoop=false;
+							}
+							break;
+
+						default:
+							break;
+					}
 				}
 			}
 		}
-    }*/
+		ClearWiimoteEvents();
+		/*
+		//==================================================================================================================
+		cout<<endl<<endl<<endl<<endl
+			<<" /////////////////////////////////////////////////////"<<endl
+			<<"O===================================================O/"<<endl
+			<<"| Appuyez sur le bouton (-) de la wiimote de gauche |/"<<endl
+			<<"O===================================================O"<<endl;
+		bLoop = true;
+		while(bLoop)
+		{
+			if(wiiuse_poll(m_WMTable, nFound))
+			{
+				int n;
+				for(n=0 ; n < nFound; ++n)
+				{
+					if(m_WMTable[n] == m_WiimotePos->GetWiimote() || m_WMTable[n] == m_WiimoteRight->GetWiimote())
+						continue;
+
+					switch(m_WMTable[n]->event)
+					{
+						case WIIUSE_EVENT:
+							if(IS_JUST_PRESSED(m_WMTable[n], WIIMOTE_BUTTON_MINUS))
+							{
+								cout<<"==> WiiMote de droite trouvee et prete"<<endl;
+								wiiuse_set_leds(m_WMTable[n], WIIMOTE_LED_3 | WIIMOTE_LED_4);
+
+								//Enregistrement dans la config
+								m_Config.SetStringValue("MACAddrRightWM", m_WMTable[n].bdaddr_str);
+								cout<<"    Addr MAC="<<m_WMTable[n]->bdaddr_str<<endl;
+
+								m_WiimoteLeft = new WiiCur(m_WMTable, m_WMTable[n], m_nConnectedWM, Config, bConfigure);
+
+								bLoop=false;
+							}
+							break;
+
+						default:
+							break;
+					}
+				}
+			}
+		}*/
+
+		m_Config.WriteToFile("data/wiimotes.cfg");
+	}
+	else
+	{
+		ClearWiimoteEvents();
+		bool bFound[3]={false, false, false};
+		for(int i=0 ; i<nFound ; i++)
+		{
+			string sAddr(m_WMTable[i]->bdaddr_str);
+			if(sAddr == m_Config.GetStringValue("MACAddrFixedWM"))
+			{
+				bFound[0] = true;
+				wiiuse_set_leds(m_WMTable[i], WIIMOTE_LED_2 | WIIMOTE_LED_3);
+				m_WiimotePos = new WiiPos(m_WMTable, m_WMTable[i], m_nConnectedWM, &m_Config, m_Config.GetValue<float>("Pitch"), bConfigure);
+			}
+			else if(sAddr == m_Config.GetStringValue("MACAddrLeftWM"))
+			{
+				bFound[1] = true;
+				wiiuse_set_leds(m_WMTable[i], WIIMOTE_LED_1 | WIIMOTE_LED_2);
+				m_WiimoteRight = new WiiCur(m_WMTable, m_WMTable[i], m_nConnectedWM, &m_Config);
+			}
+			else if(sAddr == m_Config.GetStringValue("MACAddrRightWM"))
+			{
+				bFound[2] = true;
+				wiiuse_set_leds(m_WMTable[i], WIIMOTE_LED_3 | WIIMOTE_LED_4);
+				m_WiimoteLeft = new WiiCur(m_WMTable, m_WMTable[i], m_nConnectedWM, &m_Config);
+			}
+		}
+
+		if(!bFound[0])cerr<<"/!\\  Attention : Wiimote fixe non trouvée (MAC="<<m_Config.GetStringValue("MACAddrFixedWM")<<")"<<endl;
+		if(!bFound[1])cerr<<"/!\\  Attention : Wiimote gauche non trouvée (MAC="<<m_Config.GetStringValue("MACAddrLeftWM")<<")"<<endl;
+		if(!bFound[2])cerr<<"/!\\  Attention : Wiimote droite non trouvée (MAC="<<m_Config.GetStringValue("MACAddrRightWM")<<")"<<endl;
+
+	}
 
 
 
@@ -216,11 +272,6 @@ WiimoteHandler::WiimoteHandler(bool bConfigure)
         <<"O===============================O/"<<endl
         <<"|    WIIMOTES DESACTIVEES !!!   |/"<<endl
         <<"O===============================O"<<endl;
-
-
-    //Sleep(2000);
-
-
     #endif
 
 

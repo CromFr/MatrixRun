@@ -125,10 +125,9 @@
 		</Build>
 		<Compiler>
 			<Add option="-Wall" />
-			<Add option="-DNO_WIIMOTES" />
-			<Add option="-DFIXED_TARGETS" />
+			<Add option="-DNO_WIIMOTES_" />
 		</Compiler>
-		<Unit filename="base/Elipse.hpp" />
+		<Unit filename="base/Ellipse.hpp" />
 		<Unit filename="data/config.cfg">
 			<Option target="&lt;{~None~}&gt;" />
 		</Unit>
@@ -169,7 +168,7 @@
 			<Option target="&lt;{~None~}&gt;" />
 		</Unit>
 		<Unit filename="io/IOManager.hpp" />
-		<Unit filename="io/Mouse.hpp" />
+		<Unit filename="io/StdInput.hpp" />
 		<Unit filename="io/WiiCur.cpp" />
 		<Unit filename="io/WiiCur.hpp" />
 		<Unit filename="io/WiiPos.cpp" />

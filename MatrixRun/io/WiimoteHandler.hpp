@@ -28,7 +28,7 @@ class WiimoteHandler
     public:
 
     ///Organise le tableau des wiimotes & entame la procédure d'initialisation
-    WiimoteHandler(bool bConfigure=false);
+    WiimoteHandler();
 
     ///Supprime les allocs dyna
     ~WiimoteHandler();

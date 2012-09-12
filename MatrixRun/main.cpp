@@ -23,16 +23,18 @@
 
 
 
-
-
 int main()
 {
 	using namespace std;
 	using namespace irr;
+/*
+	ofstream logFile("log.txt");
+	streambuf* streambufCout = cout.rdbuf();
+	streambuf* streambufLog = logFile.rdbuf();
 
-
-	cout<<endl<<endl
-        <<" /////////////////////////////////////////////////"<<endl
+	cout.rdbuf(streambufLog);
+*/
+	cout<<" /////////////////////////////////////////////////"<<endl
         <<"O===============================================O/"<<endl
         <<"|                  Matrix-Run!                  |/"<<endl
         <<"|          Réalisé par Thibaut CHARLES          |/"<<endl
@@ -63,19 +65,32 @@ int main()
         <<"|    Chargement du moteur 3D    |/"<<endl
         <<"O===============================O"<<endl;
 
-    #define FULLSCREEN false
-    int nScreenWidth, nScreenHeight;
-    if(FULLSCREEN)  { nScreenWidth=1920;  nScreenHeight=1080; }
-    else            { nScreenWidth=1900;  nScreenHeight=1080-30-80;  }
+	bool bFullscreen = Config.GetValue<bool>("Fullscreen");
+    int nScreenWidth = Config.GetValue<int>("ScreenResolution", 0);
+    int nScreenHeight = Config.GetValue<int>("ScreenResolution", 1);
 
 
     cout<<endl<<"========================> Entrées/Sorties"<<endl;
-    mrio::IOManager IOMgr(mrio::IOManager::mouse, mrio::IOManager::keyboard, core::vector2di(nScreenWidth, nScreenHeight));
+    mrio::IOManager::InputDevice inputdevCamera, inputdevCursor;
+
+    string sControlCamera(Config.GetStringValue("CameraControlType"));
+    if(sControlCamera == "mouse")inputdevCamera=mrio::IOManager::mouse;
+    else if(sControlCamera == "keyboard")inputdevCamera=mrio::IOManager::keyboard;
+    else if(sControlCamera == "wiimote")inputdevCamera=mrio::IOManager::wiimote;
+    else cerr<<"/!\\ Error in config file : line CameraControlType, unknown value \""<<sControlCamera<<"\""<<endl;
+
+    string sControlCursor(Config.GetStringValue("CursorControlType"));
+    if(sControlCursor == "mouse")inputdevCursor=mrio::IOManager::mouse;
+    else if(sControlCursor == "keyboard")inputdevCursor=mrio::IOManager::keyboard;
+    else if(sControlCursor == "wiimote")inputdevCursor=mrio::IOManager::wiimote;
+    else cerr<<"/!\\ Error in config file : line CameraControlType, unknown value \""<<sControlCursor<<"\""<<endl;
+
+    mrio::IOManager IOMgr(inputdevCamera, inputdevCursor, core::vector2di(nScreenWidth, nScreenHeight));
 
 
 	cout<<endl<<"========================> Device, Driver, Scene mgr, Collision mgr"<<endl;
 	//Device
-    IrrlichtDevice *oDev = createDevice(video::EDT_OPENGL, core::dimension2d<u32>(nScreenWidth,nScreenHeight), 32, FULLSCREEN, false, false, IOMgr.GetEventReceiver());
+    IrrlichtDevice *oDev = createDevice(video::EDT_OPENGL, core::dimension2d<u32>(nScreenWidth,nScreenHeight), 32, bFullscreen, true, Config.GetValue<bool>("VSync"), IOMgr.GetEventReceiver());
     oDev->setWindowCaption(L"Matrix-Run!   by Thibaut CHARLES");
     oDev->getCursorControl()->setVisible(true);
 
@@ -138,8 +153,21 @@ int main()
 
 	struct timeval timeEndLoading;
 	gettimeofday(&timeEndLoading, NULL);
+	struct timeval timeLoading;
+	//appying operator -
+	{
+		int nMod = 0;
+		timeLoading.tv_usec = timeEndLoading.tv_usec - timeStartLoading.tv_usec;
+		if(timeLoading.tv_usec<0)
+		{
+			nMod = 1;
+			timeLoading.tv_usec=1000000-timeLoading.tv_usec;
+		}
+		timeLoading.tv_sec = timeEndLoading.tv_sec - timeStartLoading.tv_sec - nMod;
+	}
 	cout<<endl<<"O===============================O"<<endl
-				<<"Finished in "<<(timeStartLoading.tv_usec - timeEndLoading.tv_usec)/1000<<" ms"<<endl<<endl;
+				<<"Finished in "<<timeLoading.tv_sec<<"."<<timeLoading.tv_usec/1000000<<" seconds"<<endl<<endl;
+
 
     //Boucle principale
     while(oDev->run())
@@ -162,6 +190,8 @@ int main()
 		//On récupère les coordonnées du joueur
 		bool bCameraEnoughIRSrc;
 		core::vector3df posCamera = IOMgr.GetCameraPosition(&bCameraEnoughIRSrc);
+
+		//cout<<posCamera.X<<"\t"<<posCamera.Y<<"\t"<<posCamera.Z<<endl;
 
 		//On positionne la caméra à l'endroit du joueur
 		nodeCamContainer->setPosition(posCamera);
@@ -196,7 +226,7 @@ int main()
         while( IOMgr.GetIsCursorEvent(mrio::IOManager::right) )
 		{
 			const struct mrio::IOManager::IOCursorEvent e = IOMgr.GetLastCursorEvent(mrio::IOManager::right);
-			if(e.button == mrio::IOManager::primary)
+			if(e.button == mrio::IOManager::primary && e.event == mrio::IOManager::pressed)
 			{
 				core::line3df ray(oCollM->getRayFromScreenCoordinates(e.pos, nodeCamera));
 
@@ -223,17 +253,22 @@ int main()
         ====================================================================================================================*/
 
         //Notification GUI IRSrc lunettes
-        if(bCameraEnoughIRSrc)
+        if(!bCameraEnoughIRSrc)
             oDriver->draw2DImage(res::material::Get("no_ir_src.png"), core::vector2di(50,50),
                         core::rect<s32>(0,0,200,200), 0,
                         video::SColor(255, 255, 255, 255), true);
 
 
+        //Dessin des curseurs
+        bool bEnoughIRSrc = true;
+        core::vector2di vLeftCursorPos(IOMgr.GetCursorPosition(mrio::IOManager::left, &bEnoughIRSrc));
+        if(bEnoughIRSrc)
+            oDriver->draw2DImage(res::material::Get("leftcrosshair.png"), vLeftCursorPos - core::vector2di(32, 32),
+                        core::rect<s32>(0,0,64,64), 0,
+                        video::SColor(255, 255, 255, 255), true);
 
-        //Dessin du curseur droit
-        bool bRightCursorEnoughIRSrc;
-        core::vector2di vRightCursorPos(IOMgr.GetCursorPosition(mrio::IOManager::right, &bRightCursorEnoughIRSrc));
-        if(bRightCursorEnoughIRSrc)
+        core::vector2di vRightCursorPos(IOMgr.GetCursorPosition(mrio::IOManager::right, &bEnoughIRSrc));
+        if(bEnoughIRSrc)
             oDriver->draw2DImage(res::material::Get("rightcrosshair.png"), vRightCursorPos - core::vector2di(32, 32),
                         core::rect<s32>(0,0,64,64), 0,
                         video::SColor(255, 255, 255, 255), true);
@@ -243,14 +278,6 @@ int main()
         //Affichage de la scène
         oDriver->endScene();
 
-
-
-        //Frametime
-        core::stringw sCaption = L"FPS=";
-        sCaption += oDriver->getFPS();//oTimer->getTime()
-        oDev->setWindowCaption(sCaption.c_str());
-
-        sleep(0.1);
     }
 
     oDev->drop();

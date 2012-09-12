@@ -9,7 +9,7 @@ using namespace std;
 using namespace irr;
 
 #include "WiimoteHandler.hpp"
-#include "Mouse.hpp"
+#include "StdInput.hpp"
 
 #include "../io/transition.hpp"
 
@@ -44,8 +44,7 @@ namespace mrio
 		IOManager(InputDevice CameraControl, InputDevice CursorControl, const core::vector2di& vScreenDim):
 			m_vScreenDim(vScreenDim)
 		{
-			m_Mouse = 0;
-			//m_Keyboard = 0;
+			m_StdIn = new StdInput();
 			m_WM = 0;
 
 			m_CamCtrl=CameraControl;
@@ -55,14 +54,15 @@ namespace mrio
 			{
 			case mouse:
 				fMouseCtrlCamZ = -100;
-				m_Mouse = new Mouse;
+				m_StdIn->SetMouseCapture(true);
 				break;
 
 			case keyboard:
+				m_StdIn->SetKeyboardCapture(true);
 				break;
 
 			case wiimote:
-				m_WM = new WiimoteHandler(0);
+				m_WM = new WiimoteHandler();
 				break;
 			}
 
@@ -70,15 +70,16 @@ namespace mrio
 			{
 			case mouse:
 				m_CursorCtrlSelectedCur = left;
-				m_Mouse->SetWheelCallback(boost::bind(&IOManager::SwitchCursor, this, _1));
-				if(m_Mouse == 0) m_Mouse = new Mouse;
+				m_StdIn->SetWheelCallback(boost::bind(&IOManager::SwitchCursor, this, _1));
+				m_StdIn->SetMouseCapture(true);
 				break;
 
 			case keyboard:
+				m_StdIn->SetKeyboardCapture(true);
 				break;
 
 			case wiimote:
-				if(m_WM == 0) m_WM = new WiimoteHandler(0);
+				if(m_WM == 0) m_WM = new WiimoteHandler();
 				break;
 			}
 
@@ -87,7 +88,7 @@ namespace mrio
 
 		~IOManager()
 		{
-			delete m_Mouse;
+			delete m_StdIn;
 			delete m_WM;
 		}
 
@@ -100,7 +101,7 @@ namespace mrio
 		{
 			if(m_CamCtrl==mouse)
 			{
-				core::vector2di pos(m_Mouse->GetMousePosition());
+				core::vector2di pos(m_StdIn->GetMousePosition());
 				pos.X = 300*pos.X/m_vScreenDim.X-150;
 				pos.Y = 300*pos.Y/m_vScreenDim.Y-150;
 
@@ -111,7 +112,32 @@ namespace mrio
 			}
 			else if(m_CamCtrl==keyboard)
 			{
-				cerr<<"/!\\  Keyboard camera control not handled"<<endl;
+				float SPEED(5.0);
+				if(m_StdIn->GetKeyState(KEY_UP) == StdInput::down)
+				{
+					if(m_StdIn->GetKeyState(KEY_RSHIFT) == StdInput::down)
+						m_vLastCameraPos.Z += SPEED;
+					else
+						m_vLastCameraPos.Y += SPEED;
+				}
+				if(m_StdIn->GetKeyState(KEY_DOWN) == StdInput::down)
+				{
+					if(m_StdIn->GetKeyState(KEY_RSHIFT) == StdInput::down)
+						m_vLastCameraPos.Z -= SPEED;
+					else
+						m_vLastCameraPos.Y -= SPEED;
+				}
+				if(m_StdIn->GetKeyState(KEY_LEFT) == StdInput::down)
+				{
+					m_vLastCameraPos.X -= SPEED;
+				}
+				if(m_StdIn->GetKeyState(KEY_RIGHT) == StdInput::down)
+				{
+					m_vLastCameraPos.X += SPEED;
+				}
+
+				if(outEnoughIRSrc>0)
+					*outEnoughIRSrc = true;
 			}
 			else if(m_CamCtrl==wiimote)
 			{
@@ -140,16 +166,16 @@ namespace mrio
 		===========================================================================*/
 		core::vector2di GetCursorPosition(Cursor cur, bool* outEnoughIRSrc=0)
 		{
-			if(m_CamCtrl==mouse)
+			if(m_CurCtrl==mouse)
 			{
 				//update cursor pos
 				if(m_CursorCtrlSelectedCur == left)
 				{
-					m_vLastLeftCursorPos.set(m_Mouse->GetMousePosition());
+					m_vLastLeftCursorPos.set(m_StdIn->GetMousePosition());
 				}
 				else
 				{
-					m_vLastRightCursorPos.set(m_Mouse->GetMousePosition());
+					m_vLastRightCursorPos.set(m_StdIn->GetMousePosition());
 				}
 
 				if(cur==left)
@@ -160,11 +186,47 @@ namespace mrio
 				if(outEnoughIRSrc>0)
 					*outEnoughIRSrc = true;
 			}
-			else if(m_CamCtrl==keyboard)
+			else if(m_CurCtrl==keyboard)
 			{
-				cerr<<"/!\\  Keyboard cursor control not handled"<<endl;
+				float SPEED(3.0);
+				if(m_StdIn->GetKeyState(KEY_KEY_Z) == StdInput::down)
+				{
+					if(m_StdIn->GetKeyState(KEY_LSHIFT) == StdInput::down)
+						m_vLastRightCursorPos.Y -= SPEED;
+					else
+						m_vLastLeftCursorPos.Y -= SPEED;
+				}
+				if(m_StdIn->GetKeyState(KEY_KEY_S) == StdInput::down)
+				{
+					if(m_StdIn->GetKeyState(KEY_LSHIFT) == StdInput::down)
+						m_vLastRightCursorPos.Y += SPEED;
+					else
+						m_vLastLeftCursorPos.Y += SPEED;
+				}
+				if(m_StdIn->GetKeyState(KEY_KEY_Q) == StdInput::down)
+				{
+					if(m_StdIn->GetKeyState(KEY_LSHIFT) == StdInput::down)
+						m_vLastRightCursorPos.X -= SPEED;
+					else
+						m_vLastLeftCursorPos.X -= SPEED;
+				}
+				if(m_StdIn->GetKeyState(KEY_KEY_D) == StdInput::down)
+				{
+					if(m_StdIn->GetKeyState(KEY_LSHIFT) == StdInput::down)
+						m_vLastRightCursorPos.X += SPEED;
+					else
+						m_vLastLeftCursorPos.X += SPEED;
+				}
+
+				if(outEnoughIRSrc>0)
+					*outEnoughIRSrc = true;
+
+				if(cur==left)
+					return m_vLastLeftCursorPos;
+				else
+					return m_vLastRightCursorPos;
 			}
-			else if(m_CamCtrl==wiimote)
+			else if(m_CurCtrl==wiimote)
 			{
 				try
 				{
@@ -203,20 +265,25 @@ namespace mrio
 		===========================================================================*/
 		bool GetIsCursorEvent(Cursor cur)
 		{
-			if(m_CamCtrl==mouse)
+			if(m_CurCtrl==mouse)
 			{
-				for(  ; m_Mouse->GetIsMouseEvent() ; m_Mouse->DeleteLastEvent())
+				for(  ; m_StdIn->GetIsMouseEvent() ; m_StdIn->DropLastMouseEvent())
 				{
-					const struct Mouse::MouseEvent* me = m_Mouse->GetMouseLastEvent();
-					if(me->button == Mouse::left || me->button == Mouse::right)//<============== Allowed mouse Buttons
+					const struct StdInput::MouseEvent* me = m_StdIn->GetLastMouseEvent();
+					if(me->button == StdInput::left || me->button == StdInput::right)//<============== Allowed mouse Buttons
 						return true;
 				}
 			}
-			else if(m_CamCtrl==keyboard)
+			else if(m_CurCtrl==keyboard)
 			{
-
+				for(  ; m_StdIn->GetIsKeyboardEvent() ; m_StdIn->DropLastKeyboardEvent())
+				{
+					const struct StdInput::KeyboardEvent* kbe = m_StdIn->GetLastKeyboardEvent();
+					if(kbe->key == KEY_KEY_A || kbe->key == KEY_KEY_E)				//<============== Allowed keyboard keys
+						return true;
+				}
 			}
-			else if(m_CamCtrl==wiimote)
+			else if(m_CurCtrl==wiimote)
 			{
 				int nWM;
 				if(cur == left)	nWM = WMHDL_LEFT;
@@ -238,36 +305,62 @@ namespace mrio
 		===========================================================================*/
 		const IOCursorEvent& GetLastCursorEvent(Cursor cur)
 		{
-			if(m_CamCtrl==mouse)
+			if(m_CurCtrl==mouse)
 			{
-				for(  ; m_Mouse->GetIsMouseEvent() ; m_Mouse->DeleteLastEvent())
+				for(  ; m_StdIn->GetIsMouseEvent() ; m_StdIn->DropLastMouseEvent())
 				{
-					const struct Mouse::MouseEvent* me = m_Mouse->GetMouseLastEvent();
-					if(me->button == Mouse::left || me->button == Mouse::right)//<============== Allowed mouse Buttons
+					const struct StdInput::MouseEvent* me = m_StdIn->GetLastMouseEvent();
+					if(me->button == StdInput::left || me->button == StdInput::right)//<============== Allowed mouse Buttons
 					{
 						m_LastCursorEvent.cursor = m_CursorCtrlSelectedCur;
 						m_LastCursorEvent.pos.set(me->pos.X, me->pos.Y);
 
-						if(me->button == Mouse::left)
+						if(me->button == StdInput::left)
 							m_LastCursorEvent.button = primary;
 						else
 							m_LastCursorEvent.button = secondary;
 
-						if(me->state == Mouse::down)
+						if(me->state == StdInput::down)
 							m_LastCursorEvent.event = pressed;
 						else
 							m_LastCursorEvent.event = released;
 
-						m_Mouse->DeleteLastEvent();
+						m_StdIn->DropLastMouseEvent();
 						break;
 					}
 				}
 			}
-			else if(m_CamCtrl==keyboard)
+			else if(m_CurCtrl==keyboard)
 			{
-				cerr<<"/!\\  Keyboard cursor control not handled"<<endl;
+				for(  ; m_StdIn->GetIsKeyboardEvent() ; m_StdIn->DropLastKeyboardEvent())
+				{
+					const struct StdInput::KeyboardEvent* kbe = m_StdIn->GetLastKeyboardEvent();
+					if(kbe->key == KEY_KEY_A || kbe->key == KEY_KEY_E)
+					{
+						m_LastCursorEvent.button = primary;
+
+						if(kbe->key == KEY_KEY_A)
+						{
+							m_LastCursorEvent.cursor = right;
+							m_LastCursorEvent.pos.set(m_vLastRightCursorPos);
+						}
+						else
+						{
+							m_LastCursorEvent.cursor = left;
+							m_LastCursorEvent.pos.set(m_vLastLeftCursorPos);
+						}
+
+						if(kbe->state == StdInput::down)
+							m_LastCursorEvent.event = pressed;
+						else
+							m_LastCursorEvent.event = released;
+
+						m_StdIn->DropLastKeyboardEvent();
+						break;
+					}
+				}
 			}
-			else if(m_CamCtrl==wiimote)
+			else if(m_CurCtrl==wiimote)
 			{
 				int nWM;
 				if(cur == left)	nWM = WMHDL_LEFT;
@@ -301,7 +394,7 @@ namespace mrio
 			return m_LastCursorEvent;
 		}
 
-		IEventReceiver* GetEventReceiver(){return m_Mouse;}
+		IEventReceiver* GetEventReceiver(){return m_StdIn;}
 
 
 		void SwitchCursor(float fWheelDir)
@@ -322,8 +415,7 @@ namespace mrio
 		core::vector2di m_vLastLeftCursorPos;
 		core::vector2di m_vLastRightCursorPos;
 
-		Mouse* m_Mouse;
-		//Keyboard* m_KeyB;
+		StdInput* m_StdIn;
 		WiimoteHandler* m_WM;
 
 		queue<IOCursorEvent> m_qCursorEvents;
