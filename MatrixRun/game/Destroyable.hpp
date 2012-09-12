@@ -32,7 +32,6 @@ namespace game
 				}
 			}
 
-
 		}
 
 		void Heal(int nAmount)

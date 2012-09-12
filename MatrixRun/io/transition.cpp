@@ -5,10 +5,10 @@
 \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ====================================================================================================================*/
-Wiimote3d World3dToWiimote3d(irr::core::vector3df World, bool bBorner)
+mrio::wm::Wiimote3d World3dToWiimote3d(const irr::core::vector3df& World, bool bBorner)
 {
 
-    if(bBorner)
+    /*if(bBorner)
     {
         if(World.X>WORLD_WIDTH/2)
             World.X=WORLD_WIDTH/2;
@@ -22,9 +22,11 @@ Wiimote3d World3dToWiimote3d(irr::core::vector3df World, bool bBorner)
     }
 
     return Wiimote3d(SCREEN_WIDTH_MM*World.X/WORLD_WIDTH, World.Z, SCREEN_HEIGHT_MM*World.Y/WORLD_HEIGHT);
+    */
+    return World3dToWiimote3d(World.X, World.Y, World.Z, bBorner);
 }
 
-Wiimote3d World3dToWiimote3d(float x, float y, float z, bool bBorner)
+mrio::wm::Wiimote3d World3dToWiimote3d(float x, float y, float z, bool bBorner)
 {
     if(bBorner)
     {
@@ -39,7 +41,7 @@ Wiimote3d World3dToWiimote3d(float x, float y, float z, bool bBorner)
             y=-WORLD_HEIGHT/2;
     }
 
-    return Wiimote3d(SCREEN_WIDTH_MM*x/WORLD_WIDTH, z, SCREEN_HEIGHT_MM*y/WORLD_HEIGHT);
+    return mrio::wm::Wiimote3d(SCREEN_WIDTH_MM*x/WORLD_WIDTH, z, SCREEN_HEIGHT_MM*y/WORLD_HEIGHT);
 }
 
 
@@ -47,8 +49,9 @@ Wiimote3d World3dToWiimote3d(float x, float y, float z, bool bBorner)
 \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ====================================================================================================================*/
-irr::core::vector3df Wiimote3dToWorld3d(Wiimote3d Wiimote, bool bBorner)
+irr::core::vector3df Wiimote3dToWorld3d(const mrio::wm::Wiimote3d& Wiimote, bool bBorner)
 {
+	/*
     if(bBorner)
     {
         if(Wiimote.x>SCREEN_WIDTH_MM/2)
@@ -63,6 +66,8 @@ irr::core::vector3df Wiimote3dToWorld3d(Wiimote3d Wiimote, bool bBorner)
     }
 
     return irr::core::vector3df(WORLD_WIDTH * Wiimote.x/SCREEN_WIDTH_MM, Wiimote.z, WORLD_HEIGHT * Wiimote.y/SCREEN_HEIGHT_MM);
+    */
+    return Wiimote3dToWorld3d(Wiimote.x, Wiimote.y, Wiimote.z, bBorner);
 }
 
 irr::core::vector3df Wiimote3dToWorld3d(float x, float y, float z, bool bBorner)

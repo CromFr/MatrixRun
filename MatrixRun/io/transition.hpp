@@ -12,10 +12,10 @@
 #define WORLD_HEIGHT 300
 
 
-Wiimote3d World3dToWiimote3d(irr::core::vector3df World, bool bBorner=false);
-Wiimote3d World3dToWiimote3d(float x, float y, float z, bool bBorner=false);
+mrio::wm::Wiimote3d World3dToWiimote3d(const irr::core::vector3df& World, bool bBorner=false);
+mrio::wm::Wiimote3d World3dToWiimote3d(float x, float y, float z, bool bBorner=false);
 
-irr::core::vector3df Wiimote3dToWorld3d(Wiimote3d Wiimote, bool bBorner=false);
+irr::core::vector3df Wiimote3dToWorld3d(const mrio::wm::Wiimote3d& Wiimote, bool bBorner=false);
 irr::core::vector3df Wiimote3dToWorld3d(float x, float y, float z, bool bBorner=false);
 
 #endif // TRANSITION_HPP_INCLUDED

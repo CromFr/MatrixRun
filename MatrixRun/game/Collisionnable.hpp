@@ -2,75 +2,66 @@
 #define COLLISIONNABLE_HPP_INCLUDED
 
 #include "../irr/IEmptySceneNode.h"
-using namespace irr;
 
 #include "CollGeometry.hpp"
 
 #include <boost/bind.hpp>
 #include <boost/function.hpp>
-using namespace boost;
 
 namespace game
 {
+	/**
+	@brief Scene node that contain collision points and execute a callback in case of collision
+	**/
 	class Collisionnable : public scene::IEmptySceneNode
 	{
 	public:
+		/**
+		@brief Unique constructor
+		@param funcCallback Boost function to call in case of collision
+		@param nCollisionFlags ID of the scene nodes that can have collision with this object
+		**/
 		Collisionnable(scene::ISceneNode* parent, scene::ISceneManager* mgr, s32 id,
-				function<void(scene::ISceneNode*, core::triangle3df&, core::vector3df&)> funcCallback)
-			: IEmptySceneNode(parent, mgr, id, core::vector3df(0,0,0))
-		{
-			m_CollM = mgr->getSceneCollisionManager();
-			m_nCollisionFlags = 0;
-			m_funcCallback = funcCallback;
-		}
-		~Collisionnable()
-		{
-			ClearCollisions();
-		}
+				boost::function<void(scene::ISceneNode*, core::triangle3df&, core::vector3df&)> funcCallback, int nCollisionFlags=0);
 
-		inline void SetCollisionFlags(int nFlags){m_nCollisionFlags = nFlags;}
-		inline int GetCollisionFlags()const{return m_nCollisionFlags;}
+		~Collisionnable();
 
+		/**
+		@note The collision flags are the ID of the objects that can generate collisions
+		**/
+		void SetCollisionFlags(int nFlags){m_nCollisionFlags = nFlags;}
 
+		/**
+		@note The collision flags are the ID of the objects that can generate collisions
+		**/
+		int GetCollisionFlags()const{return m_nCollisionFlags;}
+
+		/**
+		@brief Adds a line that can generate collisions
+		**/
 		void AddCollisionLine(const core::line3df& line)
 		{
 			m_CollPoints.push_back(new coll::CollLine(this, line));
 		}
+
+		/**
+		@brief Adds a point that can generate collisions
+		**/
 		void AddCollisionPoint(const core::vector3df& point)
 		{
 			m_CollPoints.push_back(new coll::CollPoint(this, point));
 		}
-		void ClearCollisions()
-		{
-			unsigned int nSize = m_CollPoints.size();
-			for(unsigned int i=0 ; i<nSize ; i++)
-			{
-				delete m_CollPoints[i];
-			}
-			m_CollPoints.clear();
-		}
+
+
+		/**
+		@brief Removes all collision points/lines
+		**/
+		void ClearCollisions();
 
 
 
 	protected:
-		void OnAnimate(u32 timeMs)
-		{
-			ISceneNode::OnAnimate(timeMs);
-			if(m_nCollisionFlags != 0)
-			{
-				unsigned int nSize = m_CollPoints.size();
-				for(unsigned int i=0 ; i<nSize ; i++)
-				{
-					coll::Collision* collision = m_CollPoints[i]->GetCollision(m_CollM, this, m_nCollisionFlags);
-					if(collision>0)
-					{
-						m_funcCallback(collision->node, collision->triangle, collision->position);
-						break;
-					}
-				}
-			}
-		}
-
+		void OnAnimate(u32 timeMs);
 
 		scene::ISceneCollisionManager* m_CollM;
 
@@ -78,7 +69,7 @@ namespace game
 
 	private:
 		vector<coll::CollGeometry*> m_CollPoints;
-		function<void(scene::ISceneNode*, core::triangle3df&, core::vector3df&)> m_funcCallback;
+		boost::function<void(scene::ISceneNode*, core::triangle3df&, core::vector3df&)> m_funcCallback;
 
 
 	};

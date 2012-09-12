@@ -2,10 +2,6 @@
 #define GAME_OBJECT_HPP_INCLUDED
 
 #include <iostream>
-using namespace std;
-
-#include "../irr/IEmptySceneNode.h"
-using namespace irr;
 
 namespace game
 {
@@ -40,7 +36,7 @@ namespace game
 		const char* GetObjectTypeString()
 		{
 			enum ObjectType type = GetType();
-			string sType;
+			std::string sType;
 			if(type == none) 			sType+="|None";
 			if(type == tunnel_border) 	sType+="|Tunnel-Border";
 			if(type == tunnel_block) 	sType+="|Tunnel-Block";

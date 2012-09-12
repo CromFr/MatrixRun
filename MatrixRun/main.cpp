@@ -223,9 +223,9 @@ int main()
         ==========================================================================================*/
 
 
-        while( IOMgr.GetIsCursorEvent(mrio::IOManager::right) )
+        while( IOMgr.GetIsCursorEvent() )
 		{
-			const struct mrio::IOManager::IOCursorEvent e = IOMgr.GetLastCursorEvent(mrio::IOManager::right);
+			const struct mrio::IOManager::IOCursorEvent e = IOMgr.GetLastCursorEvent();
 			if(e.button == mrio::IOManager::primary && e.event == mrio::IOManager::pressed)
 			{
 				core::line3df ray(oCollM->getRayFromScreenCoordinates(e.pos, nodeCamera));

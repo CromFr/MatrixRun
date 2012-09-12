@@ -1,10 +1,10 @@
 #include "divers.hpp"
 
+using namespace std;
 
-
-std::string IntToBinary(int n, int nLengh)
+string IntToBinary(int n, int nLengh)
 {
-    std::string sOut("");
+    string sOut("");
 
     int nBitValue=1;
     int nNecessaryDigits = 1;

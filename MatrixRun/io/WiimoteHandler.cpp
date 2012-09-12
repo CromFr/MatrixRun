@@ -1,5 +1,12 @@
 #include "WiimoteHandler.hpp"
 
+using namespace std;
+
+namespace mrio
+{
+	namespace wm
+	{
+
 
 
 /*====================================================================================================================
@@ -417,6 +424,9 @@ void WiimoteHandler::ClearWiimoteEvents()
 
 
 
+
+	}
+}
 
 
 
