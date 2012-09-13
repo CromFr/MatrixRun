@@ -112,7 +112,7 @@ namespace mrio
 		StdInput* m_StdIn;
 		wm::WiimoteHandler* m_WM;
 
-		queue<IOCursorEvent> m_qCursorEvents;
+		std::queue<IOCursorEvent> m_qCursorEvents;
 
 
 		//Mouse camera control

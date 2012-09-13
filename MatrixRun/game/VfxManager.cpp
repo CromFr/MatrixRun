@@ -1,5 +1,9 @@
 #include "VfxManager.hpp"
 
+using namespace std;
+using namespace irr;
+using namespace SPK;
+
 namespace game
 {
 	vector<Registerable*> VfxManager::m_vfxList;

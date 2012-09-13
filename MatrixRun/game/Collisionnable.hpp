@@ -13,7 +13,7 @@ namespace game
 	/**
 	@brief Scene node that contain collision points and execute a callback in case of collision
 	**/
-	class Collisionnable : public scene::IEmptySceneNode
+	class Collisionnable : public irr::scene::IEmptySceneNode
 	{
 	public:
 		/**
@@ -21,8 +21,8 @@ namespace game
 		@param funcCallback Boost function to call in case of collision
 		@param nCollisionFlags ID of the scene nodes that can have collision with this object
 		**/
-		Collisionnable(scene::ISceneNode* parent, scene::ISceneManager* mgr, s32 id,
-				boost::function<void(scene::ISceneNode*, core::triangle3df&, core::vector3df&)> funcCallback, int nCollisionFlags=0);
+		Collisionnable(irr::scene::ISceneNode* parent, irr::scene::ISceneManager* mgr, s32 id,
+				boost::function<void(irr::scene::ISceneNode*, irr::core::triangle3df&, irr::core::vector3df&)> funcCallback, int nCollisionFlags=0);
 
 		~Collisionnable();
 
@@ -39,7 +39,7 @@ namespace game
 		/**
 		@brief Adds a line that can generate collisions
 		**/
-		void AddCollisionLine(const core::line3df& line)
+		void AddCollisionLine(const irr::core::line3df& line)
 		{
 			m_CollPoints.push_back(new coll::CollLine(this, line));
 		}
@@ -47,7 +47,7 @@ namespace game
 		/**
 		@brief Adds a point that can generate collisions
 		**/
-		void AddCollisionPoint(const core::vector3df& point)
+		void AddCollisionPoint(const irr::core::vector3df& point)
 		{
 			m_CollPoints.push_back(new coll::CollPoint(this, point));
 		}
@@ -61,15 +61,15 @@ namespace game
 
 
 	protected:
-		void OnAnimate(u32 timeMs);
+		void OnAnimate(irr::u32 timeMs);
 
-		scene::ISceneCollisionManager* m_CollM;
+		irr::scene::ISceneCollisionManager* m_CollM;
 
 		int m_nCollisionFlags;
 
 	private:
-		vector<coll::CollGeometry*> m_CollPoints;
-		boost::function<void(scene::ISceneNode*, core::triangle3df&, core::vector3df&)> m_funcCallback;
+		std::vector<coll::CollGeometry*> m_CollPoints;
+		boost::function<void(irr::scene::ISceneNode*, irr::core::triangle3df&, irr::core::vector3df&)> m_funcCallback;
 
 
 	};

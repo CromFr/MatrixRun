@@ -67,7 +67,6 @@ ________________________________
 #include <sstream>
 #include <vector>
 
-using namespace std;
 
 
 
@@ -89,7 +88,7 @@ class ConfigFile
     @brief Get a human readable string for a given error
     @param e The error
     **/
-    static string GetErrorString(enum Error e)
+    static std::string GetErrorString(enum Error e)
     {
     	if(e==no_error)return "Success";
     	else if(e==file_not_found)return "File not found";
@@ -124,7 +123,7 @@ class ConfigFile
     @param cName The name of the variable in the config file
     @return examples: "10" or "Thibaut CHARLES" or "10.5 18.0 80.6" for a vector. Returns "" if the row does not exist
     **/
-    string GetStringValue(const char* cName)const;
+    std::string GetStringValue(const char* cName)const;
 //================================================================================
 	template<typename T>
 	/**
@@ -135,8 +134,8 @@ class ConfigFile
 	**/
     T GetValue(const char* cName, int n=0)const
 	{
-		string sValue(GetStringValue(cName)+" ");
-		string sCurrValue;
+		std::string sValue(GetStringValue(cName)+" ");
+		std::string sCurrValue;
 
 		int nPos=0;
 		for(unsigned int i=0 ; i<sValue.size() ; i++)
@@ -149,7 +148,7 @@ class ConfigFile
 			{
 				if(nPos==n)
 				{
-					stringstream ss(sCurrValue);
+					std::stringstream ss(sCurrValue);
 					T a;
 					ss>>a;
 					return a;
@@ -169,12 +168,12 @@ class ConfigFile
 	@brief Get an array of parsed values from the config file
 	@param cName The name of the variable in the config file
 	**/
-    vector<T> GetArrayValue(const char* cName)const
+    std::vector<T> GetArrayValue(const char* cName)const
 	{
-		vector<T> Return;
-		string sValue(GetStringValue(cName)+" ");
+		std::vector<T> Return;
+		std::string sValue(GetStringValue(cName)+" ");
 
-		string sCurrValue;
+		std::string sCurrValue;
 		for(unsigned int i=0 ; i<sValue.size() ; i++)
 		{
 			char c = sValue[i];
@@ -184,7 +183,7 @@ class ConfigFile
 			}
 			else
 			{
-				stringstream ss(sCurrValue);
+				std::stringstream ss(sCurrValue);
 				T a;
 				ss>>a;
 				Return.push_back(a);
@@ -205,7 +204,7 @@ class ConfigFile
 	template<typename T>
 	void SetValue(const char* cName, T Value)
 	{
-		stringstream ss;
+		std::stringstream ss;
 		ss<<Value;
 		SetStringValue(cName, ss.str().c_str());
 	}
@@ -224,12 +223,12 @@ class ConfigFile
 
     struct ConfigLine
     {
-        string name;
-        string value;
+        std::string name;
+        std::string value;
     };
 
-    string m_sPath;
-    vector<struct ConfigLine> m_Config;
+    std::string m_sPath;
+    std::vector<struct ConfigLine> m_Config;
 
 
 };

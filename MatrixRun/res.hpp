@@ -2,11 +2,9 @@
 #define RES_HPP_INCLUDED
 
 #include <irrlicht.h>
-using namespace irr;
 
 #include <iostream>
 #include <map>
-using namespace std;
 
 #include <dirent.h>
 
@@ -15,28 +13,28 @@ namespace res
 	class material
 	{
 	public:
-		static void LoadFile(video::IVideoDriver* oDriver, const char* cName, const char* cPath);
-		static void LoadDir(video::IVideoDriver* oDriver, const char* cPath);
-		static video::ITexture* Get(string name);
+		static void LoadFile(irr::video::IVideoDriver* oDriver, const char* cName, const char* cPath);
+		static void LoadDir(irr::video::IVideoDriver* oDriver, const char* cPath);
+		static irr::video::ITexture* Get(std::string name);
 
 	private:
 		material();
 
-		static map<string, video::ITexture*> m_materials;
+		static std::map<std::string, irr::video::ITexture*> m_materials;
 	};
 
 
 	class model
 	{
 	public:
-		static void LoadFile(scene::ISceneManager* oSM, const char* cName, const char* cPath);
-		static void LoadDir(scene::ISceneManager* oSM, const char* cPath);
-		static scene::IAnimatedMesh* Get(string name);
+		static void LoadFile(irr::scene::ISceneManager* oSM, const char* cName, const char* cPath);
+		static void LoadDir(irr::scene::ISceneManager* oSM, const char* cPath);
+		static irr::scene::IAnimatedMesh* Get(std::string name);
 
 	private:
 		model();
 
-		static map<string, scene::IAnimatedMesh*> m_models;
+		static std::map<std::string, irr::scene::IAnimatedMesh*> m_models;
 	};
 
 

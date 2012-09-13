@@ -32,7 +32,7 @@ namespace game
 	{
 	public:
 
-		virtual enum ObjectType GetType()=0;
+		virtual enum ObjectType GetType()const=0;
 		const char* GetObjectTypeString()
 		{
 			enum ObjectType type = GetType();

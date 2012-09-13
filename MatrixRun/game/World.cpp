@@ -1,5 +1,7 @@
 #include "World.hpp"
 
+using namespace irr;
+
 namespace game
 {
 

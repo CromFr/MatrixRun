@@ -3,13 +3,9 @@
 
 #include <iostream>
 #include <vector>
-using namespace std;
 
 
 #include <irrlicht.h>
-using namespace irr;
-
-
 
 
 
@@ -17,16 +13,16 @@ class GravityAnimator : public scene::ISceneNodeAnimator
 {
 
     public:
-    GravityAnimator(float fMasseKg, float fGravity=98, float fAirFriction=0, core::vector3df OptForce=core::vector3df(0,0,0));
+    GravityAnimator(float fMasseKg, float fGravity=98, float fAirFriction=0, irr::core::vector3df OptForce=irr::core::vector3df(0,0,0));
 
     ///Va suivre un node en appliquant une force dirigée vers celui ci, dont la norme est égale à fIntensity
-    void FollowNode(scene::ISceneNode* Node, float fIntensity, core::vector3df m_vFollowOffset=core::vector3df(0));
+    void FollowNode(irr::scene::ISceneNode* Node, float fIntensity, irr::core::vector3df m_vFollowOffset=irr::core::vector3df(0));
 
     ///Nettoye tous les follow précédament lancés
     void StopFollow(){m_nodeFollowedNode=0;}
 
     ///Change instantanément la vitesse du node
-    void SetSpeed(core::vector3df Speed){m_Speed = Speed;}
+    void SetSpeed(irr::core::vector3df Speed){m_Speed = Speed;}
 
     ///Change la valeur de la force appliquée au node
     void SetOptForce(core::vector3df Force){m_OptForce = Force;}

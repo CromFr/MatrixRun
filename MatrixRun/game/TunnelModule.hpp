@@ -22,39 +22,39 @@ namespace game
 	#define TUNNEL_TEXT_SCALE_X 200.0
 	#define TUNNEL_TEXT_SCALE_Z 500.0
 
-	class TunnelModule : public scene::ISceneNode
+	class TunnelModule : public irr::scene::ISceneNode
 	{
 	public:
-		TunnelModule(scene::ISceneNode* parent, scene::ISceneManager* mgr, const core::vector3df& pos, const base::Ellipse& start, const base::Ellipse& end);
+		TunnelModule(irr::scene::ISceneNode* parent, irr::scene::ISceneManager* mgr, const irr::core::vector3df& pos, const base::Ellipse& start, const base::Ellipse& end);
 
 
 		virtual void OnRegisterSceneNode();
 
 		virtual void render();
 
-		virtual const core::aabbox3d<f32>& getBoundingBox() const{return m_MeshBuffer.BoundingBox;}
-		virtual u32 getMaterialCount() const{return 2;}
-		virtual video::SMaterial& getMaterial(u32 i){return m_MeshBuffer.Material;}
+		virtual const irr::core::aabbox3d<irr::f32>& getBoundingBox()const {return m_MeshBuffer.BoundingBox;}
+		virtual irr::u32 getMaterialCount()const {return 2;}
+		virtual irr::video::SMaterial& getMaterial(irr::u32 i){return m_MeshBuffer.Material;}
 
-		bool GetIsInTunnel(const core::vector3df& vCheckPosRelNode);
+		bool GetIsInTunnel(const irr::core::vector3df& vCheckPosRelNode)const;
 
-		const base::Ellipse* GetStartingEllipse(){return &m_StartingEllipse;}
-		const base::Ellipse* GetEndingEllipse(){return &m_EndingEllipse;}
+		const base::Ellipse* GetStartingEllipse()const {return &m_StartingEllipse;}
+		const base::Ellipse* GetEndingEllipse()const {return &m_EndingEllipse;}
 
 
 	private:
-		void AddFrontPolygon(const core::vector3df& a, const core::vector3df& b, const core::vector3df& c, const core::vector3df& d);
+		void AddFrontPolygon(const irr::core::vector3df& a, const irr::core::vector3df& b, const irr::core::vector3df& c, const irr::core::vector3df& d);
 
-		void AddQuad(u16 A, u16 B, u16 C, u16 D);
+		void AddQuad(irr::u16 A, irr::u16 B, irr::u16 C, irr::u16 D);
 
 		base::Ellipse m_StartingEllipse;
 		base::Ellipse m_EndingEllipse;
 
-		scene::SMesh m_Mesh;
-		scene::CMeshBuffer<video::S3DVertexTangents> m_MeshBuffer;
+		irr::scene::SMesh m_Mesh;
+		irr::scene::CMeshBuffer<irr::video::S3DVertexTangents> m_MeshBuffer;
 
 
-		video::SColor clr;
+		irr::video::SColor clr;
 	};
 }
 

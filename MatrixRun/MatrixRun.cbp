@@ -127,6 +127,7 @@
 			<Add option="-Wall" />
 			<Add option="-DNO_WIIMOTES_" />
 		</Compiler>
+		<Unit filename="base/Ellipse.cpp" />
 		<Unit filename="base/Ellipse.hpp" />
 		<Unit filename="data/config.cfg">
 			<Option target="&lt;{~None~}&gt;" />
@@ -139,25 +140,24 @@
 		<Unit filename="game/CollGeometry.hpp">
 			<Option target="&lt;{~None~}&gt;" />
 		</Unit>
+		<Unit filename="game/Collisionnable.cpp" />
 		<Unit filename="game/Collisionnable.hpp">
 			<Option target="&lt;{~None~}&gt;" />
 		</Unit>
 		<Unit filename="game/Destroyable.hpp">
 			<Option target="&lt;{~None~}&gt;" />
 		</Unit>
-		<Unit filename="game/GravityAnimator.cpp">
-			<Option link="0" />
-		</Unit>
-		<Unit filename="game/GravityAnimator.hpp" />
 		<Unit filename="game/Object.hpp">
 			<Option target="&lt;{~None~}&gt;" />
 		</Unit>
 		<Unit filename="game/Sentinel.hpp">
 			<Option target="&lt;{~None~}&gt;" />
 		</Unit>
+		<Unit filename="game/Tunnel.cpp" />
 		<Unit filename="game/Tunnel.hpp">
 			<Option target="&lt;{~None~}&gt;" />
 		</Unit>
+		<Unit filename="game/TunnelModule.cpp" />
 		<Unit filename="game/TunnelModule.hpp">
 			<Option target="&lt;{~None~}&gt;" />
 		</Unit>
@@ -167,7 +167,9 @@
 		<Unit filename="game/World.hpp">
 			<Option target="&lt;{~None~}&gt;" />
 		</Unit>
+		<Unit filename="io/IOManager.cpp" />
 		<Unit filename="io/IOManager.hpp" />
+		<Unit filename="io/StdInput.cpp" />
 		<Unit filename="io/StdInput.hpp" />
 		<Unit filename="io/WiiCur.cpp" />
 		<Unit filename="io/WiiCur.hpp" />
@@ -186,6 +188,8 @@
 		<Unit filename="irr/IEmptySceneNode.h">
 			<Option target="&lt;{~None~}&gt;" />
 		</Unit>
+		<Unit filename="irr/IGravityAnimator.cpp" />
+		<Unit filename="irr/IGravityAnimator.hpp" />
 		<Unit filename="lib/Async.cpp" />
 		<Unit filename="lib/Async.hpp" />
 		<Unit filename="lib/ConfigFile.cpp" />

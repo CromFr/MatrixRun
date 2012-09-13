@@ -4,14 +4,12 @@
 #include <iostream>
 #include <vector>
 #include <ctime>
-using namespace std;
 
 #include <boost/bind.hpp>
 #include <boost/function.hpp>
 
 #include <boost/chrono.hpp>
 #include <boost/thread.hpp>
-using namespace boost;
 
 #include <sys/time.h>
 
@@ -28,7 +26,7 @@ public:
 	@param fDelay Time in seconds to wait before executing the function (precision : 0.000001)
 	@param func The function bind to execute. ex: boost::bind(MyFunction, param1, param2)	boost::bind(&MyClass::MyFunction, &MyObject, param1, param2)
 	**/
-	static void DelayCommand(double fDelay, function<void()> func);
+	static void DelayCommand(double fDelay, boost::function<void()> func);
 
 
 	//==========================================> EXECUTION
@@ -97,7 +95,7 @@ private:
 	{
 		bool exec;
 		struct timeval date;
-		function<void()> func;
+		boost::function<void()> func;
 	};
 	//
 
@@ -110,12 +108,12 @@ private:
 
 
 	//Vars
-	vector<delayableFunction> m_Functions;
+	std::vector<delayableFunction> m_Functions;
 
 	bool m_bPaused;
 	struct timeval m_PauseDate;
 
-	thread* m_Thread;
+	boost::thread* m_Thread;
 	bool m_bThread;
 	int m_nThreadLoopTimeUS;
 

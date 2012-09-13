@@ -357,7 +357,7 @@ namespace game
 	\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	=================================================================================================================*/
-	bool TunnelModule::GetIsInTunnel(const core::vector3df& vCheckPosRelNode)
+	bool TunnelModule::GetIsInTunnel(const core::vector3df& vCheckPosRelNode)const
 	{
 		//fCoeff = 0:start, 1:end
 		float fCoeff = vCheckPosRelNode.Z/TUNNEL_MODULE_DIM_Z;

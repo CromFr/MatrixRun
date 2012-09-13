@@ -8,37 +8,18 @@
 
 namespace game
 {
-	class Sentinel : public Destroyable, public scene::IEmptySceneNode
+	class Sentinel : public Destroyable, public irr::scene::IEmptySceneNode
 	{
 	public:
-		Sentinel(scene::ISceneNode* parent, scene::ISceneManager* mgr,
-				const core::vector3df& position)
-			: Destroyable(100),
-			  IEmptySceneNode(parent, mgr, sentinel, position)
-			//m_collisionnable(this, this->getSceneManager(), 0, bind(&Sentinel::OnCollision, this, _1, _2, _3))
-		{
-
-			//3d model
-			m_model = mgr->addMeshSceneNode(res::model::Get("sentinel.3ds"), this);
-			m_model->setMaterialFlag(video::EMF_LIGHTING, true);
-			m_model->setMaterialFlag(video::EMF_FOG_ENABLE, true);
-			m_model->setTriangleSelector(mgr->createTriangleSelector(res::model::Get("sentinel.3ds"), m_model));
-
-			//Light
-			m_light = mgr->addLightSceneNode(this, core::vector3df(0,0,2), video::SColor(255,255,0,0), 5);
-
-			//Collisions
-			//m_collisionnable.SetCollisionFlags(tunnel_border|tunnel_block|sentinel|ship);
-			//m_collisionnable.AddCollisionPoint(core::vector3df(0,0,0));
-
-		}
+		Sentinel(irr::scene::ISceneNode* parent, irr::scene::ISceneManager* mgr,
+				const irr::core::vector3df& position);
 
 
 
 	private:
 		virtual void OnDamaged(int nAmount)
 		{
-			cout<<"OnDamaged"<<endl;
+			std::cout<<"OnDamaged"<<std::endl;
 			VfxManager::AddVfxSceneNode(this, vfx_blood_sentinel);
 		}
 		virtual void OnDeath()
@@ -46,7 +27,7 @@ namespace game
 
 		}
 
-		void OnCollision(const scene::ISceneNode* node, const core::triangle3df& triangle, const core::vector3df& position)
+		void OnCollision(const irr::scene::ISceneNode* node, const irr::core::triangle3df& triangle, const irr::core::vector3df& position)
 		{
 
 		}
@@ -55,8 +36,8 @@ namespace game
 
 		enum ObjectType GetType(){return sentinel;}
 
-		scene::IMeshSceneNode* m_model;
-		scene::ILightSceneNode* m_light;
+		irr::scene::IMeshSceneNode* m_model;
+		irr::scene::ILightSceneNode* m_light;
 		//Collisionnable m_collisionnable;
 	};
 

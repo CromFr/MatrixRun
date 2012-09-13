@@ -70,7 +70,7 @@ namespace game
 	\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	=================================================================================================================*/
-	bool Tunnel::GetIsInTunnel(const core::vector3df& posAbs, scene::ISceneNode** outCheckedTunnel)
+	bool Tunnel::GetIsInTunnel(const core::vector3df& posAbs, scene::ISceneNode** outCheckedTunnel)const
 	{
 		core::vector3df posCheckRelTunnel = posAbs - getAbsolutePosition();
 

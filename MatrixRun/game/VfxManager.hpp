@@ -3,14 +3,11 @@
 
 #include <iostream>
 #include <vector>
-using namespace std;
 
 #include <irrlicht.h>
-using namespace irr;
 
 #include <SPK.h>
 #include <SPK_IRR.h>
-using namespace SPK;
 
 #include "../res.hpp"
 
@@ -28,11 +25,11 @@ namespace game
 	class VfxManager
 	{
 	public:
-		static void Init(IrrlichtDevice* oDev);
-		static IRR::IRRSystem* AddVfxSceneNode(scene::ISceneNode* parent, enum vfx effect, const core::vector3df& position=core::vector3df(0,0,0));
-		static void StopEmitting(IRR::IRRSystem* sys);
+		static void Init(irr::IrrlichtDevice* oDev);
+		static SPK::IRR::IRRSystem* AddVfxSceneNode(irr::scene::ISceneNode* parent, enum vfx effect, const irr::core::vector3df& position=irr::core::vector3df(0,0,0));
+		static void StopEmitting(SPK::IRR::IRRSystem* sys);
 	private:
-		static vector<Registerable*> m_vfxList;
+		static std::vector<SPK::Registerable*> m_vfxList;
 	};
 
 

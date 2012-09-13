@@ -1,5 +1,7 @@
 #include "Async.hpp"
 
+using namespace std;
+using namespace boost;
 
 
 //===================

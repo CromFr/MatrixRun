@@ -16,18 +16,18 @@ namespace game
 	/**
 	@brief Scene node that contain multiple tunnel modules. The tunnel modules are auto-generated
 	**/
-	class Tunnel : public Object, public scene::IEmptySceneNode
+	class Tunnel : public Object, public irr::scene::IEmptySceneNode
 	{
 	public:
 
-		Tunnel(scene::ISceneNode* parent, scene::ISceneManager* mgr);
+		Tunnel(irr::scene::ISceneNode* parent, irr::scene::ISceneManager* mgr);
 
 		~Tunnel();
 
 		/**
 		@brief Overrides OnAnimate from IEmptySceneNode
 		**/
-		void OnAnimate(u32 timeMs);
+		void OnAnimate(irr::u32 timeMs);
 
 		/**
 		@brief Gets if the given point is in the tunnel
@@ -36,19 +36,19 @@ namespace game
 		@return true if inside the tunnel, else false
 		@note always return true if the position is before the tunnel module, and false if after the last
 		**/
-		bool GetIsInTunnel(const core::vector3df& posAbs, scene::ISceneNode** outCheckedTunnel=0);
+		bool GetIsInTunnel(const irr::core::vector3df& posAbs, irr::scene::ISceneNode** outCheckedTunnel=0)const;
 
 		/**
 		@brief Implementation of Object
 		**/
-		virtual enum ObjectType GetType(){return tunnel_border;}
+		virtual enum ObjectType GetType()const{return tunnel_border;}
 
 
 
 	private:
 		base::Ellipse RandomizeEllipse(const base::Ellipse& base);
 
-		deque<TunnelModule*> m_dqTunnelModules;
+		std::deque<TunnelModule*> m_dqTunnelModules;
 
 
 
