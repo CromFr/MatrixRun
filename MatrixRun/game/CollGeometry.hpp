@@ -9,6 +9,9 @@ namespace coll
 {
 
 //====================================
+	/**
+	@brief Represents a collision, with its position, triangle and associated node
+	**/
 	class Collision
 	{
 	public:
@@ -36,6 +39,9 @@ namespace coll
 	};
 
 //====================================
+	/**
+	@brief Abstract class to define a standart collision generator such as point or line
+	**/
 	class CollGeometry
 	{
 	public:
@@ -46,6 +52,9 @@ namespace coll
 	};
 
 //====================================
+	/**
+	@brief A point that generates collisons
+	**/
 	class CollPoint : public CollGeometry
 	{
 	public:
@@ -105,6 +114,9 @@ namespace coll
 		irr::core::vector3df* m_vLastPosAbs;
 	};
 //====================================
+	/**
+	@brief A line that generates collisons
+	**/
 	class CollLine : public CollGeometry
 	{
 	public:

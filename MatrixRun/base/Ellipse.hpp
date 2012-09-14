@@ -35,6 +35,7 @@ namespace base
 		**/
 		Ellipse(const irr::core::vector2df& vCenter, float fA, float fB, float fAngle, int nPrecision=15);
 
+
 		//Getter & Setter
 		void SetCenter(const irr::core::vector2df& v){m_vCenter=v; m_bCalculated=false;}
 		void SetA(float f){m_fA=f; m_bCalculated=false;}
@@ -72,6 +73,17 @@ namespace base
 		@return true if the point is inside, false if outside
 		**/
 		bool GetIsInto(const float& fposX, const float& fposY)const;
+
+		/**
+		@brief
+		**/
+		/*irr::core::vector2df GetPointReportedOnEllipse(const irr::core::vector2df& pos)
+		{
+			using namespace irr;
+
+			core::vector2df vLine(pos-m_vCenter);
+
+		}*/
 
 	//=====================
 	private:

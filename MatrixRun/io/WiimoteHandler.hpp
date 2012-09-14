@@ -26,10 +26,13 @@ namespace mrio
 {
 	namespace wm
 	{
+		/**
+		@brief Handle class to manage all wiimotes
+		**/
 		class WiimoteHandler
 		{
 		public:
-			///Organise le tableau des wiimotes & entame la procédure d'initialisation
+			///Organise le tableau des wiimotes & entame la procÃ©dure d'initialisation
 			WiimoteHandler();
 
 			~WiimoteHandler();
@@ -50,7 +53,7 @@ namespace mrio
 			Wiimote2dPercent GetCursorPos(int nWM)const;
 
 			/**
-			@brief Access to WiiCur::GetLastButtonEvent : Relève la dernière action effectuée sur la WM
+			@brief Access to WiiCur::GetLastButtonEvent : RelÃ¨ve la derniÃ¨re action effectuÃ©e sur la WM
 			@return la struct contenant tout ce qu'il faut pour l'event
 			**/
 			struct WiimoteCursorEvent GetLastButtonEvent(int nWM);

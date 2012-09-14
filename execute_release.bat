@@ -1,1 +1,3 @@
-.\MatrixRun\bin\win\Release\HeadTracking.exe
+CD .\MatrixRun
+.\bin\win\Release\MatrixRun.exe
+CD ..\

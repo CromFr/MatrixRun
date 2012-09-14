@@ -48,7 +48,7 @@ namespace game
 		IEmptySceneNode::OnAnimate(timeMs);
 		//Generation of the tunnel
 		float fZ = m_dqTunnelModules.front()->getAbsolutePosition().Z;
-		if(fZ<=-400)
+		if(fZ<=-800)
 		{
 			//modulo position
 			RelativeTranslation.Z+=TUNNEL_MODULE_DIM_Z;//+300z for the container
@@ -58,8 +58,12 @@ namespace game
 				newpos.Z-=TUNNEL_MODULE_DIM_Z;
 				(*it)->setPosition(newpos);
 			}
-
+			//removing first module
+			m_dqTunnelModules.front()->removeAll();
+			m_dqTunnelModules.front()->remove();
 			m_dqTunnelModules.pop_front();
+
+			//Adding a new module
 			const base::Ellipse* ellipseLast = m_dqTunnelModules.back()->GetEndingEllipse();
 			m_dqTunnelModules.push_back(new TunnelModule(this, getSceneManager(), core::vector3df(0,0,fZ+TUNNEL_MODULE_DIM_Z*10)-getAbsolutePosition(), *ellipseLast, RandomizeEllipse(*ellipseLast)));
 		}

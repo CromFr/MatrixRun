@@ -10,7 +10,9 @@
 
 namespace mrio
 {
-
+	/**
+	@brief Handle irrlicht input devices, such as mouse, keyboard and joystick
+	**/
 	class StdInput : public irr::IEventReceiver
 	{
 	public:

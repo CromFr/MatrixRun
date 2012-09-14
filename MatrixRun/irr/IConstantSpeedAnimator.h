@@ -9,6 +9,9 @@ namespace irr
 	namespace scene
 	{
 
+		/**
+		@brief Animator tha moves the node on a given direction at a constant speed
+		**/
 		class IConstantSpeedAnimator : public scene::ISceneNodeAnimator
 		{
 			public:

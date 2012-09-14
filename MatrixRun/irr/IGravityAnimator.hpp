@@ -11,29 +11,31 @@ namespace irr
 {
 	namespace scene
 	{
-
+		/**
+		@brief Animator to make realistic movements/gravity
+		**/
 		class IGravityAnimator : public ISceneNodeAnimator
 		{
 
 			public:
 			IGravityAnimator(float fMasseKg, float fGravity=98, float fAirFriction=0, irr::core::vector3df OptForce=irr::core::vector3df(0,0,0));
 
-			///Va suivre un node en appliquant une force dirigée vers celui ci, dont la norme est égale à fIntensity
+			///Va suivre un node en appliquant une force dirigÃ©e vers celui ci, dont la norme est Ã©gale Ã  fIntensity
 			void FollowNode(irr::scene::ISceneNode* Node, float fIntensity, irr::core::vector3df m_vFollowOffset=irr::core::vector3df(0));
 
-			///Nettoye tous les follow précédament lancés
+			///Nettoye tous les follow prÃ©cÃ©dament lancÃ©s
 			void StopFollow(){m_nodeFollowedNode=0;}
 
-			///Change instantanément la vitesse du node
+			///Change instantanÃ©ment la vitesse du node
 			void SetSpeed(irr::core::vector3df Speed){m_Speed = Speed;}
 
-			///Change la valeur de la force appliquée au node
+			///Change la valeur de la force appliquÃ©e au node
 			void SetOptForce(core::vector3df Force){m_OptForce = Force;}
 
-			///Change les frottements fluides de l'air appliqués au node
+			///Change les frottements fluides de l'air appliquÃ©s au node
 			void SetAirFriction(float fCoef){m_fAirFriction = fCoef;}
 
-			///Change la gravité spécifique appliquée
+			///Change la gravitÃ© spÃ©cifique appliquÃ©e
 			void SetGravity(float fGravity){m_fGravity = fGravity;}
 
 
@@ -60,7 +62,7 @@ namespace irr
 			float m_fMass;
 
 			long m_nLastCalculDate;
-		// TODO (Administrateur#1#): vérifier long/u32
+		// TODO (Administrateur#1#): vÃ©rifier long/u32
 
 
 		};

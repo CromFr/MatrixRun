@@ -14,12 +14,10 @@ namespace game
 	=================================================================================================================*/
 	TunnelModule::TunnelModule(scene::ISceneNode* parent, scene::ISceneManager* mgr, const core::vector3df& pos, const base::Ellipse& start, const base::Ellipse& end)
 		: ISceneNode(parent, mgr, tunnel_border, pos),
-		clr(128,128,128,128)
+		clr(128,128,128,128),
+		m_StartingEllipse(start),
+		m_EndingEllipse(end)
 	{
-		m_StartingEllipse = start;
-		m_EndingEllipse = end;
-
-
 		//============================> Preparing mesh
 		m_MeshBuffer.BoundingBox.reset(core::aabbox3d<f32>(-150,-150,0,300,300,300));
 

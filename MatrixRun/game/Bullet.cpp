@@ -31,7 +31,7 @@ namespace game
 		addAnimator(m_animator);
 
 		//Visual effects
-		m_effect = VfxManager::AddVfxSceneNode(this, vfx_bullet_trail);
+		m_effect = VfxManager::AddVfxSceneNode(this, VfxManager::bullet_trail);
 	}
 
 
@@ -56,7 +56,7 @@ namespace game
 		getSceneManager()->addToDeletionQueue(m_collisionnable);//Delete the collisionnable
 		VfxManager::StopEmitting(m_effect);//Stop the trail effect
 		removeAnimators();//Stop moving
-		VfxManager::AddVfxSceneNode(this, vfx_bullet_impact);//impact effect
+		VfxManager::AddVfxSceneNode(this, VfxManager::bullet_impact);//impact effect
 
 		//Light effect
 		// TODO (crom#1#): Change parent of light to follow the percuted node

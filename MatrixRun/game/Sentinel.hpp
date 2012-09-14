@@ -8,6 +8,9 @@
 
 namespace game
 {
+	/**
+	@brief Beware of the naughty sentinels !
+	**/
 	class Sentinel : public Destroyable, public irr::scene::IEmptySceneNode
 	{
 	public:
@@ -20,7 +23,7 @@ namespace game
 		virtual void OnDamaged(int nAmount)
 		{
 			std::cout<<"OnDamaged"<<std::endl;
-			VfxManager::AddVfxSceneNode(this, vfx_blood_sentinel);
+			VfxManager::AddVfxSceneNode(this, VfxManager::blood_sentinel);
 		}
 		virtual void OnDeath()
 		{

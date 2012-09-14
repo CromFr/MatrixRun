@@ -16,7 +16,9 @@
 
 namespace game
 {
-
+	/**
+	@brief A bullet fired by the player that can cause damage to enemies
+	**/
 	class Bullet : public Object, public irr::scene::IEmptySceneNode
 	{
 	public:

@@ -9,6 +9,9 @@ namespace irr
 {
 	namespace scene
 	{
+		/**
+		@brief Light scene node that can fade/interpolate to different colors
+		**/
 		class IDynamicLightSceneNode : public IEmptySceneNode
 		{
 		public:

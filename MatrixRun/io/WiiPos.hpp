@@ -18,6 +18,9 @@ namespace mrio
 	namespace wm
 	{
 
+		/**
+		@brief 3D coordinates in wiimote axis
+		**/
 		class Wiimote3d
 		{
 			public:
@@ -37,6 +40,9 @@ namespace mrio
 		#define EXC_WIIPOS_NOT_ENOUGH_IRSRC 1
 		#define EXC_WIIPOS_NO_EVENT 2
 
+		/**
+		@brief A wiimote used as the game pointing device, ie cursor
+		**/
 		class WiiPos
 		{
 		public:
@@ -47,30 +53,30 @@ namespace mrio
 			@param WMTable Tableau des wiimotes
 			@param Wiimote Pointeur sur la WM qui servira au positionnement
 			@param nConnectedWM Nombre de WM connectees
-			@param Config Fichier de configuration à utiliser pour récupérer/ecrire les infos & donnes de calibration.
+			@param Config Fichier de configuration Ã  utiliser pour rÃ©cupÃ©rer/ecrire les infos & donnes de calibration.
 			@param bConfigure true si il faut configurer (calibration) la WM, false si pas necessaire
 			**/
 			WiiPos(wiimote** WMTable, wiimote* Wiimote, int nConnectedWM, ConfigFile* Config, float fPitch, bool bConfigure);
 
 			/**
-			@brief Lance la procédute de calibration
+			@brief Lance la procÃ©dute de calibration
 			**/
 			void Calibrer();
 
 			/**
-			@brief Récupère la position du joueur dans l'espace.
+			@brief RÃ©cupÃ¨re la position du joueur dans l'espace.
 			@throws EXC_WIIPOS_NOT_ENOUGH_IRSRC et EXC_WIIPOS_NO_EVENT
 			@return La struct contenant la position du joueur en 3d
 			**/
 			Wiimote3d GetPosition() const;
 
 			/**
-			@brief Mise a jour des données de position via la récup des sources IR et comm via bluetooth
+			@brief Mise a jour des donnÃ©es de position via la rÃ©cup des sources IR et comm via bluetooth
 			**/
 			void UpdatePosition();
 
 			/**
-			@return La wiimote utilisée
+			@return La wiimote utilisÃ©e
 			**/
 			wiimote* GetWiimote()const;
 
@@ -81,12 +87,12 @@ namespace mrio
 			ConfigFile* m_Config;
 
 
-			//Données de position
+			//DonnÃ©es de position
 			bool m_bEnoughSrc;
 			Wiimote3d m_pos;
 
 
-			//Données de calibrage
+			//DonnÃ©es de calibrage
 			float m_fCALDistDotToDotmm;
 			float m_fCALDistDotToDotpx;
 			float m_fCALDistWmToDotsmm;

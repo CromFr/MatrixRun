@@ -18,13 +18,13 @@ namespace game
 		//video::IVideoDriver* oDriver = oDev->getVideoDriver();
 		scene::ISceneManager *oSM = oDev->getSceneManager();
 	//================================================================
-	//vfx_bullet_shot
+	//VfxManager::bullet_shot
 		{
 		m_vfxList.push_back(0);
 		}
 
 	//================================================================
-	//vfx_bullet_trail
+	//VfxManager::bullet_trail
 		{
 			Point* zone = Point::create();
 
@@ -86,7 +86,7 @@ namespace game
 			m_vfxList.push_back(sys);
 		}
 	//================================================================
-	//vfx_bullet_impact
+	//VfxManager::bullet_impact
 		{
 			Point* zone = Point::create();
 
@@ -166,7 +166,7 @@ namespace game
 			m_vfxList.push_back(sys);
 		}
 	//================================================================
-	//vfx_blood_sentinel
+	//VfxManager::blood_sentinel
 		{
 			Point* zone = Point::create();
 

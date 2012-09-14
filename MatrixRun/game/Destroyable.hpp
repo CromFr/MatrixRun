@@ -6,6 +6,9 @@
 
 namespace game
 {
+	/**
+	@brief Abstract class for objects that can be destroyed
+	**/
 	class Destroyable : public Object
 	{
 	public:
@@ -15,8 +18,6 @@ namespace game
 			m_nCurHP = m_nMaxHP;
 		}
 
-
-		int GetHP(){return m_nCurHP;}
 
 		void ApplyDamage(int nAmount)
 		{
@@ -41,13 +42,24 @@ namespace game
 				m_nCurHP=m_nMaxHP;
 		}
 
-		bool GetIsDead()
-		{
-			return !m_nCurHP;
-		}
 
-	private:
+		int GetHP()const {return m_nCurHP;}
+
+		bool GetIsDead()const {return !m_nCurHP;}
+
+	protected:
+		/**
+		@brief Callback function executed when the object has been damaged
+		@note this function is called before removing hit points
+		@warning You should not call this function manually
+		**/
 		virtual void OnDamaged(int nAmount)=0;
+
+		/**
+		@brief Callback function executed when the object's hit points reaches 0 (death)
+		@note this function is called after removing hit points, this means the current hit points =0
+		@warning You should not call this function manually
+		**/
 		virtual void OnDeath()=0;
 
 		int m_nMaxHP;

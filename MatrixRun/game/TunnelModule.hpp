@@ -22,6 +22,9 @@ namespace game
 	#define TUNNEL_TEXT_SCALE_X 200.0
 	#define TUNNEL_TEXT_SCALE_Z 500.0
 
+	/**
+	@brief Small section of the tunnel, starting and ending with two given ellipsis
+	**/
 	class TunnelModule : public irr::scene::ISceneNode
 	{
 	public:

@@ -15,6 +15,7 @@ namespace game
 {
 	/**
 	@brief Scene node that contain multiple tunnel modules. The tunnel modules are auto-generated
+	@note moves with the world, and automatically moves back %400 z
 	**/
 	class Tunnel : public Object, public irr::scene::IEmptySceneNode
 	{

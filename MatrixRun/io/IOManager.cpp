@@ -77,7 +77,7 @@ namespace mrio
 		}
 		else if(m_CamCtrl==keyboard)
 		{
-			float SPEED(5.0);
+			float SPEED(10.0);
 			if(m_StdIn->GetKeyState(KEY_UP) == StdInput::down)
 			{
 				if(m_StdIn->GetKeyState(KEY_RSHIFT) == StdInput::down)

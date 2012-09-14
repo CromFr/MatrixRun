@@ -134,6 +134,10 @@
 		</Unit>
 		<Unit filename="divers.cpp" />
 		<Unit filename="divers.hpp" />
+		<Unit filename="doc.h">
+			<Option target="&lt;{~None~}&gt;" />
+		</Unit>
+		<Unit filename="game/Bullet.cpp" />
 		<Unit filename="game/Bullet.hpp">
 			<Option target="&lt;{~None~}&gt;" />
 		</Unit>
@@ -150,6 +154,7 @@
 		<Unit filename="game/Object.hpp">
 			<Option target="&lt;{~None~}&gt;" />
 		</Unit>
+		<Unit filename="game/Sentinel.cpp" />
 		<Unit filename="game/Sentinel.hpp">
 			<Option target="&lt;{~None~}&gt;" />
 		</Unit>

@@ -1,1 +1,3 @@
-./MatrixRun/bin/linux/Release/HeadTracking
+cd ./MatrixRun
+./bin/linux/Release/MatrixRun
+cd ../

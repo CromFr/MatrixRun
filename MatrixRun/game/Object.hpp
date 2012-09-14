@@ -28,6 +28,9 @@ namespace game
 
 
 
+	/**
+	@brief Abstract class to define a generic game object
+	**/
 	class Object
 	{
 	public:

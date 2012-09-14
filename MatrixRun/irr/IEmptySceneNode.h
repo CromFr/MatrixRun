@@ -8,6 +8,9 @@ namespace irr
 	namespace scene
 	{
 
+		/**
+		@brief Handy empty scene node
+		**/
 		class IEmptySceneNode : public ISceneNode
 		{
 		public:

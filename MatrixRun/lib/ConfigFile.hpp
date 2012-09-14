@@ -130,7 +130,7 @@ class ConfigFile
 	@brief Get a parsed value from the config file
 	@param cName The name of the variable in the config file
 	@param n The position of the value in a multivalue field.
-	@example For "MyArray 10 56 38 52 46;",  GetValue<int>("MyArray", 3) will return 52. (the first value is at n=0)
+	For "MyArray 10 56 38 52 46;",  GetValue<int>("MyArray", 3) will return 52. (the first value is at n=0)
 	**/
     T GetValue(const char* cName, int n=0)const
 	{

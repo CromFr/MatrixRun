@@ -10,8 +10,8 @@
 namespace game
 {
 	/**
-	Node contenant toutes les entités du jeu, sauf les entitées "fixes" comme le joueur & la caméra
-	World avance vers la caméra à 400u/s
+	@brief Scene node containing all moving entities, meaning the tunnel, sentinels, ... without the camera and player
+	@note World is moving to the camera at 400 units/sec
 	**/
 	class World : public irr::scene::IEmptySceneNode
 	{
