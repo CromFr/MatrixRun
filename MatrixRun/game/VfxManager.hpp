@@ -6,8 +6,8 @@
 
 #include <irrlicht.h>
 
-#include <SPK.h>
-#include <SPK_IRR.h>
+#include <SPARK/SPK.h>
+#include <SPARK/SPK_IRR.h>
 
 #include "../res.hpp"
 

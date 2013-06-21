@@ -79,7 +79,7 @@ namespace mrio
 			@brief Relève la dernière action effectuée
 			@return la struct contenant l'ID du bouton, l'action effectuee et la position visée
 			**/
-			struct WiimoteCursorEvent GetLastButtonEvent();
+			struct WiimoteCursorEvent* GetLastButtonEvent();
 
 			/**
 			@brief Supprime le dernier event
@@ -87,6 +87,7 @@ namespace mrio
 			void DropLastButtonEvent()
 			{
 				m_Events.pop();
+        		//std::cout<<m_WM->bdaddr_str<<"\tDropEvent"<<std::endl;
 			}
 
 			/**

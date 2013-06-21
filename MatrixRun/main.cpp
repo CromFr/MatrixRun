@@ -1,5 +1,4 @@
 
-
 #include <iostream>
 
 #include <irrlicht.h>
@@ -90,7 +89,12 @@ int main()
 
 	cout<<endl<<"========================> Device, Driver, Scene mgr, Collision mgr"<<endl;
 	//Device
-    IrrlichtDevice *oDev = createDevice(video::EDT_OPENGL, core::dimension2d<u32>(nScreenWidth,nScreenHeight), 32, bFullscreen, true, Config.GetValue<bool>("VSync"), IOMgr.GetEventReceiver());
+	#ifdef WIN32
+    	IrrlichtDevice *oDev = createDevice(video::EDT_DIRECT3D9, core::dimension2d<u32>(nScreenWidth,nScreenHeight), 32, bFullscreen, true, Config.GetValue<bool>("VSync"), IOMgr.GetEventReceiver());
+    #else
+    	IrrlichtDevice *oDev = createDevice(video::EDT_OPENGL, core::dimension2d<u32>(nScreenWidth,nScreenHeight), 32, bFullscreen, true, Config.GetValue<bool>("VSync"), IOMgr.GetEventReceiver());
+    #endif
+
     oDev->setWindowCaption(L"Matrix-Run!   by Thibaut CHARLES");
     oDev->getCursorControl()->setVisible(true);
 
@@ -193,6 +197,9 @@ int main()
 
 		//cout<<posCamera.X<<"\t"<<posCamera.Y<<"\t"<<posCamera.Z<<endl;
 
+		//Report on ellipse border if outside the tunnel
+		//game::World::GetInstance()->GetTunnel()->GetIsInTunnel(posCamera, 0, &posCamera);
+
 		//On positionne la caméra à l'endroit du joueur
 		nodeCamContainer->setPosition(posCamera);
 
@@ -225,6 +232,7 @@ int main()
 
         while( IOMgr.GetIsCursorEvent() )
 		{
+			cout<<"Cursor Event"<<endl;
 			const struct mrio::IOManager::IOCursorEvent e = IOMgr.GetLastCursorEvent();
 			if(e.button == mrio::IOManager::primary && e.event == mrio::IOManager::pressed)
 			{
@@ -260,7 +268,7 @@ int main()
 
 
         //Dessin des curseurs
-        bool bEnoughIRSrc = true;
+        bool bEnoughIRSrc = false;
         core::vector2di vLeftCursorPos(IOMgr.GetCursorPosition(mrio::IOManager::left, &bEnoughIRSrc));
         if(bEnoughIRSrc)
             oDriver->draw2DImage(res::material::Get("leftcrosshair.png"), vLeftCursorPos - core::vector2di(32, 32),

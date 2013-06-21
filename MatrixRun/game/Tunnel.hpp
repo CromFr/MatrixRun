@@ -10,6 +10,9 @@
 
 #include "TunnelModule.hpp"
 
+//@todo : remove this, testing only
+#include "Sentinel.hpp"
+
 
 namespace game
 {
@@ -37,7 +40,7 @@ namespace game
 		@return true if inside the tunnel, else false
 		@note always return true if the position is before the tunnel module, and false if after the last
 		**/
-		bool GetIsInTunnel(const irr::core::vector3df& posAbs, irr::scene::ISceneNode** outCheckedTunnel=0)const;
+		bool GetIsInTunnel(const irr::core::vector3df& posAbs, irr::scene::ISceneNode** outCheckedTunnel=0, irr::core::vector3df* outCollPosAbs=0)const;
 
 		/**
 		@brief Implementation of Object

@@ -1,4 +1,4 @@
-#include "IGravityAnimator.hpp"
+#include "IGravityAnimator.h"
 
 using namespace std;
 

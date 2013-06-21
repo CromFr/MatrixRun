@@ -2,6 +2,7 @@
 
 using namespace irr;
 using namespace std;
+//using namespace boost;
 
 namespace game
 {
@@ -14,8 +15,9 @@ namespace game
 	Sentinel::Sentinel(irr::scene::ISceneNode* parent, irr::scene::ISceneManager* mgr,
 			const irr::core::vector3df& position)
 		: Destroyable(100),
-		  IEmptySceneNode(parent, mgr, sentinel, position)
-		//m_collisionnable(this, this->getSceneManager(), 0, bind(&Sentinel::OnCollision, this, _1, _2, _3))
+		  IEmptySceneNode(parent, mgr, sentinel, position),
+		  //m_collisionnable(this, this->getSceneManager(), 0, bind(&Sentinel::OnCollision, this, _1, _2, _3)),
+		  m_animator(200, 0.0, 0.0, core::vector3df(0,0,100))
 	{
 
 		//3d model
@@ -28,8 +30,11 @@ namespace game
 		m_light = mgr->addLightSceneNode(this, core::vector3df(0,0,2), video::SColor(255,255,0,0), 5);
 
 		//Collisions
-		//m_collisionnable.SetCollisionFlags(tunnel_border|tunnel_block|sentinel|ship);
-		//m_collisionnable.AddCollisionPoint(core::vector3df(0,0,0));
+//		m_collisionnable.SetCollisionFlags(tunnel_border|tunnel_block|sentinel|ship);
+//		m_collisionnable.AddCollisionPoint(core::vector3df(0,0,0));
+
+
+		addAnimator(&m_animator);
 
 	}
 }

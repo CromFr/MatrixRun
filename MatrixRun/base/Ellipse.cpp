@@ -21,6 +21,31 @@ namespace base
 		m_bCalculated = true;
 	}
 
+	Ellipse::Ellipse(const Ellipse& b)
+	{
+		m_vCenter.set(b.m_vCenter);
+		m_fA = b.m_fA;
+		m_fB = b.m_fB;
+		m_fAngle = b.m_fAngle;
+		m_fCos = b.m_fCos;
+		m_fSin = b.m_fSin;
+		m_nPrecision = b.m_nPrecision;
+		m_bCalculated = false;
+	}
+
+	Ellipse& Ellipse::operator=(const Ellipse& b)
+	{
+		this->m_vCenter.set(b.m_vCenter);
+		this->m_fA = b.m_fA;
+		this->m_fB = b.m_fB;
+		this->m_fAngle = b.m_fAngle;
+		this->m_fCos = b.m_fCos;
+		this->m_fSin = b.m_fSin;
+		this->m_nPrecision = b.m_nPrecision;
+		this->m_bCalculated = false;
+		return *this;
+	}
+
 
 	/*====================================================================================================================
 	\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
@@ -124,4 +149,34 @@ namespace base
 		return ( ((fX*fX)/(m_fA*m_fA) + (fY*fY)/(m_fB*m_fB)) <= 1 );
 	}
 
+
+
+	/*====================================================================================================================
+	\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	====================================================================================================================*/
+	irr::core::vector2df Ellipse::GetPointReportedOnEllipse(const irr::core::vector2df& pos)
+	{
+		using namespace irr;
+
+		//Unrotate
+		float fCos = m_fCos;//cosf(-m_fAngle*3.14/180);
+		float fSin = -m_fSin;//sinf(-m_fAngle*3.14/180);
+
+		//Calculate point in ellipse origin
+		float fPosX = fCos*(pos.X-m_vCenter.X) - fSin*(pos.Y-m_vCenter.Y);
+		float fPosY = fSin*(pos.X-m_vCenter.X) + fCos*(pos.Y-m_vCenter.Y);
+
+		core::vector2df cal;
+		cal.X = sqrt(1/(1/(m_fA*m_fA) + fPosY/(fPosX*m_fB)));
+		if(fPosX<0)
+			cal.X *= -1;
+
+		cal.Y = (fPosY / fPosX) * cal.X;
+
+		//Rerotate
+		float fCalX = fCos*(cal.X-m_vCenter.X) + fSin*(cal.Y-m_vCenter.Y);
+		float fCalY = -fSin*(cal.X-m_vCenter.X) + fCos*(cal.Y-m_vCenter.Y);
+		return core::vector2df(fCalX, fCalY);
+	}
 }

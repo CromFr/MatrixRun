@@ -21,8 +21,11 @@ namespace game
 		@param funcCallback Boost function to call in case of collision
 		@param nCollisionFlags ID of the scene nodes that can have collision with this object
 		**/
-		Collisionnable(irr::scene::ISceneNode* parent, irr::scene::ISceneManager* mgr, s32 id,
-				boost::function<void(irr::scene::ISceneNode*, irr::core::triangle3df&, irr::core::vector3df&)> funcCallback, int nCollisionFlags=0);
+		Collisionnable(	irr::scene::ISceneNode* parent,
+						irr::scene::ISceneManager* mgr,
+						s32 id,
+						boost::function<void(irr::scene::ISceneNode*, irr::core::triangle3df&, irr::core::vector3df&)> funcCallback,
+						int nCollisionFlags=0);
 
 		~Collisionnable();
 

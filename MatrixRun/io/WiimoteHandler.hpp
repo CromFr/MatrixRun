@@ -16,7 +16,7 @@
 #include "WiiCur.hpp"
 
 
-#define NB_WIIMOTES 4
+#define NB_WIIMOTES 3
 
 #define WMHDL_LEFT 0
 #define WMHDL_RIGHT 1
@@ -33,7 +33,7 @@ namespace mrio
 		{
 		public:
 			///Organise le tableau des wiimotes & entame la procédure d'initialisation
-			WiimoteHandler();
+			WiimoteHandler(bool bPos, bool bCur);
 
 			~WiimoteHandler();
 
@@ -56,7 +56,7 @@ namespace mrio
 			@brief Access to WiiCur::GetLastButtonEvent : Relève la dernière action effectuée sur la WM
 			@return la struct contenant tout ce qu'il faut pour l'event
 			**/
-			struct WiimoteCursorEvent GetLastButtonEvent(int nWM);
+			struct WiimoteCursorEvent* GetLastButtonEvent(int nWM);
 
 			void DropLastButtonEvent(int nWM)
 			{
@@ -91,6 +91,8 @@ namespace mrio
 			boost::thread* UpdatingThread;
 			bool m_bStopThread;
 			bool m_bPauseThread;
+
+			bool m_bPos, m_bCur;
 
 
 			void ClearWiimoteEvents();

@@ -15,6 +15,7 @@ namespace res
 	map<string, video::ITexture*> material::m_materials;
 	void material::LoadDir(video::IVideoDriver* oDriver, const char* cPath)
 	{
+		cout<<"Loading all textures/materials in \""<<cPath<<"\""<<endl;
 		DIR* dir = opendir(cPath);
 		if(dir!=NULL)
 		{
@@ -91,6 +92,7 @@ namespace res
 ====================================================================================================================*/
 	void model::LoadDir(scene::ISceneManager* oSM, const char* cPath)
 	{
+		cout<<"Loading all 3d models in \""<<cPath<<"\""<<endl;
 		DIR* dir = opendir(cPath);
 		if(dir!=NULL)
 		{

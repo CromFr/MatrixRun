@@ -223,13 +223,13 @@ enum ConfigFile::Error ConfigFile::WriteToFile(const char* cPath)
 /*\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////*/
-void ConfigFile::Print()const
-{
-    for(unsigned int i=0 ; i<m_Config.size() ; i++)
-    {
-        cout<<m_Config[i].name<<"   \t\t"<<m_Config[i].value<<"   \t;"<<endl;
-    }
-}
+//void ConfigFile::Print()const
+//{
+//    for(unsigned int i=0 ; i<m_Config.size() ; i++)
+//    {
+//        cout<<m_Config[i].name<<"\t"<<m_Config[i].value<<";"<<endl;
+//    }
+//}
 
 
 

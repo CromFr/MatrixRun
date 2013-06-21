@@ -15,6 +15,9 @@ namespace mrio
 		m_CamCtrl=CameraControl;
 		m_CurCtrl=CursorControl;
 
+		bool bWMPos = false;
+		bool bWMCur = false;
+
 		switch(m_CamCtrl)
 		{
 		case mouse:
@@ -27,7 +30,7 @@ namespace mrio
 			break;
 
 		case wiimote:
-			m_WM = new wm::WiimoteHandler();
+			bWMPos = true;
 			break;
 		}
 
@@ -44,9 +47,12 @@ namespace mrio
 			break;
 
 		case wiimote:
-			if(m_WM == 0) m_WM = new wm::WiimoteHandler();
+			bWMCur = true;
 			break;
 		}
+
+		if(bWMPos || bWMCur)
+			m_WM = new wm::WiimoteHandler(bWMPos, bWMCur);
 	}
 
 
@@ -198,30 +204,33 @@ namespace mrio
 				wm::Wiimote2dPercent pos;
 				if(cur==left)
 				{
-					pos = m_WM->GetCursorPos(0);
+					pos = m_WM->GetCursorPos(WMHDL_LEFT);
 					m_vLastLeftCursorPos.set(pos.x*m_vScreenDim.X, pos.y*m_vScreenDim.Y);
+
+					if(outEnoughIRSrc!=0)
+						*outEnoughIRSrc = true;
+					return m_vLastLeftCursorPos;
 				}
 				else
 				{
-					pos = m_WM->GetCursorPos(1);
+					pos = m_WM->GetCursorPos(WMHDL_RIGHT);
 					m_vLastRightCursorPos.set(pos.x*m_vScreenDim.X, pos.y*m_vScreenDim.Y);
-				}
 
-				if(outEnoughIRSrc>0)
-					*outEnoughIRSrc = true;
+					if(outEnoughIRSrc!=0)
+						*outEnoughIRSrc = true;
+					return m_vLastRightCursorPos;
+				}
 			}
 			catch(int e)
 			{
-				if(e == EXC_WIICUR_NO_IRSRC && outEnoughIRSrc>0)
+				if(outEnoughIRSrc!=0)
 					*outEnoughIRSrc = false;
 			}
-
-			return m_vLastRightCursorPos;
 		}
 		else
 			cerr<<"/!\\  Unknown cursor controller !"<<endl;
 
-		return core::vector2di(0,0);
+		return core::vector2di(50,50);
 	}
 
 	/*===========================================================================
@@ -252,15 +261,19 @@ namespace mrio
 		{
 			for(  ; m_WM->GetIsButtonEvent(WMHDL_LEFT) ; m_WM->DropLastButtonEvent(WMHDL_LEFT))
 			{
-				struct wm::WiimoteCursorEvent wme = m_WM->GetLastButtonEvent(WMHDL_LEFT);
-				if(wme.button & (WIIMOTE_BUTTON_A|WIIMOTE_BUTTON_B|WIIMOTE_BUTTON_HOME))//<============== Allowed WM Buttons
+				//cout<<"Left event"<<endl;
+				struct wm::WiimoteCursorEvent* wme = m_WM->GetLastButtonEvent(WMHDL_LEFT);
+				//cout<<wme->button<<"\t&\t"<<(WIIMOTE_BUTTON_A|WIIMOTE_BUTTON_B|WIIMOTE_BUTTON_HOME)<<"\t=\t"<<(wme->button & (WIIMOTE_BUTTON_A|WIIMOTE_BUTTON_B|WIIMOTE_BUTTON_HOME))<<endl;
+				if(wme->button & (WIIMOTE_BUTTON_A|WIIMOTE_BUTTON_B|WIIMOTE_BUTTON_HOME))//<============== Allowed WM Buttons
 					return true;
 			}
 
 			for(  ; m_WM->GetIsButtonEvent(WMHDL_RIGHT) ; m_WM->DropLastButtonEvent(WMHDL_RIGHT))
 			{
-				struct wm::WiimoteCursorEvent wme = m_WM->GetLastButtonEvent(WMHDL_RIGHT);
-				if(wme.button & (WIIMOTE_BUTTON_A|WIIMOTE_BUTTON_B|WIIMOTE_BUTTON_HOME))//<============== Allowed WM Buttons
+				//cout<<"Right event"<<endl;
+				struct wm::WiimoteCursorEvent* wme = m_WM->GetLastButtonEvent(WMHDL_RIGHT);
+				//cout<<wme->button<<"\t&\t"<<(WIIMOTE_BUTTON_A|WIIMOTE_BUTTON_B|WIIMOTE_BUTTON_HOME)<<"\t=\t"<<(wme->button & (WIIMOTE_BUTTON_A|WIIMOTE_BUTTON_B|WIIMOTE_BUTTON_HOME))<<endl;
+				if(wme->button & (WIIMOTE_BUTTON_A|WIIMOTE_BUTTON_B|WIIMOTE_BUTTON_HOME))//<============== Allowed WM Buttons
 					return true;
 			}
 		}
@@ -273,6 +286,7 @@ namespace mrio
 	===========================================================================*/
 	const IOManager::IOCursorEvent& IOManager::GetLastCursorEvent()
 	{
+		cout<<"GetLastCursorEvent!"<<endl;
 		if(m_CurCtrl==mouse)
 		{
 			for(  ; m_StdIn->GetIsMouseEvent() ; m_StdIn->DropLastMouseEvent())
@@ -333,20 +347,21 @@ namespace mrio
 
 			for(  ; m_WM->GetIsButtonEvent(WMHDL_LEFT) ; m_WM->DropLastButtonEvent(WMHDL_LEFT))
 			{
-				const struct wm::WiimoteCursorEvent wme = m_WM->GetLastButtonEvent(WMHDL_LEFT);
-				if(wme.button & (WIIMOTE_BUTTON_A|WIIMOTE_BUTTON_B|WIIMOTE_BUTTON_HOME))//<============== Allowed WM Buttons
+				const struct wm::WiimoteCursorEvent* wme = m_WM->GetLastButtonEvent(WMHDL_LEFT);
+				if(wme->button & (WIIMOTE_BUTTON_A|WIIMOTE_BUTTON_B|WIIMOTE_BUTTON_HOME))//<============== Allowed WM Buttons
 				{
+					cout<<"LeftEvent!"<<endl;
 					m_LastCursorEvent.cursor = left;
-					m_LastCursorEvent.pos.X = wme.pos.x * m_vScreenDim.X;
-					m_LastCursorEvent.pos.Y = wme.pos.y * m_vScreenDim.Y;
+					m_LastCursorEvent.pos.X = wme->pos.x * m_vScreenDim.X;
+					m_LastCursorEvent.pos.Y = wme->pos.y * m_vScreenDim.Y;
 
-					if(wme.event == wm::EVENT_PRESSED)	m_LastCursorEvent.event = pressed;
+					if(wme->event == wm::EVENT_PRESSED)	m_LastCursorEvent.event = pressed;
 					else							m_LastCursorEvent.event = released;
 
 
-					if(wme.button & WIIMOTE_BUTTON_B)			m_LastCursorEvent.button = primary;
-					else if(wme.button & WIIMOTE_BUTTON_A)		m_LastCursorEvent.button = secondary;
-					else if(wme.button & WIIMOTE_BUTTON_HOME)		m_LastCursorEvent.button = menu;
+					if(wme->button & WIIMOTE_BUTTON_B)			m_LastCursorEvent.button = primary;
+					else if(wme->button & WIIMOTE_BUTTON_A)		m_LastCursorEvent.button = secondary;
+					else if(wme->button & WIIMOTE_BUTTON_HOME)		m_LastCursorEvent.button = menu;
 
 					m_WM->DropLastButtonEvent(WMHDL_LEFT);
 					break;
@@ -355,20 +370,21 @@ namespace mrio
 
 			for(  ; m_WM->GetIsButtonEvent(WMHDL_RIGHT) ; m_WM->DropLastButtonEvent(WMHDL_RIGHT))
 			{
-				const struct wm::WiimoteCursorEvent wme = m_WM->GetLastButtonEvent(WMHDL_RIGHT);
-				if(wme.button & (WIIMOTE_BUTTON_A|WIIMOTE_BUTTON_B|WIIMOTE_BUTTON_HOME))//<============== Allowed WM Buttons
+				const struct wm::WiimoteCursorEvent* wme = m_WM->GetLastButtonEvent(WMHDL_RIGHT);
+				if(wme->button & (WIIMOTE_BUTTON_A|WIIMOTE_BUTTON_B|WIIMOTE_BUTTON_HOME))//<============== Allowed WM Buttons
 				{
+				cout<<"RihtEvent!"<<endl;
 					m_LastCursorEvent.cursor = right;
-					m_LastCursorEvent.pos.X = wme.pos.x * m_vScreenDim.X;
-					m_LastCursorEvent.pos.Y = wme.pos.y * m_vScreenDim.Y;
+					m_LastCursorEvent.pos.X = wme->pos.x * m_vScreenDim.X;
+					m_LastCursorEvent.pos.Y = wme->pos.y * m_vScreenDim.Y;
 
-					if(wme.event == wm::EVENT_PRESSED)	m_LastCursorEvent.event = pressed;
+					if(wme->event == wm::EVENT_PRESSED)	m_LastCursorEvent.event = pressed;
 					else								m_LastCursorEvent.event = released;
 
 
-					if(wme.button & WIIMOTE_BUTTON_B)			m_LastCursorEvent.button = primary;
-					else if(wme.button & WIIMOTE_BUTTON_A)		m_LastCursorEvent.button = secondary;
-					else if(wme.button & WIIMOTE_BUTTON_HOME)		m_LastCursorEvent.button = menu;
+					if(wme->button & WIIMOTE_BUTTON_B)			m_LastCursorEvent.button = primary;
+					else if(wme->button & WIIMOTE_BUTTON_A)		m_LastCursorEvent.button = secondary;
+					else if(wme->button & WIIMOTE_BUTTON_HOME)		m_LastCursorEvent.button = menu;
 
 					m_WM->DropLastButtonEvent(WMHDL_RIGHT);
 					break;

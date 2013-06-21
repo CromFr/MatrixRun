@@ -36,6 +36,9 @@
 	@namespace game
 		@brief Contain all MatrixRun game entities such as sentinels, tunnel, world, ...
 
+	@namespace game::coll
+		@brief Contain all collision calculators
+
 	@namespace base
 		@brief Contain basic & general classes such as the ellipse
 

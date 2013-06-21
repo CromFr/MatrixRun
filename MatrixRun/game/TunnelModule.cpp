@@ -14,9 +14,9 @@ namespace game
 	=================================================================================================================*/
 	TunnelModule::TunnelModule(scene::ISceneNode* parent, scene::ISceneManager* mgr, const core::vector3df& pos, const base::Ellipse& start, const base::Ellipse& end)
 		: ISceneNode(parent, mgr, tunnel_border, pos),
-		clr(128,128,128,128),
 		m_StartingEllipse(start),
-		m_EndingEllipse(end)
+		m_EndingEllipse(end),
+		clr(128,128,128,128)
 	{
 		//============================> Preparing mesh
 		m_MeshBuffer.BoundingBox.reset(core::aabbox3d<f32>(-150,-150,0,300,300,300));
@@ -355,7 +355,7 @@ namespace game
 	\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	=================================================================================================================*/
-	bool TunnelModule::GetIsInTunnel(const core::vector3df& vCheckPosRelNode)const
+	bool TunnelModule::GetIsInTunnel(const core::vector3df& vCheckPosRelNode, core::vector3df* outCollisionPoint)const
 	{
 		//fCoeff = 0:start, 1:end
 		float fCoeff = vCheckPosRelNode.Z/TUNNEL_MODULE_DIM_Z;
@@ -366,7 +366,18 @@ namespace game
 									m_StartingEllipse.GetB()*fCoeff + m_EndingEllipse.GetB()*fAntiCoeff,
 									m_StartingEllipse.GetAngle()*fCoeff + m_EndingEllipse.GetAngle()*fAntiCoeff);
 
-		return ellipseMidle.GetIsInto(vCheckPosRelNode.X, vCheckPosRelNode.Y);
+		if(ellipseMidle.GetIsInto(vCheckPosRelNode.X, vCheckPosRelNode.Y))
+			return true;
+		else
+		{
+			if(outCollisionPoint!=0)
+			{
+				core::vector2df collPoint(ellipseMidle.GetPointReportedOnEllipse(core::vector2df(vCheckPosRelNode.X, vCheckPosRelNode.Y)));
+				outCollisionPoint->set(core::vector3df(collPoint.X, collPoint.Y, vCheckPosRelNode.Z));
+				*outCollisionPoint += getAbsolutePosition();
+			}
+			return false;
+		}
 	}
 
 

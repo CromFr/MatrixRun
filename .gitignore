@@ -2,8 +2,14 @@
 *.c4d
 *.exe
 *.o
+*.depend
+*.layout
+*.dll
+
+
 api
 MatrixRun_light
 MatrixRun/bin
 doc
 trash
+valgrind

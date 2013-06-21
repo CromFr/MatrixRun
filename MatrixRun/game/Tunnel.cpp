@@ -66,6 +66,11 @@ namespace game
 			//Adding a new module
 			const base::Ellipse* ellipseLast = m_dqTunnelModules.back()->GetEndingEllipse();
 			m_dqTunnelModules.push_back(new TunnelModule(this, getSceneManager(), core::vector3df(0,0,fZ+TUNNEL_MODULE_DIM_Z*10)-getAbsolutePosition(), *ellipseLast, RandomizeEllipse(*ellipseLast)));
+
+
+			//@todo : Remove this, testing only
+			if(rand()%5 == 4)
+				new Sentinel(m_dqTunnelModules.back(), getSceneManager(), core::vector3df(0,0,250));
 		}
 	}
 
@@ -74,7 +79,7 @@ namespace game
 	\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	=================================================================================================================*/
-	bool Tunnel::GetIsInTunnel(const core::vector3df& posAbs, scene::ISceneNode** outCheckedTunnel)const
+	bool Tunnel::GetIsInTunnel(const core::vector3df& posAbs, scene::ISceneNode** outCheckedTunnel, core::vector3df* outCollPosAbs)const
 	{
 		core::vector3df posCheckRelTunnel = posAbs - getAbsolutePosition();
 
@@ -105,7 +110,7 @@ namespace game
 		if(outCheckedTunnel!=0)
 			*outCheckedTunnel = tunnelmod;
 
-		return tunnelmod->GetIsInTunnel(posCheckRelTunnel-tunnelmod->getPosition());
+		return tunnelmod->GetIsInTunnel(posCheckRelTunnel-tunnelmod->getPosition(), outCollPosAbs);
 	}
 
 
@@ -120,6 +125,7 @@ namespace game
 	=================================================================================================================*/
 	base::Ellipse Tunnel::RandomizeEllipse(const base::Ellipse& base)
 	{
+
 		float fAngle = base.GetAngle() + (rand()%40)-20;
 
 		core::vector2df vCenter(base.GetCenter().X+(rand()%50)-25, base.GetCenter().Y+(rand()%50)-25);

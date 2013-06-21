@@ -36,6 +36,11 @@ void Wiimote2dPercent::set(double x, double y)
 ====================================================================================================================*/
 WiiCur::WiiCur(wiimote** WMTable, wiimote* Wiimote, int nConnectedWM, ConfigFile* Config)
 {
+	if(Wiimote == 0)
+	{
+		cerr<<"#####\tCritical error @WiiCur::WiiCur : null pointer to selected wiimote"<<endl;
+		return;
+	}
     m_WMTable = WMTable;
     m_WM = Wiimote;
     m_Config = Config;
@@ -47,6 +52,9 @@ WiiCur::WiiCur(wiimote** WMTable, wiimote* Wiimote, int nConnectedWM, ConfigFile
 
 
     wiiuse_set_ir(m_WM, true);
+
+    cout<<m_WM<<endl;
+
 }
 
 
@@ -74,20 +82,18 @@ Wiimote2dPercent WiiCur::GetCursorPos()const
 \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ====================================================================================================================*/
-struct WiimoteCursorEvent WiiCur::GetLastButtonEvent()
+struct WiimoteCursorEvent* WiiCur::GetLastButtonEvent()
 {
-    struct WiimoteCursorEvent Return;
+    struct WiimoteCursorEvent* Return;
 
     if(!m_Events.empty())
     {
-        //Copie du dernier event & suppr
-        Return = m_Events.front();
-        //m_Events.pop();
-
+        Return = &(m_Events.front());
         return Return;
     }
-    Return.button=0;Return.event=EVENT_NONE;
 
+    Return->button=0;
+    Return->event=EVENT_NONE;
     return Return;
 
 }
@@ -100,7 +106,9 @@ struct WiimoteCursorEvent WiiCur::GetLastButtonEvent()
 ====================================================================================================================*/
 void WiiCur::UpdateCursor()
 {
-    if(m_WM->ir.dot[0].visible)
+	if(m_WM == 0){cerr<<"#####\tCritical error @UpdateCursor : m_WM = 0 !"<<endl; return;}
+
+	if(m_WM->ir.dot[0].visible)
     {
         m_bIrSRC = true;
 
@@ -117,7 +125,7 @@ void WiiCur::UpdateCursor()
             }
         }
 
-        //Fenetre = 75% de la capacité de la wm
+        //Fenetre = 75% de la capacitÃ© de la wm
         // 0<x-128<768          0<y-144<576
         double fPercentX = (nSommeX/nIrSRC-128.0)/768.0;
         double fPercentY = (nSommeY/nIrSRC-144.0)/576.0;
@@ -164,6 +172,7 @@ void WiiCur::UpdateCursor()
         Event.outofscr = m_bOutOfScreen;
         Event.pos.set(m_CurPos.x, m_CurPos.y);
         m_Events.push(Event);
+        //cout<<m_WM->bdaddr_str<<"\tAddEvent\tbtn="<<nButton<<endl;
     }
     m_PressedButons = m_WM->btns;
 
@@ -180,6 +189,7 @@ void WiiCur::UpdateCursor()
 ====================================================================================================================*/
 bool WiiCur::GetIsButtonHeld(int nButton)
 {
+	if(m_WM == 0){cerr<<"#####\tCritical error @GetIsButtonHeld : m_WM = 0 !"<<endl; return false;}
     if((m_WM->btns_held & nButton) == nButton)
         return true;
     return false;

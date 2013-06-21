@@ -36,6 +36,11 @@ void Wiimote3d::set(float x, float y, float z)
 ====================================================================================================================*/
 WiiPos::WiiPos(wiimote** WMTable, wiimote* Wiimote, int nConnectedWM, ConfigFile* Config, float fPitch, bool bConfigure)
 {
+	if(Wiimote == 0)
+	{
+		cerr<<"Critical error when initializing a WiiPos : null pointer to selected wiimote"<<endl;
+		return;
+	}
     m_WMTable = WMTable;
     m_WM = Wiimote;
     m_Config = Config;
@@ -105,13 +110,13 @@ WiiPos::WiiPos(wiimote** WMTable, wiimote* Wiimote, int nConnectedWM, ConfigFile
             <<"| Vous devez effectuer le calibrage |/"<<endl
             <<"O===================================O/"<<endl;
 
-        //A la question "voulez vous calibrer", la réponse sera non
+        //A la question "voulez vous calibrer", la rÃ©ponse sera non
         cAns='o';
     }
 
     if(cAns=='n' || cAns=='N')
     {
-        //ne rien faire : les données sont déja enregistrées
+        //ne rien faire : les donnÃ©es sont dÃ©ja enregistrÃ©es
     }
     else
     {
@@ -119,7 +124,7 @@ WiiPos::WiiPos(wiimote** WMTable, wiimote* Wiimote, int nConnectedWM, ConfigFile
     }
 
 
-    cout<<endl<<"Wiimote fixe calibrée et prête"<<endl;
+    cout<<endl<<"Wiimote fixe calibrÃ©e et prÃªte"<<endl;
 }
 
 
@@ -135,7 +140,7 @@ void WiiPos::Calibrer()
     cout<<endl<<"<== Distance entre la wiimote et les sources infrarouges (mm) : ";
     cin>>m_fCALDistWmToDotsmm;
 
-    cout<<endl<<"<== Inclinaison de la wiimote = Pitch (degré) : ";
+    cout<<endl<<"<== Inclinaison de la wiimote = Pitch (degrÃ©) : ";
     cin>>m_fPitch;
 
 
@@ -241,7 +246,7 @@ void WiiPos::UpdatePosition()
         posC.x = (posA.x+posB.x)/2;
         posC.y = (posA.y+posB.y)/2;
 
-        //Calcul de la distance en px séparant les dots
+        //Calcul de la distance en px sÃ©parant les dots
         float fDistDotToDot = sqrt( (m_WM->ir.dot[0].x-m_WM->ir.dot[1].x)
                                      *(m_WM->ir.dot[0].x-m_WM->ir.dot[1].x)
                                     +
@@ -263,7 +268,7 @@ void WiiPos::UpdatePosition()
 
         //cout<<"X="<<fX<<"\tY="<<fY<<"\tZ="<<fZ<<endl;
 
-        m_pos.set(fX1, fY1, fZ1);
+        m_pos.set(fX1, fY1+600, fZ1);
     }
     else
         m_bEnoughSrc = false;

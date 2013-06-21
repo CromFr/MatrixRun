@@ -31,15 +31,15 @@ namespace game
 		TunnelModule(irr::scene::ISceneNode* parent, irr::scene::ISceneManager* mgr, const irr::core::vector3df& pos, const base::Ellipse& start, const base::Ellipse& end);
 
 
-		virtual void OnRegisterSceneNode();
+		virtual void OnRegisterSceneNode() override;
 
-		virtual void render();
+		virtual void render() override;
 
-		virtual const irr::core::aabbox3d<irr::f32>& getBoundingBox()const {return m_MeshBuffer.BoundingBox;}
-		virtual irr::u32 getMaterialCount()const {return 2;}
-		virtual irr::video::SMaterial& getMaterial(irr::u32 i){return m_MeshBuffer.Material;}
+		virtual const irr::core::aabbox3d<irr::f32>& getBoundingBox()const override {return m_MeshBuffer.BoundingBox;}
+		virtual irr::u32 getMaterialCount()const override {return 2;}
+		virtual irr::video::SMaterial& getMaterial(irr::u32 i) override {return m_MeshBuffer.Material;}
 
-		bool GetIsInTunnel(const irr::core::vector3df& vCheckPosRelNode)const;
+		bool GetIsInTunnel(const irr::core::vector3df& vCheckPosRelNode, irr::core::vector3df* outCollisionPoint=0)const;
 
 		const base::Ellipse* GetStartingEllipse()const {return &m_StartingEllipse;}
 		const base::Ellipse* GetEndingEllipse()const {return &m_EndingEllipse;}

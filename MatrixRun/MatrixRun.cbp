@@ -72,12 +72,12 @@
 				<Compiler>
 					<Add option="-g" />
 					<Add option="-static" />
-					<Add directory="../api/linux/boost_1_50_0/include" />
-					<Add directory="../api/linux/irrlicht_1_7_3/include" />
-					<Add directory="../api/linux/spark_1_5_5/include" />
 					<Add directory="../api/linux/wiiuse/include" />
+					<Add directory="/usr/local/include/SPARK" />
+					<Add directory="/usr/local/include/irrlicht" />
 				</Compiler>
 				<Linker>
+					<Add option="-lboost_system" />
 					<Add option="-lboost_thread" />
 					<Add option="-lIrrlicht" />
 					<Add option="-lSPARK" />
@@ -89,9 +89,6 @@
 					<Add option="-lX11" />
 					<Add option="-lm" />
 					<Add option="-lbluetooth" />
-					<Add directory="../api/linux/boost_1_50_0/lib" />
-					<Add directory="../api/linux/irrlicht_1_7_3/lib" />
-					<Add directory="../api/linux/spark_1_5_5/lib" />
 					<Add directory="../api/linux/wiiuse/lib" />
 				</Linker>
 			</Target>
@@ -194,7 +191,7 @@
 			<Option target="&lt;{~None~}&gt;" />
 		</Unit>
 		<Unit filename="irr/IGravityAnimator.cpp" />
-		<Unit filename="irr/IGravityAnimator.hpp" />
+		<Unit filename="irr/IGravityAnimator.h" />
 		<Unit filename="lib/Async.cpp" />
 		<Unit filename="lib/Async.hpp" />
 		<Unit filename="lib/ConfigFile.cpp" />

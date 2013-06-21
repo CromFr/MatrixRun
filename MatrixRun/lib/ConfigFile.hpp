@@ -213,7 +213,13 @@ class ConfigFile
     /**
     @brief Prints the config to cout. Useful for debugging ;)
     **/
-    void Print()const;
+    void Print()const
+{
+    for(unsigned int i=0 ; i<m_Config.size() ; i++)
+    {
+        std::cout<<m_Config[i].name<<"\t"<<m_Config[i].value<<";"<<std::endl;
+    }
+}
 
 
 

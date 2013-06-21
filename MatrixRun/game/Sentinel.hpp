@@ -3,6 +3,9 @@
 
 #include "Destroyable.hpp"
 #include "../irr/IEmptySceneNode.h"
+#include "../irr/IGravityAnimator.h"
+
+//#include "Collisionnable.hpp"//<================================ BUG HERE !!!!!!!!!!!!!!!!!
 
 #include "VfxManager.hpp"
 
@@ -14,34 +17,34 @@ namespace game
 	class Sentinel : public Destroyable, public irr::scene::IEmptySceneNode
 	{
 	public:
-		Sentinel(irr::scene::ISceneNode* parent, irr::scene::ISceneManager* mgr,
-				const irr::core::vector3df& position);
-
+		Sentinel(irr::scene::ISceneNode* parent, irr::scene::ISceneManager* mgr, const irr::core::vector3df& position);
 
 
 	private:
 		virtual void OnDamaged(int nAmount)
 		{
-			std::cout<<"OnDamaged"<<std::endl;
 			VfxManager::AddVfxSceneNode(this, VfxManager::blood_sentinel);
 		}
 		virtual void OnDeath()
 		{
-
+			m_animator.SetGravity(98);
 		}
 
 		void OnCollision(const irr::scene::ISceneNode* node, const irr::core::triangle3df& triangle, const irr::core::vector3df& position)
 		{
+			//addToDeletionQueue(this);
 
 		}
 
 
 
-		enum ObjectType GetType(){return sentinel;}
+		enum ObjectType GetType()const {return sentinel;}
 
 		irr::scene::IMeshSceneNode* m_model;
 		irr::scene::ILightSceneNode* m_light;
-		//Collisionnable m_collisionnable;
+//		Collisionnable m_collisionnable;
+
+		irr::scene::IGravityAnimator m_animator;
 	};
 
 

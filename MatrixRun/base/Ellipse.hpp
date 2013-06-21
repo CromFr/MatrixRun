@@ -3,6 +3,7 @@
 
 #include <irrlicht.h>
 
+#include <cmath>
 #include <list>
 
 /*
@@ -35,6 +36,17 @@ namespace base
 		**/
 		Ellipse(const irr::core::vector2df& vCenter, float fA, float fB, float fAngle, int nPrecision=15);
 
+		/**
+		@brief Copy constructor
+		@warning You need to recalculate points of the new ellipse
+		**/
+		Ellipse(const Ellipse& b);
+
+		/**
+		@brief Operator =
+		@warning You need to recalculate points of the ellipse on the left side
+		**/
+		Ellipse& operator=(const Ellipse& b);
 
 		//Getter & Setter
 		void SetCenter(const irr::core::vector2df& v){m_vCenter=v; m_bCalculated=false;}
@@ -77,13 +89,7 @@ namespace base
 		/**
 		@brief
 		**/
-		/*irr::core::vector2df GetPointReportedOnEllipse(const irr::core::vector2df& pos)
-		{
-			using namespace irr;
-
-			core::vector2df vLine(pos-m_vCenter);
-
-		}*/
+		irr::core::vector2df GetPointReportedOnEllipse(const irr::core::vector2df& pos);
 
 	//=====================
 	private:

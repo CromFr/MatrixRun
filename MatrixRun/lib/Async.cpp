@@ -71,7 +71,7 @@ Async::~Async()
 	StopThread();
 }
 //=======================================================================================
-void Async::DelayCommand(double fDelay, function<void()> func)
+void Async::DelayCommand(double fDelay, boost::function<void()> func)
 {
 	if(fDelay<0.0)fDelay=0.0;
 
