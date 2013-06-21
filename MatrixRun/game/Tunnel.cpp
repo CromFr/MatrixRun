@@ -1,7 +1,14 @@
 #include "Tunnel.hpp"
 
+#include "TunnelModule.hpp"
+
 using namespace irr;
 using namespace std;
+
+
+
+//@todo : remove this, testing only (generating randomly sentinels)
+#include "Sentinel.hpp"
 
 namespace game
 {

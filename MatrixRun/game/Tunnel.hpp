@@ -1,21 +1,19 @@
 #ifndef TUNNEL_HPP_INCLUDED
 #define TUNNEL_HPP_INCLUDED
 
-#include <deque>
 
 #include "Object.hpp"
 #include "../irr/IEmptySceneNode.h"
 
+#include <deque>
+
 #include "../base/Ellipse.hpp"
-
-#include "TunnelModule.hpp"
-
-//@todo : remove this, testing only
-#include "Sentinel.hpp"
 
 
 namespace game
 {
+	class TunnelModule;
+
 	/**
 	@brief Scene node that contain multiple tunnel modules. The tunnel modules are auto-generated
 	@note moves with the world, and automatically moves back %400 z

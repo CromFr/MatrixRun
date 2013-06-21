@@ -1,7 +1,7 @@
 #ifndef DIVERS_HPP_INCLUDED
 #define DIVERS_HPP_INCLUDED
 
-#include <iostream>
+#include <string>
 
 std::string IntToBinary(int n, int nLengh=0);
 

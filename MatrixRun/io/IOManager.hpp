@@ -1,7 +1,6 @@
 #ifndef IOMANAGER_HPP_INCLUDED
 #define IOMANAGER_HPP_INCLUDED
 
-#include <iostream>
 #include <queue>
 
 #include <irrlicht.h>

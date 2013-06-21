@@ -1,7 +1,7 @@
 #ifndef IFOLLOWLINEANIMATOR_H_INCLUDED
 #define IFOLLOWLINEANIMATOR_H_INCLUDED
 
-#include <irrlicht/irrlicht.h>
+#include <irrlicht.h>
 using namespace irr;
 
 namespace irr

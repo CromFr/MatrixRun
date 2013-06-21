@@ -1,5 +1,8 @@
 #include "VfxManager.hpp"
 
+
+#include <iostream>
+
 using namespace std;
 using namespace irr;
 using namespace SPK;

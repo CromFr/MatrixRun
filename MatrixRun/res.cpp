@@ -1,5 +1,7 @@
 #include "res.hpp"
 
+#include <iostream>
+
 using namespace std;
 using namespace irr;
 
@@ -12,7 +14,7 @@ namespace res
 \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ====================================================================================================================*/
-	map<string, video::ITexture*> material::m_materials;
+	unordered_map<string, video::ITexture*> material::m_materials;
 	void material::LoadDir(video::IVideoDriver* oDriver, const char* cPath)
 	{
 		cout<<"Loading all textures/materials in \""<<cPath<<"\""<<endl;
@@ -67,7 +69,7 @@ namespace res
 ====================================================================================================================*/
 	video::ITexture* material::Get(string name)
 	{
-		std::map<string,video::ITexture*>::iterator it = m_materials.find(name);
+		std::unordered_map<string,video::ITexture*>::iterator it = m_materials.find(name);
  		return it->second;
 	}
 
@@ -75,7 +77,7 @@ namespace res
 
 
 
-	map<string, scene::IAnimatedMesh*> model::m_models;
+	unordered_map<string, scene::IAnimatedMesh*> model::m_models;
 /*====================================================================================================================
 \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -132,7 +134,7 @@ namespace res
 ====================================================================================================================*/
 	scene::IAnimatedMesh* model::Get(string name)
 	{
-		std::map<string,scene::IAnimatedMesh*>::iterator it = m_models.find(name);
+		std::unordered_map<string,scene::IAnimatedMesh*>::iterator it = m_models.find(name);
  		return it->second;
 	}
 

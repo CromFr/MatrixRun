@@ -1,15 +1,13 @@
 #ifndef DESTROYABLE_HPP_INCLUDED
 #define DESTROYABLE_HPP_INCLUDED
 
-#include "Object.hpp"
-#include "../irr/IEmptySceneNode.h"
 
 namespace game
 {
 	/**
 	@brief Abstract class for objects that can be destroyed
 	**/
-	class Destroyable : public Object
+	class Destroyable
 	{
 	public:
 		Destroyable(int nMaxHP)

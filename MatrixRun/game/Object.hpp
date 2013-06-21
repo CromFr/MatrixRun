@@ -1,7 +1,7 @@
 #ifndef GAME_OBJECT_HPP_INCLUDED
 #define GAME_OBJECT_HPP_INCLUDED
 
-#include <iostream>
+#include <string>
 
 namespace game
 {

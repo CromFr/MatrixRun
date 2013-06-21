@@ -1,7 +1,7 @@
 #ifndef IEMPTYSCENENODE_H_INCLUDED
 #define IEMPTYSCENENODE_H_INCLUDED
 
-#include <irrlicht/irrlicht.h>
+#include <irrlicht.h>
 
 namespace irr
 {

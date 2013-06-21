@@ -1,15 +1,9 @@
 #ifndef TUNNEL_MODULE_HPP_INCLUDED
 #define TUNNEL_MODULE_HPP_INCLUDED
 
-#include <cmath>
-#include <vector>
-#include <list>
-
 #include <irrlicht.h>
 
 #include "../base/Ellipse.hpp"
-
-#include "../res.hpp"
 
 #include "Object.hpp"
 

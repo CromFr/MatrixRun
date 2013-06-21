@@ -1,23 +1,25 @@
 #ifndef SENTINEL_HPP_INCLUDED
 #define SENTINEL_HPP_INCLUDED
 
+#include "Object.hpp"
 #include "Destroyable.hpp"
 #include "../irr/IEmptySceneNode.h"
+
 #include "../irr/IGravityAnimator.h"
-
-//#include "Collisionnable.hpp"//<================================ BUG HERE !!!!!!!!!!!!!!!!!
-
 #include "VfxManager.hpp"
 
 namespace game
 {
+	class Collisionnable;
+
 	/**
 	@brief Beware of the naughty sentinels !
 	**/
-	class Sentinel : public Destroyable, public irr::scene::IEmptySceneNode
+	class Sentinel : public Object, public Destroyable, public irr::scene::IEmptySceneNode
 	{
 	public:
 		Sentinel(irr::scene::ISceneNode* parent, irr::scene::ISceneManager* mgr, const irr::core::vector3df& position);
+		~Sentinel();
 
 
 	private:
@@ -42,7 +44,7 @@ namespace game
 
 		irr::scene::IMeshSceneNode* m_model;
 		irr::scene::ILightSceneNode* m_light;
-//		Collisionnable m_collisionnable;
+		Collisionnable* m_collisionnable;
 
 		irr::scene::IGravityAnimator m_animator;
 	};

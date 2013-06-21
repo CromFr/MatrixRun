@@ -1,5 +1,7 @@
 #include "IGravityAnimator.h"
 
+#include <iostream>
+
 using namespace std;
 
 namespace irr

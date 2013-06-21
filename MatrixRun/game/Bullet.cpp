@@ -1,5 +1,13 @@
 #include "Bullet.hpp"
 
+#include "Sentinel.hpp"
+#include "VfxManager.hpp"
+
+#include "Collisionnable.hpp"
+#include "../lib/Async.hpp"
+
+#include <SPK_IRR.h>
+
 using namespace std;
 using namespace irr;
 using namespace boost;

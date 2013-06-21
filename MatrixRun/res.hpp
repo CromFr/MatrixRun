@@ -3,8 +3,8 @@
 
 #include <irrlicht.h>
 
-#include <iostream>
-#include <map>
+#include <string>
+#include <unordered_map>
 
 #include <dirent.h>
 
@@ -20,7 +20,7 @@ namespace res
 	private:
 		material();
 
-		static std::map<std::string, irr::video::ITexture*> m_materials;
+		static std::unordered_map<std::string, irr::video::ITexture*> m_materials;
 	};
 
 
@@ -34,7 +34,7 @@ namespace res
 	private:
 		model();
 
-		static std::map<std::string, irr::scene::IAnimatedMesh*> m_models;
+		static std::unordered_map<std::string, irr::scene::IAnimatedMesh*> m_models;
 	};
 
 

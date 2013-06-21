@@ -1,5 +1,11 @@
 #include "TunnelModule.hpp"
 
+
+#include <cmath>
+#include <vector>
+#include <list>
+#include "../res.hpp"
+
 using namespace std;
 using namespace irr;
 

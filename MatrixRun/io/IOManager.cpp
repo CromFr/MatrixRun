@@ -1,5 +1,7 @@
 #include "IOManager.hpp"
 
+#include <iostream>
+
 using namespace std;
 using namespace irr;
 

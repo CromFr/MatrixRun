@@ -1,7 +1,6 @@
 #ifndef VFX_MANAGER_HPP_INCLUDED
 #define VFX_MANAGER_HPP_INCLUDED
 
-#include <iostream>
 #include <vector>
 
 #include <irrlicht.h>
