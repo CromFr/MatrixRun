@@ -128,7 +128,7 @@ WiimoteHandler::WiimoteHandler(bool bPos, bool bCur)
 
 									//Enregistrement dans la config
 									#ifndef WIN32
-										m_Config.SetStringValue("MACAddrFixedWM", m_WMTable[n]->bdaddr_str);
+										m_Config.SetValueString("MACAddrFixedWM", m_WMTable[n]->bdaddr_str);
 										cout<<"    Addr MAC="<<m_WMTable[n]->bdaddr_str<<endl;
 									#else
 										cout<<"    DevHandle="<<m_WMTable[n]->dev_handle<<endl;
@@ -179,7 +179,7 @@ WiimoteHandler::WiimoteHandler(bool bPos, bool bCur)
 
 									//Enregistrement dans la config
 									#ifndef WIN32
-										m_Config.SetStringValue("MACAddrLeftWM", m_WMTable[n]->bdaddr_str);
+										m_Config.SetValueString("MACAddrLeftWM", m_WMTable[n]->bdaddr_str);
 										cout<<"    Addr MAC="<<m_WMTable[n]->bdaddr_str<<endl;
 									#else
 										cout<<"    DevHandle="<<m_WMTable[n]->dev_handle<<endl;
@@ -226,7 +226,7 @@ WiimoteHandler::WiimoteHandler(bool bPos, bool bCur)
 
 									//Enregistrement dans la config
 									#ifndef WIN32
-										m_Config.SetStringValue("MACAddrRightWM", m_WMTable[n]->bdaddr_str);
+										m_Config.SetValueString("MACAddrRightWM", m_WMTable[n]->bdaddr_str);
 										cout<<"    Addr MAC="<<m_WMTable[n]->bdaddr_str<<endl;
 									#else
 										cout<<"    DevHandle="<<m_WMTable[n]->dev_handle<<endl;
@@ -255,19 +255,19 @@ WiimoteHandler::WiimoteHandler(bool bPos, bool bCur)
 		for(int i=0 ; i<nFound ; i++)
 		{
 			string sAddr(m_WMTable[i]->bdaddr_str);
-			if(sAddr == m_Config.GetStringValue("MACAddrFixedWM") && bPos)
+			if(sAddr == m_Config.GetValueString("MACAddrFixedWM") && bPos)
 			{
 				bFound[0] = true;
 				wiiuse_set_leds(m_WMTable[i], WIIMOTE_LED_2 | WIIMOTE_LED_3);
 				m_WiimotePos = new WiiPos(m_WMTable, m_WMTable[i], m_nConnectedWM, &m_Config, m_Config.GetValue<float>("Pitch"), bConfigure);
 			}
-			else if(sAddr == m_Config.GetStringValue("MACAddrLeftWM") && bCur)
+			else if(sAddr == m_Config.GetValueString("MACAddrLeftWM") && bCur)
 			{
 				bFound[1] = true;
 				wiiuse_set_leds(m_WMTable[i], WIIMOTE_LED_1 | WIIMOTE_LED_2);
 				m_WiimoteRight = new WiiCur(m_WMTable, m_WMTable[i], m_nConnectedWM, &m_Config);
 			}
-			else if(sAddr == m_Config.GetStringValue("MACAddrRightWM") && bCur)
+			else if(sAddr == m_Config.GetValueString("MACAddrRightWM") && bCur)
 			{
 				bFound[2] = true;
 				wiiuse_set_leds(m_WMTable[i], WIIMOTE_LED_3 | WIIMOTE_LED_4);
@@ -275,9 +275,9 @@ WiimoteHandler::WiimoteHandler(bool bPos, bool bCur)
 			}
 		}
 
-		if(!bFound[0] && bPos)cerr<<"/!\\  Attention : Wiimote fixe non trouvée (MAC="<<m_Config.GetStringValue("MACAddrFixedWM")<<")"<<endl;
-		if(!bFound[1] && bCur)cerr<<"/!\\  Attention : Wiimote gauche non trouvée (MAC="<<m_Config.GetStringValue("MACAddrLeftWM")<<")"<<endl;
-		if(!bFound[2] && bCur)cerr<<"/!\\  Attention : Wiimote droite non trouvée (MAC="<<m_Config.GetStringValue("MACAddrRightWM")<<")"<<endl;
+		if(!bFound[0] && bPos)cerr<<"/!\\  Attention : Wiimote fixe non trouvée (MAC="<<m_Config.GetValueString("MACAddrFixedWM")<<")"<<endl;
+		if(!bFound[1] && bCur)cerr<<"/!\\  Attention : Wiimote gauche non trouvée (MAC="<<m_Config.GetValueString("MACAddrLeftWM")<<")"<<endl;
+		if(!bFound[2] && bCur)cerr<<"/!\\  Attention : Wiimote droite non trouvée (MAC="<<m_Config.GetValueString("MACAddrRightWM")<<")"<<endl;
 	}
 
 

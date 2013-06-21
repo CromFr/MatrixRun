@@ -1,4 +1,5 @@
 #include "WiiCur.hpp"
+#include <iostream>
 
 using namespace std;
 

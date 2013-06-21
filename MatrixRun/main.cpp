@@ -72,13 +72,13 @@ int main()
     cout<<endl<<"========================> Entrées/Sorties"<<endl;
     mrio::IOManager::InputDevice inputdevCamera, inputdevCursor;
 
-    string sControlCamera(Config.GetStringValue("CameraControlType"));
+    string sControlCamera(Config.GetValueString("CameraControlType"));
     if(sControlCamera == "mouse")inputdevCamera=mrio::IOManager::mouse;
     else if(sControlCamera == "keyboard")inputdevCamera=mrio::IOManager::keyboard;
     else if(sControlCamera == "wiimote")inputdevCamera=mrio::IOManager::wiimote;
     else cerr<<"/!\\ Error in config file : line CameraControlType, unknown value \""<<sControlCamera<<"\""<<endl;
 
-    string sControlCursor(Config.GetStringValue("CursorControlType"));
+    string sControlCursor(Config.GetValueString("CursorControlType"));
     if(sControlCursor == "mouse")inputdevCursor=mrio::IOManager::mouse;
     else if(sControlCursor == "keyboard")inputdevCursor=mrio::IOManager::keyboard;
     else if(sControlCursor == "wiimote")inputdevCursor=mrio::IOManager::wiimote;
