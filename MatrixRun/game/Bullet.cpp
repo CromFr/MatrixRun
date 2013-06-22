@@ -50,6 +50,8 @@ namespace game
 	void Bullet::OnCollision(const scene::ISceneNode* node, const core::triangle3df& triangle, const core::vector3df& position)
 	{
 		Object* oContainer = dynamic_cast<Object*>(node->getParent());
+		if(oContainer==nullptr)
+			return;
 		enum ObjectType nType = oContainer->GetType();
 		if(nType&sentinel)
 		{
