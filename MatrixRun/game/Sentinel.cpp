@@ -3,8 +3,6 @@
 using namespace irr;
 using namespace std;
 
-#include "Collisionnable.hpp"
-
 namespace game
 {
 
@@ -17,6 +15,7 @@ namespace game
 			const irr::core::vector3df& position)
 		: Destroyable(100),
 		  IEmptySceneNode(parent, mgr, sentinel, position),
+		  Collisionnable(this),
 		  m_animator(200, 0.0, 0.0, core::vector3df(0,0,100))
 	{
 		//3d model
@@ -29,9 +28,8 @@ namespace game
 		m_light = mgr->addLightSceneNode(this, core::vector3df(0,0,2), video::SColor(255,255,0,0), 5);
 
 		//Collisions
-		m_collisionnable = new Collisionnable(this, this->getSceneManager(), 0, bind(&Sentinel::OnCollision, this, _1, _2, _3));
-		m_collisionnable->SetCollisionFlags(tunnel_border|tunnel_block|sentinel|ship);
-		m_collisionnable->AddCollisionPoint(core::vector3df(0,0,0));
+		GetCollisionNode()->SetCollisionFlags(tunnel_border|tunnel_block|sentinel|ship);
+		GetCollisionNode()->AddCollisionPoint(core::vector3df(0,0,0));
 
 
 		addAnimator(&m_animator);
@@ -40,6 +38,5 @@ namespace game
 
 	Sentinel::~Sentinel()
 	{
-		delete m_collisionnable;
 	}
 }

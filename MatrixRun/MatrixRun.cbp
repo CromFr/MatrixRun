@@ -121,6 +121,7 @@
 			</Target>
 		</Build>
 		<Compiler>
+			<Add option="-march=corei7" />
 			<Add option="-Wall" />
 			<Add option="-DNO_WIIMOTES_" />
 		</Compiler>
@@ -141,10 +142,10 @@
 		<Unit filename="game/CollGeometry.hpp">
 			<Option target="&lt;{~None~}&gt;" />
 		</Unit>
+		<Unit filename="game/CollisionNode.cpp" />
+		<Unit filename="game/CollisionNode.hpp" />
 		<Unit filename="game/Collisionnable.cpp" />
-		<Unit filename="game/Collisionnable.hpp">
-			<Option target="&lt;{~None~}&gt;" />
-		</Unit>
+		<Unit filename="game/Collisionnable.hpp" />
 		<Unit filename="game/Destroyable.hpp">
 			<Option target="&lt;{~None~}&gt;" />
 		</Unit>

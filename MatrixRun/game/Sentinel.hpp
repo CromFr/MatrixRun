@@ -4,18 +4,17 @@
 #include "Object.hpp"
 #include "Destroyable.hpp"
 #include "../irr/IEmptySceneNode.h"
+#include "Collisionnable.hpp"
 
 #include "../irr/IGravityAnimator.h"
 #include "VfxManager.hpp"
 
 namespace game
 {
-	class Collisionnable;
-
 	/**
 	@brief Beware of the naughty sentinels !
 	**/
-	class Sentinel : public Object, public Destroyable, public irr::scene::IEmptySceneNode
+	class Sentinel : public Object, public Destroyable, public irr::scene::IEmptySceneNode, public Collisionnable
 	{
 	public:
 		Sentinel(irr::scene::ISceneNode* parent, irr::scene::ISceneManager* mgr, const irr::core::vector3df& position);
@@ -32,10 +31,9 @@ namespace game
 			m_animator.SetGravity(98);
 		}
 
-		void OnCollision(const irr::scene::ISceneNode* node, const irr::core::triangle3df& triangle, const irr::core::vector3df& position)
+		void OnCollision(irr::scene::ISceneNode* node, const irr::core::triangle3df& triangle, const irr::core::vector3df& position)
 		{
 			//addToDeletionQueue(this);
-
 		}
 
 
@@ -44,7 +42,6 @@ namespace game
 
 		irr::scene::IMeshSceneNode* m_model;
 		irr::scene::ILightSceneNode* m_light;
-		Collisionnable* m_collisionnable;
 
 		irr::scene::IGravityAnimator m_animator;
 	};
