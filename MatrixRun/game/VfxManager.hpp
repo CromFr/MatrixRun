@@ -25,7 +25,8 @@ namespace game
 			bullet_shot=0,
 			bullet_trail=1,
 			bullet_impact=2,
-			blood_sentinel=3
+			blood_sentinel=3,
+			death_sentinel=4
 		};
 
 		static void Init(irr::IrrlichtDevice* oDev);

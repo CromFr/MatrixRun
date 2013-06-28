@@ -23,7 +23,7 @@ namespace game
 	{
 		base::Ellipse ellipseFirst(core::vector2df(0,0), 140, 120, 0);
 		m_dqTunnelModules.push_back(new TunnelModule(this, mgr, core::vector3df(0,0,-TUNNEL_MODULE_DIM_Z), ellipseFirst, ellipseFirst));
-		for(int i=0 ; i<=9 ; i++)
+		for(int i=0 ; i<10 ; i++)
 		{
 			const base::Ellipse* ellipseLast = m_dqTunnelModules.back()->GetEndingEllipse();
 			TunnelModule* tunnel = new TunnelModule(this, mgr, core::vector3df(0,0,i*TUNNEL_MODULE_DIM_Z), *ellipseLast, RandomizeEllipse(*ellipseLast) );
@@ -77,8 +77,28 @@ namespace game
 
 			//@todo : Remove this, testing only
 			if(rand()%5 == 4)
-				new Sentinel(m_dqTunnelModules.back(), getSceneManager(), core::vector3df(0,0,250));
+			{
+				irr::core::vector2df center(m_dqTunnelModules.back()->GetStartingEllipse()->GetCenter());
+
+				new Sentinel(m_dqTunnelModules.back(), getSceneManager(), core::vector3df(center.X,center.Y,100));
+			}
 		}
+	}
+
+
+	/*=================================================================================================================
+	\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	=================================================================================================================*/
+	TunnelModule* Tunnel::GetTunnelModuleAt(const double fAbsZ)const
+	{
+		double fRelZ = fAbsZ - getAbsolutePosition().Z;
+		int nIndex = fRelZ/TUNNEL_MODULE_DIM_Z+1;
+
+		if(0<=nIndex && nIndex<=10)
+			return m_dqTunnelModules[nIndex];
+		else
+			return nullptr;
 	}
 
 
@@ -88,36 +108,28 @@ namespace game
 	=================================================================================================================*/
 	bool Tunnel::GetIsInTunnel(const core::vector3df& posAbs, scene::ISceneNode** outCheckedTunnel, core::vector3df* outCollPosAbs)const
 	{
-		core::vector3df posCheckRelTunnel = posAbs - getAbsolutePosition();
+		//@todo: This needs some optimizations
+		TunnelModule* tunnelmod = GetTunnelModuleAt(posAbs.Z);
 
-		int nPos = (posCheckRelTunnel.Z+300) / TUNNEL_MODULE_DIM_Z;
-		if(nPos<0)return true;
-		else if(nPos>10)
-		{
-			if(outCheckedTunnel!=0)
-				*outCheckedTunnel = m_dqTunnelModules.back();
-			return false;
-		}
+		//tunnelmod->RenderWireframes(true);
 
-		TunnelModule* tunnelmod = m_dqTunnelModules[nPos];
-		float posTunnelEntry = tunnelmod->getAbsolutePosition().Z;
-
-		// @note (crom#1#): Clean this
-		if(!(posTunnelEntry<posAbs.Z))
-		{
-			tunnelmod = m_dqTunnelModules[--nPos];
-			posTunnelEntry = tunnelmod->getAbsolutePosition().Z;
-		}
-		else if(!(posTunnelEntry+300>posAbs.Z))
-		{
-			tunnelmod = m_dqTunnelModules[++nPos];
-			posTunnelEntry = tunnelmod->getAbsolutePosition().Z;
-		}
-
-		if(outCheckedTunnel!=0)
+		if(outCheckedTunnel!=nullptr)
 			*outCheckedTunnel = tunnelmod;
 
-		return tunnelmod->GetIsInTunnel(posCheckRelTunnel-tunnelmod->getPosition(), outCollPosAbs);
+		if(tunnelmod!=nullptr)
+			return tunnelmod->GetIsInTunnel(posAbs-tunnelmod->getPosition(), outCollPosAbs);
+		else
+		{
+			//Handling tunnel bounds collisions
+			double fRelZ = posAbs.Z - getAbsolutePosition().Z;
+			int nIndex = fRelZ/TUNNEL_MODULE_DIM_Z+1;
+			if(nIndex<0)
+				return true;
+			else if(nIndex>10)
+				return false;
+			else
+				cerr<<"Error Tunnel::GetIsInTunnel : THIS SHOULD NOT HAPPEN"<<endl;
+		}
 	}
 
 

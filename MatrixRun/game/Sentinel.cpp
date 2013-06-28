@@ -28,7 +28,7 @@ namespace game
 		m_light = mgr->addLightSceneNode(this, core::vector3df(0,0,2), video::SColor(255,255,0,0), 5);
 
 		//Collisions
-		GetCollisionNode()->SetCollisionFlags(tunnel_border|tunnel_block|sentinel|ship);
+		GetCollisionNode()->SetCollisionFlags(tunnel_border|tunnel_block|ship);
 		GetCollisionNode()->AddCollisionPoint(core::vector3df(0,0,0));
 
 

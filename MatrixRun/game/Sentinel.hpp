@@ -9,6 +9,8 @@
 #include "../irr/IGravityAnimator.h"
 #include "VfxManager.hpp"
 
+#include "../Engine.hpp"
+
 namespace game
 {
 	/**
@@ -33,7 +35,16 @@ namespace game
 
 		void OnCollision(irr::scene::ISceneNode* node, const irr::core::triangle3df& triangle, const irr::core::vector3df& position)
 		{
-			//addToDeletionQueue(this);
+//			if(node!=nullptr)
+//			{
+//				TunnelModule* tunmod = dynamic_cast<TunnelModule*>(node);
+//				if(node != nullptr)
+//				{
+//					tunmod->RenderWireframes(true);
+//				}
+//				VfxManager::AddVfxSceneNode(node, VfxManager::death_sentinel);
+//				//Engine::IrrSceneManager->addToDeletionQueue(this);
+//			}
 		}
 
 

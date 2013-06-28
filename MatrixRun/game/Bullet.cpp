@@ -8,6 +8,8 @@
 
 #include <SPK_IRR.h>
 
+#include "../Engine.hpp"
+
 using namespace std;
 using namespace irr;
 using namespace boost;
@@ -48,6 +50,13 @@ namespace game
 ====================================================================================================================*/
 	void Bullet::OnCollision(scene::ISceneNode* node, const core::triangle3df& triangle, const core::vector3df& position)
 	{
+		if(node==nullptr)
+		{
+			//Node collided with not identified
+			Engine::IrrSceneManager->addToDeletionQueue(this);
+			return;
+		}
+
 		Object* oContainer = dynamic_cast<Object*>(node->getParent());
 		if(oContainer==nullptr)
 			return;
@@ -60,7 +69,11 @@ namespace game
 		else if(nType&ship)
 		{
 			//Apply damage to player
-
+		}
+		else if(nType&tunnel_border)
+		{
+			Tunnel* tun = dynamic_cast<Tunnel*>(oContainer);
+			//tun->GetTunnelModuleAt(position.Z)->RenderWireframes(true);
 		}
 		getSceneManager()->addToDeletionQueue(GetCollisionNode());//Delete the collisionnable
 		VfxManager::StopEmitting(m_effect);//Stop the trail effect

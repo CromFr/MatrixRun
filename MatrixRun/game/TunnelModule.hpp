@@ -38,6 +38,11 @@ namespace game
 		const base::Ellipse* GetStartingEllipse()const {return &m_StartingEllipse;}
 		const base::Ellipse* GetEndingEllipse()const {return &m_EndingEllipse;}
 
+		void RenderWireframes(bool bUseWireframes)
+		{
+			m_MeshBuffer.getMaterial().Wireframe = bUseWireframes;
+		}
+
 
 	private:
 		void AddFrontPolygon(const irr::core::vector3df& a, const irr::core::vector3df& b, const irr::core::vector3df& c, const irr::core::vector3df& d);

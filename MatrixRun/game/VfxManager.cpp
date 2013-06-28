@@ -202,6 +202,86 @@ namespace game
 
 			m_vfxList.push_back(sys);
 		}
+		//================================================================
+		//VfxManager::death_sentinel
+		{
+			Point* zone = Point::create();
+
+			StaticEmitter* emit_sw0 = StaticEmitter::create();
+			 emit_sw0->setZone(zone);
+			 emit_sw0->setTank(1);
+			 emit_sw0->setFlow(-1);
+			 //emit_sw0->setShared(true);
+			StaticEmitter* emit_sw1 = StaticEmitter::create();
+			 emit_sw1->setZone(zone);
+			 emit_sw1->setTank(1);
+			 emit_sw1->setFlow(-1);
+			 //emit_sw1->setShared(true);
+			RandomEmitter* emit_pt = RandomEmitter::create();
+			 emit_pt->setZone(zone);
+			 emit_pt->setTank(40);
+			 emit_pt->setFlow(-1);
+			 emit_pt->setForce(100, 150);
+			 //emit_pt->setShared(true);
+
+			Model* model_sw0 = Model::create(FLAG_ALPHA|FLAG_SIZE, FLAG_ALPHA|FLAG_SIZE);
+			 model_sw0->setParam(PARAM_ALPHA, 1.0, 0.0);
+			 model_sw0->setParam(PARAM_SIZE, 0, 20);
+			 model_sw0->setLifeTime(1.5, 2);
+			 model_sw0->setShared(true);
+			Model* model_sw1 = Model::create(FLAG_ALPHA|FLAG_SIZE|FLAG_ANGLE, FLAG_ALPHA|FLAG_SIZE, FLAG_ANGLE);
+			 model_sw1->setParam(PARAM_ALPHA, 1.0, 0.0);
+			 model_sw1->setParam(PARAM_SIZE, 2,2.5);
+			 model_sw1->setParam(PARAM_ANGLE, 0,2*3.14);
+			 model_sw1->setLifeTime(0.4, 0.7);
+			 model_sw1->setShared(true);
+			Model* model_pt = Model::create(FLAG_RED|FLAG_GREEN|FLAG_ALPHA, FLAG_ALPHA);
+			 model_pt->setParam(PARAM_ALPHA, 1.0, 0.0);
+			 model_pt->setParam(PARAM_GREEN, 0.6);
+			 model_pt->setParam(PARAM_RED, 0);
+			 model_pt->setLifeTime(0.4, 0.5);
+			 model_pt->setShared(true);
+
+			IRRQuadRenderer* render_sw0 = IRRQuadRenderer::create(oDev);
+			 render_sw0->setTexture(res::material::Get("shockwave0.png"));
+			 render_sw0->setTexturingMode(TEXTURE_2D);
+			 render_sw0->setScale(10.0,10.0);
+			 render_sw0->setBlending(BLENDING_ADD);
+			 render_sw0->enableRenderingHint(DEPTH_WRITE,false);
+			 //render_sw0->setShared(true);
+			IRRQuadRenderer* render_sw1 = IRRQuadRenderer::create(oDev);
+			 render_sw1->setTexture(res::material::Get("shockwave1.png"));
+			 render_sw1->setTexturingMode(TEXTURE_2D);
+			 render_sw1->setScale(10.0,10.0);
+			 render_sw1->setBlending(BLENDING_ADD);
+			 render_sw1->enableRenderingHint(DEPTH_WRITE,false);
+			 //render_sw1->setShared(true);
+			IRRPointRenderer* render_pt = IRRPointRenderer::create(oDev);
+			 render_pt->setSize(5.0);
+
+			Group* group_sw0 = Group::create(model_sw0, 1);
+			 group_sw0->setRenderer(render_sw0);
+			 group_sw0->addEmitter(emit_sw0);
+			 //group_sw0->setShared(true);
+			Group* group_sw1 = Group::create(model_sw1, 1);
+			 group_sw1->setRenderer(render_sw1);
+			 group_sw1->addEmitter(emit_sw1);
+			 //group_sw1->setShared(true);
+			Group* group_pt = Group::create(model_pt, 40);
+			 group_pt->setRenderer(render_pt);
+			 group_pt->addEmitter(emit_pt);
+			 group_pt->setFriction(3.0);
+			 //group_sw1->setShared(true);
+
+
+			IRRSystem* sys = IRRSystem::create(0,oSM, false);
+			 sys->addGroup(group_sw0);
+			 sys->addGroup(group_sw1);
+			 sys->addGroup(group_pt);
+			 sys->setVisible(false);
+
+			m_vfxList.push_back(sys);
+		}
 
 
 

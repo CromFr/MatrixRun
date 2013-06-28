@@ -8,11 +8,11 @@
 #include <deque>
 
 #include "../base/Ellipse.hpp"
+#include "TunnelModule.hpp"
 
 
 namespace game
 {
-	class TunnelModule;
 
 	/**
 	@brief Scene node that contain multiple tunnel modules. The tunnel modules are auto-generated
@@ -44,6 +44,8 @@ namespace game
 		@brief Implementation of Object
 		**/
 		virtual enum ObjectType GetType()const{return tunnel_border;}
+
+		TunnelModule* GetTunnelModuleAt(const double fZ)const;
 
 
 
