@@ -5,7 +5,7 @@
 
 #include <SPK.h>
 
-
+#include "Engine.hpp"
 
 #include "lib/ConfigFile.hpp"
 #include "lib/Async.hpp"
@@ -85,7 +85,7 @@ int main()
     else cerr<<"/!\\ Error in config file : line CameraControlType, unknown value \""<<sControlCursor<<"\""<<endl;
 
     mrio::IOManager IOMgr(inputdevCamera, inputdevCursor, core::vector2di(nScreenWidth, nScreenHeight));
-
+	Engine::IOManager = &IOMgr;//Register IO Manager
 
 	cout<<endl<<"========================> Device, Driver, Scene mgr, Collision mgr"<<endl;
 	//Device
@@ -94,18 +94,22 @@ int main()
     #else
     	IrrlichtDevice *oDev = createDevice(video::EDT_OPENGL, core::dimension2d<u32>(nScreenWidth,nScreenHeight), 32, bFullscreen, true, Config.GetValue<bool>("VSync"), IOMgr.GetEventReceiver());
     #endif
+	Engine::IrrDevice = oDev;//Register Device
 
     oDev->setWindowCaption(L"Matrix-Run!   by Thibaut CHARLES");
     oDev->getCursorControl()->setVisible(true);
 
 	//Driver
     video::IVideoDriver* oDriver = oDev->getVideoDriver();
+	Engine::IrrDriver = oDriver;//Register Device
 
 	//SceneManager
     scene::ISceneManager *oSM = oDev->getSceneManager();
+	Engine::IrrSceneManager = oSM;//Register Device
 
     //Collision manager
     scene::ISceneCollisionManager* oCollM = oSM->getSceneCollisionManager();
+	Engine::IrrCollisionManager = oCollM;//Register Device
 
 
 	cout<<endl<<"========================> Spark particle engine"<<endl;
@@ -238,7 +242,7 @@ int main()
 			{
 				core::line3df ray(oCollM->getRayFromScreenCoordinates(e.pos, nodeCamera));
 
-				new game::Bullet(&oWorld, oSM, nodeCamContainer->getAbsolutePosition()-oWorld.getAbsolutePosition(), ray.getVector(), 1500.0);
+				new game::Bullet(&oWorld, oSM, nodeCamContainer->getAbsolutePosition()-oWorld.getAbsolutePosition(), ray.getVector(), 5000.0);
 			}
 			else if(e.button == mrio::IOManager::secondary)
 			{
